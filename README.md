@@ -17,7 +17,6 @@ Lastly, we would like to give special thank to [React Redux Starter Kit](https:/
 
 
 ## Table of Contents
-1. [Features](#features)
 1. [Requirements](#requirements)
 1. [Getting Started](#getting-started)
 1. [Application Structure](#application-structure)
@@ -25,16 +24,6 @@ Lastly, we would like to give special thank to [React Redux Starter Kit](https:/
   1. [Developer Tools](#developer-tools)
   1. [Routing](#routing)
 1. [Testing](#testing)
-1. [Deployment](#deployment)
-1. [Build System](#build-system)
-  1. [Configuration](#configuration)
-  1. [Globals](#globals)
-  1. [Styles](#styles)
-  1. [Server](#server)
-  1. [Production Optimization](#production-optimization)
-1. [Learning Resources](#learning-resources)
-1. [FAQ](#troubleshooting)
-1. [Thank You](#thank-you)
 
 ## Requirements
 * node `^4.5.0`

@@ -13,11 +13,11 @@ course registration and further studying plan.
 * In addition, we need to create the system in which the staffs can edit or update the data of the students
 as well as view the summary of the information in the system for further analysis.
 
-Lastly, we would like to give special thank to [React Redux Starter Kit](https://github.com/davezuko/react-redux-starter-kit) team as our project is built on configuration of this team. 
+Lastly, we would like to give special thank to [React Redux Starter Kit](https://github.com/davezuko/react-redux-starter-kit) team as our project is built on configuration of this team.
 
 
 ## Table of Contents
-1. [Requirements](#requirements)
+1. [Prerequisites](#prerequisites)
 1. [Getting Started](#getting-started)
 1. [Application Structure](#application-structure)
 1. [Development](#development)
@@ -25,7 +25,7 @@ Lastly, we would like to give special thank to [React Redux Starter Kit](https:/
   1. [Routing](#routing)
 1. [Testing](#testing)
 
-## Requirements
+## Prerequisites
 * node `^4.5.0`
 * yarn `^0.17.0` or npm `^3.0.0`
 
@@ -37,7 +37,7 @@ $ git clone https://github.com/JThanat/student-management-system/ <my-project-na
 $ cd <my-project-name>
 ```
 
-Intall the dependecies using [Yarn](https://yarnpkg.com/) for deterministic installs, but `npm install` will work just as well.
+Install the dependencies using [Yarn](https://yarnpkg.com/) for deterministic installs, but `npm install` will work just as well.
 
 ```bash
 $ yarn install    # Install project dependencies
@@ -45,20 +45,20 @@ $ yarn start      # Compile and launch (same as `npm start`)
 ```
 If everything works, you should see the following:
 
-For futher useful instruction, you can check it out from [React Redux Starter Kit](https://github.com/davezuko/react-redux-starter-kit)
+For further useful instruction, you can check it out from [React Redux Starter Kit](https://github.com/davezuko/react-redux-starter-kit)
 
 ## Application Structure
-We follow the application structure provided by [React Redux Starter Kit](https://github.com/davezuko/react-redux-starter-kit). We use the aplicatioon Structure suggested in 
+We follow the application structure provided by [React Redux Starter Kit](https://github.com/davezuko/react-redux-starter-kit). We use the application Structure suggested in
 [awesome writeup](https://github.com/davezuko/react-redux-starter-kit/wiki/Fractal-Project-Structure) by [Justin Greenberg](https://github.com/justingreenberg).
 
 ## Development
 
-#### Developer Tools
+### Developer Tools
 
 **We recommend using the [Redux DevTools Chrome Extension](https://chrome.google.com/webstore/detail/redux-devtools/lmhkpmbekcpmknklioeibfkpmmfibljd).**
 Using the chrome extension allows your monitors to run on a separate thread and affords better performance and functionality. It comes with several of the most popular monitors, is easy to configure, filters actions, and doesn’t require installing any packages.
 
-However, adding the DevTools components to your project is simple. First, grab the packages from npm:
+However, adding the DevTools components to your project is simple. First, grab the packages from `npm`:
 
 ```bash
 npm i --save-dev redux-devtools redux-devtools-log-monitor redux-devtools-dock-monitor
@@ -71,4 +71,3 @@ We use `react-router` [route definitions](https://github.com/ReactTraining/react
 
 ## Testing
 To add a unit test, simply create a `.spec.js` file anywhere in `~/tests`. Karma will pick up on these files automatically, and Mocha and Chai will be available within your test without the need to import them. Coverage reports will be compiled to `~/coverage` by default. If you wish to change what reporters are used and where reports are compiled, you can do so by modifying `coverage_reporters` in `~/config/project.config.js`.
-

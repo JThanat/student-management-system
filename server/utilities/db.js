@@ -1,5 +1,5 @@
 const mysql = require('mysql')
-const async = requires('async')
+const async = require('async')
 const config = require('../config/config.js')
 
 const PRODUCTION_DB = 'app_prod_database'
@@ -20,7 +20,8 @@ exports.connect = (mode, done) => {
     port: config.db.port,
     user: config.db.user,
     password: config.db.password,
-    database: config.db.databaseName
+    database: config.db.databaseName,
+    debug: config.debug
   })
   state.mode = mode
   done()
@@ -30,7 +31,7 @@ exports.get = () => {
   return state.pool
 }
 
-// This function will insert from bundle of table into database 
+// This function will insert from bundle of table into database, we might not use this because we can run auto script file as well
 exports.fixtures = (data, done) => {
   let pool = state.pool
   if (!pool) return done(new Error('Missing database connection.'))

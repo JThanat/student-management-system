@@ -48,7 +48,7 @@ If everything works, you should see the following:
 For futher useful instruction, you can check it out from [React Redux Starter Kit](https://github.com/davezuko/react-redux-starter-kit)
 
 ## Application Structure
-We follow the application structure provided by [React Redux Starter Kit](https://github.com/davezuko/react-redux-starter-kit). This applicatioon Structure focusing on the stlye suggested in 
+We follow the application structure provided by [React Redux Starter Kit](https://github.com/davezuko/react-redux-starter-kit). We use the aplicatioon Structure suggested in 
 [awesome writeup](https://github.com/davezuko/react-redux-starter-kit/wiki/Fractal-Project-Structure) by [Justin Greenberg](https://github.com/justingreenberg).
 
 ## Development

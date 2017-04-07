@@ -7,6 +7,7 @@ const project = require('../config/project.config')
 const compress = require('compression')
 const bodyParser = require('body-parser')
 
+const config = require('./config/config')
 const db = require('./utilities/db')
 
 const app = express()
@@ -75,5 +76,19 @@ if (project.env === 'development') {
   // server in production.
   app.use(express.static(project.paths.dist()))
 }
+
+// ------------------------------------
+// Project Main Code 
+// ------------------------------------
+db.connect(config.test ? db.MODE_TEST : db.MODE_PRODUCTION, (err) => {
+  if (err) {
+    console.error('Cannot Connect To MySQL')
+    process.exit(1)
+  } else {
+    console.log('Successfully connect to MySQL on ' + config.db.hostName + ':' + config.db.port)
+  }
+})
+
+
 
 module.exports = app

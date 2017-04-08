@@ -1,6 +1,7 @@
 // this file contains the script which we might run automatically to create Table
 
 // This is user creating example, it should be replaced soon
+// DON'T FORGET TO  DROP TABLE IF EXIST
 const createUserTableQuery = '' +
   'CREATE TABLE users ( ' +
   'id                    	INT UNSIGNED NOT NULL AUTO_INCREMENT, ' +

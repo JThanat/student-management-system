@@ -31,7 +31,8 @@ exports.get = () => {
   return state.pool
 }
 
-// This function will insert from bundle of table into database, we might not use this because we can run auto script file as well
+// This function will insert from bundle of table into database
+// we might not use this because we can run auto script file as well
 exports.fixtures = (data, done) => {
   let pool = state.pool
   if (!pool) return done(new Error('Missing database connection.'))

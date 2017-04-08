@@ -43,7 +43,12 @@ Install the dependencies using [Yarn](https://yarnpkg.com/) for deterministic in
 $ yarn install    # Install project dependencies
 $ yarn start      # Compile and launch (same as `npm start`)
 ```
-If everything works, you should see the following:
+
+If you want to watch file change in api development. You should run 
+
+```bash
+$ yarn dev      # Compile, run and watch
+```
 
 For further useful instruction, you can check it out from [React Redux Starter Kit](https://github.com/davezuko/react-redux-starter-kit)
 

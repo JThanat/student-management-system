@@ -15,12 +15,13 @@ const app = express()
 // Apply gzip compression
 app.use(compress())
 
-
-// ------------------------------------
 // Apply Body-Parser Middleware
-// ------------------------------------
 app.use(bodyParser())
 
+// ------------------------------------
+// API : App route for
+// ------------------------------------
+app.use('/api/student', require('./student/student.route'))
 
 // ------------------------------------
 // Apply Webpack HMR Middleware
@@ -78,7 +79,7 @@ if (project.env === 'development') {
 }
 
 // ------------------------------------
-// Project Main Code 
+// Connecting to MySQL
 // ------------------------------------
 db.connect(config.test ? db.MODE_TEST : db.MODE_PRODUCTION, (err) => {
   if (err) {
@@ -88,6 +89,9 @@ db.connect(config.test ? db.MODE_TEST : db.MODE_PRODUCTION, (err) => {
     console.log('Successfully connect to MySQL on ' + config.db.hostName + ':' + config.db.port)
   }
 })
+
+
+
 
 
 

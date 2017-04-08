@@ -18,10 +18,8 @@ app.use(compress())
 // Apply Body-Parser Middleware
 app.use(bodyParser())
 
-// ------------------------------------
 // API : App route for
-// ------------------------------------
-app.use('/api/student', require('./student/student.route'))
+app.use('/api/', require('./routes/index'))
 
 // ------------------------------------
 // Apply Webpack HMR Middleware

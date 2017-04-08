@@ -1,9 +1,5 @@
 const router = require('express').Router()
 
-router.get('/test', (req, res) => {
-  res.json({
-    messege: 'hello'
-  })
-})
+router.use('/student', require('../student/student.route'))
 
 module.exports = router

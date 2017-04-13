@@ -30,6 +30,9 @@ class Sidebar extends Component {
               <Link to={'/duck'} className='nav-link'>
                 <i className='icon-speedometer' /> Duck
               </Link>
+              <Link to={'/table'} className='nav-link'>
+                <i className='icon-speedometer' /> Table
+              </Link>
             </li>
           </ul>
         </nav>

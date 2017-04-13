@@ -24,8 +24,11 @@ class Sidebar extends Component {
         <nav className='sidebar-nav'>
           <ul className='nav'>
             <li className='nav-item'>
-              <Link to={'/dashboard'} className='nav-link' activeClassName='active'>
-                <i className='icon-speedometer' /> Dashboard <span className='badge badge-info'>NEW</span>
+              <Link to={'/counter'} className='nav-link' activeClassName='active'>
+                <i className='icon-speedometer' /> Counter <span className='badge badge-info'>NEW</span>
+              </Link>
+              <Link to={'/duck'} className='nav-link'>
+                <i className='icon-speedometer' /> Duck
               </Link>
             </li>
           </ul>
@@ -36,7 +39,7 @@ class Sidebar extends Component {
 }
 
 Sidebar.propTypes = {
-  location: React.PropTypes.string
+  location: React.PropTypes.any
 }
 
 export default Sidebar

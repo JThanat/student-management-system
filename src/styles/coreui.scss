@@ -1,0 +1,73 @@
+/**
+ * CoreUI - Open Source Bootstrap Admin Template
+ * @version v1.0.0-alpha.4
+ * @link http://coreui.io
+ * Copyright (c) 2017 creativeLabs Łukasz Holeczek
+ * @license MIT
+ */
+// Import normalize
+@import "bootstrap/normalize";
+
+// Override Boostrap variables
+@import "bootstrap-variables";
+
+// Import Bootstrap source files
+@import "bootstrap/bootstrap";
+
+// If you want you can import bootstrap scss files directly from node_modules or bower_components.
+// To do this please remove @import "bootstrap/bootstrap"; and uncomment proper line.
+
+// Import Bootstrap source files from node_modules
+// @import "node_modules/bootstrap/scss/bootstrap";
+
+// Import Bootstrap source files from bower_components
+// @import "bower_components/bootstrap/scss/bootstrap";
+
+// Import core styles
+@import "custom-variables";
+@import "coreui/mixins";
+
+// Additional typography
+@import "coreui/typography";
+
+// Animations
+@import "coreui/animate";
+
+// Core files
+@import "coreui/aside";
+@import "coreui/avatars";
+@import "coreui/badge";
+@import "coreui/breadcrumb-menu";
+@import "coreui/breadcrumb";
+@import "coreui/buttons";
+@import "coreui/callout";
+@import "coreui/card";
+@import "coreui/charts";
+@import "coreui/dropdown";
+@import "coreui/footer";
+@import "coreui/grid";
+@import "coreui/input-group";
+@import "coreui/layout";
+@import "coreui/loading";
+@import "coreui/modal";
+@import "coreui/nav";
+@import "coreui/navbar";
+@import "coreui/progress";
+@import "coreui/sidebar";
+@import "coreui/switches";
+@import "coreui/tables";
+@import "coreui/widgets";
+
+@import "coreui/others";
+
+// Utility classes
+@import "coreui/utilities";
+
+// Temporary fixes
+@import "coreui/temp";
+
+// Mobile View
+// @import "coreui/mobile";
+
+// Right-to-left
+@import "coreui/rtl";

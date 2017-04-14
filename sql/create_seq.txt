@@ -1,9 +1,0 @@
-faculty
-department
-
-
-
-
-
-
-student

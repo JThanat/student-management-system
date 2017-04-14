@@ -30,7 +30,7 @@ class TableView extends Component {
         {
           title: 'Status',
           prop: 'status',
-          formatter: (word) => { return word }
+          formatter: (word) => { return <span className='badge badge-success'>{word}</span> }
         }
       ]
     }

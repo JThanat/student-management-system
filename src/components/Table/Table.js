@@ -14,7 +14,11 @@ class Table extends Component {
     })
     let tbody = data.map((rowData, i) => {
       let rowbody = header.map((header, j) => {
-        return <td key={j}>{rowData[header.prop]}</td>
+        let val = rowData[header.prop]
+        if (typeof header.formatter === 'function') {
+          val = header.formatter(val)
+        }
+        return <td key={j}>{val}</td>
       })
       return <tr key={i}>{rowbody}</tr>
     })

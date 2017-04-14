@@ -61,7 +61,6 @@ const ACTION_HANDLERS = {
   [TABLE_LOAD_COMPLETE] : (state, action) => {
     const id = state.findIndex((tableState) => tableState.id === action.id)
     let newState = state.slice()
-    console.log(action)
     let newTableState = Object.assign(
       initialTableState,
       (id !== -1 ? newState[id] : {}),

@@ -8,19 +8,21 @@ class Table extends Component {
   }
 
   render () {
-    console.log(this.props)
+    const props = this.props
+    const { config, data } = props
+    const { header } = config
 
-    let thead = this.props.header.map((header, i) => {
+    let thead = header.map((header, i) => {
       return <th key={i}>{header.title}</th>
     })
-    let tbody = this.props.data.map((rowData, i) => {
-      let rowbody = this.props.header.map((header, j) => {
+    let tbody = data.map((rowData, i) => {
+      let rowbody = header.map((header, j) => {
         return <td key={j}>{rowData[header.prop]}</td>
       })
       return <tr key={i}>{rowbody}</tr>
     })
 
-    const colSpanSize = this.props.header.length
+    const colSpanSize = header.length
 
     return (
       <div>
@@ -38,7 +40,7 @@ class Table extends Component {
               this.props.isLoading
               ? (
                 <tr><td style={{ textAlign: 'center' }} colSpan={colSpanSize}>
-                  Loading...
+                  <i className='fa fa-spin fa-spinner' /> Loading...
                 </td></tr>
               ) : (
                 this.props.data.length === 0
@@ -69,9 +71,18 @@ class Table extends Component {
   }
 }
 
+// Configuration Type
+const configTypes = React.PropTypes.shape({
+  header: React.PropTypes.arrayOf(React.PropTypes.shape({
+    title: React.PropTypes.string.isRequired,
+    prop: React.PropTypes.string.isRequired,
+    formatter: React.PropTypes.func
+  })).isRequired
+}).isRequired
+
 Table.propTypes = {
   loadTable: React.PropTypes.func.isRequired,
-  header: React.PropTypes.array.isRequired,
+  config: configTypes,
   id: React.PropTypes.string.isRequired,
   data: React.PropTypes.array,
   isLoading: React.PropTypes.bool

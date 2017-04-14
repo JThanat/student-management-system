@@ -4,9 +4,6 @@ import './Table.scss'
 
 class Table extends Component {
 
-  componentWillMount () {
-  }
-
   render () {
     const props = this.props
     const { config, data } = props

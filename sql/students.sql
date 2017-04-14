@@ -1,6 +1,6 @@
 -- DROP TABLE Student;
 
-CREATE TABLE Student(
+CREATE TABLE Students(
     sid INT(10) NOT NULL AUTO_INCREMENT NOT NULL,
     student_id CHAR(10) NOT NULL,
     curid INT(10) NOT NULL,
@@ -36,9 +36,7 @@ CREATE TABLE Student(
     PRIMARY KEY (sid)
 );
 
-SELECT * FROM Student;
-
-INSERT INTO Student(
+INSERT INTO Students(
     student_id,
     curid,
     memid,
@@ -104,7 +102,7 @@ INSERT INTO Student(
     100
 );
 
-INSERT INTO Student(
+INSERT INTO Students(
     student_id,
     curid,
     memid,
@@ -170,7 +168,7 @@ INSERT INTO Student(
     100
 );
 
-INSERT INTO Student(
+INSERT INTO Students(
     student_id,
     curid,
     memid,
@@ -236,4 +234,4 @@ INSERT INTO Student(
     100
 );
 
-SELECT * FROM Student
+SELECT * FROM Students

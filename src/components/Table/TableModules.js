@@ -1,3 +1,4 @@
+import 'whatwg-fetch'
 
 export const TABLE_LOAD_COMPLETE = 'TABLE_LOAD_COMPLETE'
 export const TABLE_LOADING = 'TABLE_LOADING'
@@ -10,46 +11,40 @@ const initialTableState = {
   header: []
 }
 
-export const loadTable = (id) => {
+export const loadTable = (src, id) => {
   return (dispatch, getState) => {
-    return new Promise((resolve) => {
+    if (!src || !src.url) {
+      dispatch({
+        type: TABLE_LOAD_ERROR,
+        error: 'URL did not provided',
+        id
+      })
+    } else {
       dispatch({
         type: TABLE_LOADING,
         id
       })
-      setTimeout(() => {
-        dispatch({
-          type: TABLE_LOAD_COMPLETE,
-          data: [
-            {
-              username: 'Eiei eueu',
-              date: '2012/01/01',
-              role: 'Member',
-              status: 'Active'
-            },
-            {
-              username: 'Zbyněk Phoibos',
-              date: '2014/01/01',
-              role: 'Staff',
-              status: 'Banned'
-            },
-            {
-              username: 'Einar Randall',
-              date: '2014/02/06',
-              role: 'Admin',
-              status: 'Inactive'
-            },
-            {
-              username: 'Félix Troels',
-              date: '2012/03/01',
-              role: 'Member',
-              status: 'Pending'
-            }
-          ],
-          id
+      return fetch(src.url)
+        .then((response) => response.text())
+        .then((body) => {
+          try {
+            body = JSON.parse(body)
+            setTimeout(() => {
+              dispatch({
+                type: TABLE_LOAD_COMPLETE,
+                data: body,
+                id
+              })
+            }, 3000)
+          } catch (e) {
+            dispatch({
+              type: TABLE_LOAD_ERROR,
+              error: `File formatting at ${src.url} is incorrect (only JSON format)`,
+              id
+            })
+          }
         })
-      }, 1000 + Math.random() * 2000)
-    })
+    }
   }
 }
 
@@ -57,43 +52,45 @@ export const loadTable = (id) => {
 //   loadTable
 // }
 
+const changeTableState = (state, action, objToMerge) => {
+  const id = state.findIndex((tableState) => tableState.id === action.id)
+  let newState = state.slice()
+  let newTableState = Object.assign(
+    initialTableState,
+    (id !== -1 ? newState[id] : {}),
+    objToMerge
+  )
+  if (id !== -1) {
+    newState[id] = newTableState
+  } else {
+    newState.push(newTableState)
+  }
+  return newState
+}
+
 const ACTION_HANDLERS = {
   [TABLE_LOAD_COMPLETE] : (state, action) => {
-    const id = state.findIndex((tableState) => tableState.id === action.id)
-    let newState = state.slice()
-    let newTableState = Object.assign(
-      initialTableState,
-      (id !== -1 ? newState[id] : {}),
-      {
-        id: action.id,
-        isLoading: false,
-        data: action.data
-      }
-    )
-    if (id !== -1) {
-      newState[id] = newTableState
-    } else {
-      newState.push(newTableState)
-    }
-    return newState
+    return changeTableState(state, action, {
+      id: action.id,
+      isLoading: false,
+      error: null,
+      data: action.data
+    })
   },
   [TABLE_LOADING] : (state, action) => {
-    const id = state.findIndex((tableState) => tableState.id === action.id)
-    let newState = state.slice()
-    let newTableState = Object.assign(
-      initialTableState,
-      (id !== -1 ? newState[id] : {}),
-      {
-        id: action.id,
-        isLoading: true
-      }
-    )
-    if (id !== -1) {
-      newState[id] = newTableState
-    } else {
-      newState.push(newTableState)
-    }
-    return newState
+    return changeTableState(state, action, {
+      id: action.id,
+      error: null,
+      isLoading: true
+    })
+  },
+  [TABLE_LOAD_ERROR] : (state, action) => {
+    console.log(action)
+    return changeTableState(state, action, {
+      id: action.id,
+      isLoading: false,
+      error: action.error.toString()
+    })
   }
 }
 

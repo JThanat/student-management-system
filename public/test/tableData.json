@@ -1,0 +1,26 @@
+[
+  {
+    "username": "Eiei eueu",
+    "date": "2012/01/01",
+    "role": "Member",
+    "status": "Active"
+  },
+  {
+    "username": "Zbyněk Phoibos",
+    "date": "2014/01/01",
+    "role": "Staff",
+    "status": "Banned"
+  },
+  {
+    "username": "Einar Randall",
+    "date": "2014/02/06",
+    "role": "Admin",
+    "status": "Inactive"
+  },
+  {
+    "username": "Félix Troels",
+    "date": "2012/03/01",
+    "role": "Member",
+    "status": "Pending"
+  }
+]

@@ -9,11 +9,13 @@ class TableView extends Component {
   constructor (props) {
     super(props)
     this.tableID = staticID('TableView.table')
-    console.log(this.tableID)
   }
 
   render () {
     const config = {
+      src: {
+        url: '../test/tableData.json'
+      },
       header: [
         {
           title: 'Username',

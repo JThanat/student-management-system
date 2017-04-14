@@ -4,16 +4,26 @@ import './Table.scss'
 
 class Table extends Component {
 
+  loadTable = () => {
+    this.props.loadTable(this.src)
+  }
+
+  componentWillMount () {
+    const props = this.props
+    const { config } = props
+    this.header = config.header
+    this.src = config.src
+  }
+
   render () {
     const props = this.props
-    const { config, data } = props
-    const { header } = config
+    const { data } = props
 
-    let thead = header.map((header, i) => {
+    let thead = this.header.map((header, i) => {
       return <th key={i}>{header.title}</th>
     })
     let tbody = data.map((rowData, i) => {
-      let rowbody = header.map((header, j) => {
+      let rowbody = this.header.map((header, j) => {
         let val = rowData[header.prop]
         if (typeof header.formatter === 'function') {
           val = header.formatter(val)
@@ -23,13 +33,19 @@ class Table extends Component {
       return <tr key={i}>{rowbody}</tr>
     })
 
-    const colSpanSize = header.length
+    const colSpanSize = this.header.length
 
     return (
       <div>
-        <div className='btn btn-primary' onClick={this.props.loadTable} style={{ marginBottom: 15 }}>
+        <div className='btn btn-primary' onClick={this.loadTable} style={{ marginBottom: 15 }}>
           Load Table
         </div>
+        {
+          props.errorMsg &&
+          (<div className='alert alert-danger' role='alert'>
+            <strong>Oops!</strong> {props.errorMsg}
+          </div>)
+        }
         <table className='table table-bordered table-striped table-md'>
           <thead>
             <tr>
@@ -38,13 +54,13 @@ class Table extends Component {
           </thead>
           <tbody>
             {
-              this.props.isLoading
+              props.isLoading
               ? (
                 <tr><td style={{ textAlign: 'center' }} colSpan={colSpanSize}>
                   <i className='fa fa-spin fa-spinner' /> Loading...
                 </td></tr>
               ) : (
-                this.props.data.length === 0
+                props.data.length === 0
                 ? (
                   <tr><td style={{ textAlign: 'center' }} colSpan={colSpanSize}>
                     No record to show
@@ -78,7 +94,10 @@ const configTypes = React.PropTypes.shape({
     title: React.PropTypes.string.isRequired,
     prop: React.PropTypes.string.isRequired,
     formatter: React.PropTypes.func
-  })).isRequired
+  })).isRequired,
+  src: React.PropTypes.shape({
+    url: React.PropTypes.string.isRequired
+  })
 }).isRequired
 
 Table.propTypes = {
@@ -86,7 +105,8 @@ Table.propTypes = {
   config: configTypes,
   id: React.PropTypes.string.isRequired,
   data: React.PropTypes.array,
-  isLoading: React.PropTypes.bool
+  isLoading: React.PropTypes.bool,
+  errorMsg: React.PropTypes.string
 }
 
 export default Table

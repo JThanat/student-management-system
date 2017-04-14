@@ -13,14 +13,15 @@ import Table from './Table'
     implementing our wrapper around increment; the component doesn't care   */
 
 const mapDispatchToProps = (dispatch, ownProps) => ({
-  loadTable : () => dispatch(loadTable(ownProps.id))
+  loadTable : (src) => dispatch(loadTable(src, ownProps.id))
 })
 
 const mapStateToProps = (state, ownProps) => {
   const table = state.table.find((x) => x.id === ownProps.id) || []
   return {
     data: table.data || [],
-    isLoading: table.isLoading
+    isLoading: table.isLoading,
+    errorMsg: table.error
   }
 }
 

@@ -8,11 +8,21 @@ class Table extends Component {
     this.props.loadTable(this.src)
   }
 
+  deleteRow = (row, id) => {
+    console.log(row, id)
+  }
+
+  editRow = (row, id) => {
+    console.log(row, id)
+  }
+
   componentWillMount () {
     const props = this.props
     const { config } = props
     this.header = config.header
-    this.src = config.src
+    this.src = {
+      url: props.url
+    }
   }
 
   render () {
@@ -24,11 +34,31 @@ class Table extends Component {
     })
     let tbody = data.map((rowData, i) => {
       let rowbody = this.header.map((header, j) => {
-        let val = rowData[header.prop]
-        if (typeof header.formatter === 'function') {
-          val = header.formatter(val)
+        if (header.isDelete) {
+          let delBtn = typeof header.formatter === 'function'
+            ? header.formatter()
+            : (<div className='btn btn-danger btn-sm'>Delete</div>)
+          delBtn = React.cloneElement(
+            delBtn,
+            { onClick: () => this.deleteRow(rowData, i) }
+          )
+          return <td key={j}>{delBtn}</td>
+        } else if (header.isEdit) {
+          let editBtn = typeof header.formatter === 'function'
+            ? header.formatter()
+            : (<div className='btn btn-warning btn-sm'>Edit</div>)
+          editBtn = React.cloneElement(
+            editBtn,
+            { onClick: () => this.editRow(rowData, i) }
+          )
+          return <td key={j}>{editBtn}</td>
+        } else {
+          let val = rowData[header.prop]
+          if (typeof header.formatter === 'function') {
+            val = header.formatter(val)
+          }
+          return <td key={j}>{val}</td>
         }
-        return <td key={j}>{val}</td>
       })
       return <tr key={i}>{rowbody}</tr>
     })
@@ -93,7 +123,8 @@ const configTypes = React.PropTypes.shape({
   header: React.PropTypes.arrayOf(React.PropTypes.shape({
     title: React.PropTypes.string.isRequired,
     prop: React.PropTypes.string.isRequired,
-    formatter: React.PropTypes.func
+    formatter: React.PropTypes.func,
+    isDelete: React.PropTypes.bool
   })).isRequired,
   src: React.PropTypes.shape({
     url: React.PropTypes.string.isRequired

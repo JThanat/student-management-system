@@ -13,9 +13,6 @@ class TableView extends Component {
 
   render () {
     const config = {
-      src: {
-        url: '../test/tableData.json'
-      },
       header: [
         {
           title: 'Username',
@@ -32,12 +29,23 @@ class TableView extends Component {
         {
           title: 'Status',
           prop: 'status',
-          formatter: (word) => { return <span className='badge badge-success'>{word}</span> }
+          formatter: (word) => <span className='badge badge-success'>{word}</span>
+        },
+        {
+          title: 'Edit',
+          prop: 'edit',
+          isEdit: true
+        },
+        {
+          title: 'Delete',
+          prop: 'delete',
+          isDelete: true,
+          formatter: () => <div className='btn btn-danger btn-sm'>Delete</div>
         }
       ]
     }
     return (
-      <TableComponent id={this.tableID} config={config} />
+      <TableComponent id={this.tableID} config={config} url='../test/tableData.json' test />
     )
   }
 }

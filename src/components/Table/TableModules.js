@@ -29,13 +29,11 @@ export const loadTable = (src, id) => {
         .then((body) => {
           try {
             body = JSON.parse(body)
-            setTimeout(() => {
-              dispatch({
-                type: TABLE_LOAD_COMPLETE,
-                data: body,
-                id
-              })
-            }, 3000)
+            dispatch({
+              type: TABLE_LOAD_COMPLETE,
+              data: body,
+              id
+            })
           } catch (e) {
             dispatch({
               type: TABLE_LOAD_ERROR,

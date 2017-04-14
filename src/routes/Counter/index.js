@@ -1,6 +1,7 @@
 import { injectReducer } from '../../store/reducers'
 
 export default (store) => ({
+  name : 'Counter',
   path : 'counter',
   /*  Async getComponent is only invoked when route matches   */
   getComponent (nextState, cb) {

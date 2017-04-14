@@ -30,6 +30,9 @@ class Sidebar extends Component {
               <Link to={'/duck'} className='nav-link'>
                 <i className='icon-speedometer' /> Duck
               </Link>
+              <Link to={'/coretable'} className='nav-link'>
+                <i className='icon-speedometer' /> Core Table
+              </Link>
               <Link to={'/table'} className='nav-link'>
                 <i className='icon-speedometer' /> Table
               </Link>
@@ -42,7 +45,7 @@ class Sidebar extends Component {
 }
 
 Sidebar.propTypes = {
-  location: React.PropTypes.any
+  location: React.PropTypes.object
 }
 
 export default Sidebar

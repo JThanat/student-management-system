@@ -2,8 +2,9 @@
 import CoreLayout from '../layouts/CoreLayout'
 import Home from './Home'
 import Duck from './Duck'
-import Table from './Table'
+import CoreTable from './CoreTable'
 import CounterRoute from './Counter'
+import TableView from './TableView'
 
 /*  Note: Instead of using JSX, we recommend using react-router
     PlainRoute objects to build route definitions.   */
@@ -16,7 +17,8 @@ export const createRoutes = (store) => ({
   childRoutes : [
     CounterRoute(store),
     Duck,
-    Table
+    CoreTable,
+    TableView(store)
   ]
 })
 

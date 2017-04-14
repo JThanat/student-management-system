@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 
-class TableView extends Component {
+class CoreTableView extends Component {
   render () {
     return (
       <div className='animated fadeIn'>
@@ -379,4 +379,4 @@ class TableView extends Component {
   }
 }
 
-export default TableView
+export default CoreTableView

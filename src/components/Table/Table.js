@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 import TableFrame from '../TableFrame'
 import PaginationBar from '../PaginationBar'
 import { Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap'
+import './Table.scss'
 
 class Table extends Component {
 
@@ -11,8 +12,9 @@ class Table extends Component {
     this.state = {
       deleteModalShow: false,
       editModalShow: false,
+      addModalShow: false,
       form: {
-
+        modal: {}
       }
     }
 
@@ -53,7 +55,7 @@ class Table extends Component {
             <input
               className='form-control'
               name={prop}
-              value={this.state.form ? (this.state.form[prop] || '') : ''}
+              value={this.state.form.modal ? (this.state.form.modal[prop] || '') : ''}
               onChange={(e) => this.handleChangeForm(e, prop)}
               />
           </div>
@@ -67,8 +69,10 @@ class Table extends Component {
   handleChangeForm = (event, property) => {
     this.setState({
       form: {
-        ...this.state.form,
-        [property]: event.target.value
+        modal: {
+          ...this.state.form.modal,
+          [property]: event.target.value
+        }
       }
     })
   }
@@ -88,10 +92,26 @@ class Table extends Component {
   confirmEditRow = (resolve, reject, oldData) => {
     this.setShowModal('editModal', true)
     this.setState({
-      form: oldData
+      form: {
+        modal: oldData
+      }
     })
-    this._confirm = () => resolve(this.state.form)
+    this._confirm = () => resolve(this.state.form.modal)
     this._reject = reject
+  }
+
+  addRow = () => {
+    this.setShowModal('addModal', true)
+    this.setState({
+      form: {
+        modal: {}
+      }
+    })
+    this._confirm = () => {
+      // this.props.showLog('Adding data...')
+      this.reloadTable()
+    }
+    this._reject = () => {}
   }
 
   componentWillMount () {
@@ -122,7 +142,7 @@ class Table extends Component {
 
     return (
       <div>
-        <Modal isOpen={this.state.editModalShow}>
+        <Modal isOpen={this.state.editModalShow || this.state.addModalShow}>
           <ModalHeader>{this.state.editModalShow ? 'Edit' : 'Add'} data</ModalHeader>
           <ModalBody>
             {this.formEditContent()}
@@ -131,10 +151,12 @@ class Table extends Component {
             <div className='btn btn-primary' onClick={() => {
               if (this._confirm) this._confirm()
               this.setShowModal('editModal', false)
+              this.setShowModal('addModal', false)
             }}>{this.state.editModalShow ? 'Edit' : 'Add'}</div>{' '}
             <div className='btn btn-secondary' onClick={() => {
               if (this._reject) this._reject()
               this.setShowModal('editModal', false)
+              this.setShowModal('addModal', false)
             }}>Cancel</div>
           </ModalFooter>
         </Modal>
@@ -154,17 +176,21 @@ class Table extends Component {
             }}>Cancel</div>
           </ModalFooter>
         </Modal>
-        <div style={{ marginBottom: 15 }}>
+        <div className='nav-table' style={{ marginBottom: 15 }}>
           <div
             className='btn btn-primary'
-            style={{ marginRight: 10 }} 
             onClick={() => this.setShowModal('editModal', true)}>
-            Test Model
+            Test Modal
+          </div>
+          <div
+            className='btn btn-primary'
+            onClick={this.addRow}>
+            <i className='fa fa-plus' /> Add Data
           </div>
           <div
             className='btn btn-primary'
             onClick={this.reloadTable}>
-            Load Table
+            <i className='fa fa-refresh' /> Load Table
           </div>
         </div>
         {

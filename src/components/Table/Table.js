@@ -5,7 +5,7 @@ import './Table.scss'
 class Table extends Component {
 
   loadTable = () => {
-    this.props.loadTable(this.src)
+    this.props.loadTable(this.src, this.config)
   }
 
   deleteRow = (row, id) => {
@@ -16,10 +16,24 @@ class Table extends Component {
     console.log(row, id)
   }
 
+  changePage = (pageNo) => {
+    this.props.changePage(pageNo, this.config)
+  }
+
+  changePageTab = (startPage) => {
+    this.props.changePageTab(startPage)
+  }
+
   componentWillMount () {
     const props = this.props
     const { config } = props
-    this.header = config.header
+
+    config.pagination = config.pagination || {
+      pageSize: config.pagination.pageSize || 10,
+      paginationTabSize: config.pagination.paginationTabSize || 5
+    }
+
+    this.config = config
     this.src = {
       url: props.url
     }
@@ -27,13 +41,18 @@ class Table extends Component {
 
   render () {
     const props = this.props
-    const { data } = props
+    let { tableView } = props
+    const config = this.config
+    const { header } = config
 
-    let thead = this.header.map((header, i) => {
+    tableView = tableView || {}
+    tableView.data = tableView.data || []
+
+    let thead = header.map((header, i) => {
       return <th key={i}>{header.title}</th>
     })
-    let tbody = data.map((rowData, i) => {
-      let rowbody = this.header.map((header, j) => {
+    let tbody = tableView.data.map((rowData, i) => {
+      let rowbody = header.map((header, j) => {
         if (header.isDelete) {
           let delBtn = typeof header.formatter === 'function'
             ? header.formatter()
@@ -63,7 +82,7 @@ class Table extends Component {
       return <tr key={i}>{rowbody}</tr>
     })
 
-    const colSpanSize = this.header.length
+    const colSpanSize = header.length
 
     return (
       <div>
@@ -103,14 +122,45 @@ class Table extends Component {
         </table>
         <nav>
           <ul className='pagination'>
-            <li className='page-item'><a className='page-link' href='#'>Prev</a></li>
-            <li className='page-item active'>
-              <a className='page-link' href='#'>1</a>
-            </li>
-            <li className='page-item'><a className='page-link' href='#'>2</a></li>
-            <li className='page-item'><a className='page-link' href='#'>3</a></li>
-            <li className='page-item'><a className='page-link' href='#'>4</a></li>
-            <li className='page-item'><a className='page-link' href='#'>Next</a></li>
+            {
+              tableView && (function (thiss) {
+                let prev = (tableView.startPage || 1) - config.pagination.paginationTabSize
+                if (prev >= 1) {
+                  return (<li className='page-item' onClick={() => thiss.changePageTab(prev)}>
+                    <span className='page-link'>Prev</span>
+                  </li>)
+                } else {
+                  return null
+                }
+              })(this)
+            }
+            {
+              tableView && Array(config.pagination.paginationTabSize).fill(1).map((el, i) => {
+                const id = i + (tableView.startPage || 1)
+                if (id <= tableView.pageAll) {
+                  return (<li
+                    className={'page-item ' + (id === tableView.pageNo ? 'active' : '')}
+                    key={i}
+                    onClick={() => this.changePage(id)}>
+                    <span className='page-link'>{ id }</span>
+                  </li>)
+                } else {
+                  return null
+                }
+              })
+            }
+            {
+              tableView && (function (thiss) {
+                let next = config.pagination.paginationTabSize + (tableView.startPage || 1)
+                if (next <= tableView.pageAll) {
+                  return (<li className='page-item' onClick={() => thiss.changePageTab(next)}>
+                    <span className='page-link'>Next</span>
+                  </li>)
+                } else {
+                  return null
+                }
+              })(this)
+            }
           </ul>
         </nav>
       </div>
@@ -126,13 +176,16 @@ const configTypes = React.PropTypes.shape({
     formatter: React.PropTypes.func,
     isDelete: React.PropTypes.bool
   })).isRequired,
-  src: React.PropTypes.shape({
-    url: React.PropTypes.string.isRequired
+  pagination: React.PropTypes.shape({
+    pageSize: React.PropTypes.number.isRequired,
+    paginationTabSize: React.PropTypes.number.isRequired
   })
 }).isRequired
 
 Table.propTypes = {
   loadTable: React.PropTypes.func.isRequired,
+  changePage: React.PropTypes.func.isRequired,
+  changePageTab: React.PropTypes.func.isRequired,
   config: configTypes,
   id: React.PropTypes.string.isRequired,
   data: React.PropTypes.array,

@@ -15,6 +15,10 @@ class TableView extends Component {
     const config = {
       header: [
         {
+          title: 'ID',
+          prop: 'id'
+        },
+        {
           title: 'Username',
           prop: 'username'
         },
@@ -42,7 +46,11 @@ class TableView extends Component {
           isDelete: true,
           formatter: () => <div className='btn btn-danger btn-sm'>Delete</div>
         }
-      ]
+      ],
+      pagination: {
+        pageSize: 10,
+        paginationTabSize: 5
+      }
     }
     return (
       <TableComponent id={this.tableID} config={config} url='../test/tableData.json' test />

@@ -1,6 +1,5 @@
 import React, { Component } from 'react'
-// import { Link } from 'react-router'
-import './Table.scss'
+import TableFrame from '../TableFrame'
 
 class Table extends Component {
 
@@ -43,46 +42,8 @@ class Table extends Component {
     const props = this.props
     let { tableView } = props
     const config = this.config
-    const { header } = config
 
     tableView = tableView || {}
-    tableView.data = tableView.data || []
-
-    let thead = header.map((header, i) => {
-      return <th key={i}>{header.title}</th>
-    })
-    let tbody = tableView.data.map((rowData, i) => {
-      let rowbody = header.map((header, j) => {
-        if (header.isDelete) {
-          let delBtn = typeof header.formatter === 'function'
-            ? header.formatter()
-            : (<div className='btn btn-danger btn-sm'>Delete</div>)
-          delBtn = React.cloneElement(
-            delBtn,
-            { onClick: () => this.deleteRow(rowData, i) }
-          )
-          return <td key={j}>{delBtn}</td>
-        } else if (header.isEdit) {
-          let editBtn = typeof header.formatter === 'function'
-            ? header.formatter()
-            : (<div className='btn btn-warning btn-sm'>Edit</div>)
-          editBtn = React.cloneElement(
-            editBtn,
-            { onClick: () => this.editRow(rowData, i) }
-          )
-          return <td key={j}>{editBtn}</td>
-        } else {
-          let val = rowData[header.prop]
-          if (typeof header.formatter === 'function') {
-            val = header.formatter(val)
-          }
-          return <td key={j}>{val}</td>
-        }
-      })
-      return <tr key={i}>{rowbody}</tr>
-    })
-
-    const colSpanSize = header.length
 
     return (
       <div>
@@ -95,31 +56,11 @@ class Table extends Component {
             <strong>Oops!</strong> {props.errorMsg}
           </div>)
         }
-        <table className='table table-bordered table-striped table-md'>
-          <thead>
-            <tr>
-              {thead}
-            </tr>
-          </thead>
-          <tbody>
-            {
-              props.isLoading
-              ? (
-                <tr><td style={{ textAlign: 'center' }} colSpan={colSpanSize}>
-                  <i className='fa fa-spin fa-spinner' /> Loading...
-                </td></tr>
-              ) : (
-                props.data.length === 0
-                ? (
-                  <tr><td style={{ textAlign: 'center' }} colSpan={colSpanSize}>
-                    No record to show
-                  </td></tr>
-                )
-                : tbody
-              )
-            }
-          </tbody>
-        </table>
+        <TableFrame
+          data={tableView.data || []}
+          header={config.header}
+          isLoading={props.isLoading || false}
+          className='table table-bordered table-striped table-md' />
         <nav>
           <ul className='pagination'>
             {

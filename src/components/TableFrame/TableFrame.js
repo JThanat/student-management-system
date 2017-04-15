@@ -1,7 +1,14 @@
 import React, { Component } from 'react'
+import Promise from 'bluebird'
 import './TableFrame.scss'
 
 class TableFrame extends Component {
+
+  log (msg) {
+    if (typeof this.props.showLog === 'function') {
+      this.props.showLog(msg)
+    }
+  }
 
   render () {
     const props = this.props
@@ -21,18 +28,58 @@ class TableFrame extends Component {
             : (<div className='btn btn-danger btn-sm'>Delete</div>)
           delBtn = React.cloneElement(
             delBtn,
-            { onClick: () => this.deleteRow(rowData, i) }
+            {
+              onClick: () => {
+                this.log('Deleting...')
+                header.onDelete = header.onDelete || ((resolve, reject, data) => {
+                  resolve()
+                })
+                new Promise((resolve, reject) => header.onDelete(resolve, reject, rowData))
+                  .then(
+                    () => {
+                      this.props.deleteRowFunc(rowData._rid)
+                      this.log('')
+                    },
+                    (reason) => {
+                      this.log('')
+                      typeof this.props.onError === 'function'
+                        ? this.props.onError(reason)
+                        : null
+                    }
+                  )
+              }
+            }
           )
           return <td key={j}>{delBtn}</td>
         } else if (header.isEdit) {
-          let editBtn = typeof header.formatter === 'function'
+          let updateBtn = typeof header.formatter === 'function'
             ? header.formatter()
             : (<div className='btn btn-warning btn-sm'>Edit</div>)
-          editBtn = React.cloneElement(
-            editBtn,
-            { onClick: () => this.editRow(rowData, i) }
+          updateBtn = React.cloneElement(
+            updateBtn,
+            {
+              onClick: () => {
+                this.log('Editing...')
+                header.onUpdate = header.onUpdate || ((resolve, reject, data) => {
+                  resolve(data)
+                })
+                new Promise((resolve, reject) => header.onUpdate(resolve, reject, JSON.parse(JSON.stringify(rowData))))
+                  .then(
+                    (data) => {
+                      this.props.updateRowFunc(rowData._rid, data)
+                      this.log('')
+                    },
+                    (reason) => {
+                      this.log('')
+                      typeof this.props.onError === 'function'
+                        ? this.props.onError(reason)
+                        : null
+                    }
+                  )
+              }
+            }
           )
-          return <td key={j}>{editBtn}</td>
+          return <td key={j}>{updateBtn}</td>
         } else {
           let val = rowData[header.prop]
           if (typeof header.formatter === 'function') {
@@ -80,7 +127,12 @@ TableFrame.propTypes = {
   className: React.PropTypes.string.isRequired,
   data: React.PropTypes.array.isRequired,
   header: React.PropTypes.array.isRequired,
-  isLoading: React.PropTypes.bool.isRequired
+  isLoading: React.PropTypes.bool.isRequired,
+
+  deleteRowFunc: React.PropTypes.func,
+  updateRowFunc: React.PropTypes.func,
+  onError: React.PropTypes.func,
+  showLog: React.PropTypes.func
 }
 
 export default TableFrame

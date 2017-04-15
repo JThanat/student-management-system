@@ -2,7 +2,8 @@ import 'whatwg-fetch'
 
 const TABLE_LOAD_COMPLETE = 'TABLE_LOAD_COMPLETE'
 const TABLE_LOADING = 'TABLE_LOADING'
-const TABLE_LOAD_ERROR = 'TABLE_LOAD_ERROR'
+const TABLE_ERROR = 'TABLE_ERROR'
+const TABLE_LOG = 'TABLE_LOG'
 
 const CHANGE_PAGE = 'CHANGE_PAGE'
 const CHANGE_PAGE_TAB = 'CHANGE_PAGE_TAB'
@@ -33,14 +34,26 @@ export const changePageTab = (startPage, id) => {
   }
 }
 
+export const showErrorMsg = (msg, id) => {
+  return {
+    type: TABLE_ERROR,
+    error: msg ? msg.toString() : 'No message error.',
+    id
+  }
+}
+
+export const showLogMsg = (msg, id) => {
+  return {
+    type: TABLE_LOG,
+    msg: msg ? msg.toString() : null,
+    id
+  }
+}
+
 export const loadTable = (src, config, id) => {
   return (dispatch, getState) => {
     if (!src || !src.url) {
-      dispatch({
-        type: TABLE_LOAD_ERROR,
-        error: 'URL did not provided',
-        id
-      })
+      dispatch(showErrorMsg('URL did not provided', id))
     } else {
       dispatch({
         type: TABLE_LOADING,
@@ -54,7 +67,7 @@ export const loadTable = (src, config, id) => {
             body = []
             for (let i = 0; i < 150; i++) {
               body.push({
-                id: i + 1,
+                _rid: i + 1,
                 ...rawBody[i % rawBody.length]
               })
             }
@@ -66,11 +79,7 @@ export const loadTable = (src, config, id) => {
             dispatch(changePage(1, config, id))
           } catch (e) {
             console.error(e)
-            dispatch({
-              type: TABLE_LOAD_ERROR,
-              error: `File formatting at ${src.url} is incorrect (only JSON format)`,
-              id
-            })
+            dispatch(showErrorMsg(`File formatting at ${src.url} is incorrect (only JSON format)`, id))
           }
         })
     }
@@ -133,11 +142,17 @@ const ACTION_HANDLERS = {
       isLoading: true
     }
   },
-  [TABLE_LOAD_ERROR] : (state, action) => {
+  [TABLE_ERROR] : (state, action) => {
     return {
       id: action.id,
       isLoading: false,
-      error: action.error.toString()
+      error: action.error
+    }
+  },
+  [TABLE_LOG] : (state, action) => {
+    return {
+      id: action.id,
+      logMsg: action.msg
     }
   },
   [CHANGE_PAGE] : (state, action) => {
@@ -145,16 +160,16 @@ const ACTION_HANDLERS = {
     if (curTable.data === undefined) throw new Error(`Table ${action.id} is empty`)
     const dataSize = curTable.data.length
     const eachPageSize = action.config.pagination.pageSize
-    if ((action.pageNo - 1) * eachPageSize >= dataSize) {
-      throw new Error(`Page number in table ${action.id} is incorrect`)
-    }
+    let pageNo = action.pageNo || curTable.tableView.pageNo || 1
+    const pageAll = Math.ceil(dataSize / eachPageSize)
+    if (pageNo > pageAll) pageNo = pageAll
     return {
       id: action.id,
       tableView: {
         ...curTable.tableView,
-        pageNo: action.pageNo,
-        pageAll: Math.ceil(dataSize / eachPageSize),
-        data: curTable.data.slice((action.pageNo - 1) * eachPageSize, action.pageNo * eachPageSize)
+        pageNo,
+        pageAll,
+        range: [(pageNo - 1) * eachPageSize, pageNo * eachPageSize]
       }
     }
   },
@@ -171,12 +186,16 @@ const ACTION_HANDLERS = {
   [UPDATE_ROW] : (state, action) => {
     const { data } = findTableState(state, action.id)
     if (data === undefined) throw new Error(`Table ${action.id} is empty`)
-    if (action.rowID < 0 || action.rowID >= data.length) {
-      throw new Error(`Delete at ${action.rowID} index is incorrect. Data size is ${data.length}`)
+    const lastID = data[data.length - 1]._rid
+    if (action.rowID < 0 || action.rowID > lastID) {
+      throw new Error(`Change at ${action.rowID} index is incorrect. Because data size is ${lastID}`)
     }
+    const newData = data.slice(0)
+    const removeID = data.findIndex((row) => row._rid === action.rowID)
+    newData.splice(removeID, 1, ...action.updateData)
     return {
       id: action.id,
-      data: data.slice(action.rowID, 1, ...action.updateData)
+      data: newData
     }
   }
 }
@@ -184,6 +203,11 @@ const ACTION_HANDLERS = {
 export default function TableReducer (state = [], action) {
   const handler = ACTION_HANDLERS[action.type]
 
-  const newState = handler ? changeTableState(state, action.id, handler(state, action)) : state
-  return newState
+  try {
+    let newState = handler ? changeTableState(state, action.id, handler(state, action)) : state
+    return newState
+  } catch (e) {
+    console.error(e)
+    return state
+  }
 }

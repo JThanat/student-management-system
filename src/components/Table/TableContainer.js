@@ -1,5 +1,8 @@
 import { connect } from 'react-redux'
-import { loadTable, changePage, changePageTab, updateRow, deleteRow } from './TableModules'
+import {
+  loadTable, changePage, changePageTab, updateRow, deleteRow,
+  showErrorMsg, showLogMsg
+} from './TableModules'
 
 /*  This is a container component. Notice it does not contain any JSX,
     nor does it import React. This component is **only** responsible for
@@ -16,8 +19,11 @@ const mapDispatchToProps = (dispatch, ownProps) => ({
   loadTable : (src, config) => dispatch(loadTable(src, config, ownProps.id)),
   changePage : (page, config) => dispatch(changePage(page, config, ownProps.id)),
   changePageTab : (startPage) => dispatch(changePageTab(startPage, ownProps.id)),
-  updateRow : (rowID, updateData, tableID) => dispatch(updateRow(rowID, updateData, tableID)),
-  deleteRow : (rowID, tableID) => dispatch(deleteRow(rowID, tableID))
+
+  updateRow : (rowID, updateData) => dispatch(updateRow(rowID, updateData, ownProps.id)),
+  deleteRow : (rowID) => dispatch(deleteRow(rowID, ownProps.id)),
+  onError : (msg) => dispatch(showErrorMsg(msg, ownProps.id)),
+  showLog : (msg) => dispatch(showLogMsg(msg, ownProps.id))
 })
 
 const mapStateToProps = (state, ownProps) => {
@@ -26,7 +32,8 @@ const mapStateToProps = (state, ownProps) => {
     data: table.data || [],
     isLoading: table.isLoading,
     errorMsg: table.error,
-    tableView: table.tableView
+    tableView: table.tableView,
+    logMsg: table.logMsg
   }
 }
 

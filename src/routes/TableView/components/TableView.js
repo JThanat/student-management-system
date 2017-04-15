@@ -16,7 +16,7 @@ class TableView extends Component {
       header: [
         {
           title: 'ID',
-          prop: 'id'
+          prop: '_rid'
         },
         {
           title: 'Username',
@@ -38,13 +38,20 @@ class TableView extends Component {
         {
           title: 'Edit',
           prop: 'edit',
-          isEdit: true
+          isEdit: true,
+          onUpdate: (resolve, reject, data) => {
+            data.username = 'kosate'
+            setTimeout(() => resolve(data), 3000)
+          }
         },
         {
           title: 'Delete',
           prop: 'delete',
           isDelete: true,
-          formatter: () => <div className='btn btn-danger btn-sm'>Delete</div>
+          formatter: () => <div className='btn btn-danger btn-sm'>Delete</div>,
+          onDelete: (resolve, reject, data) => {
+            setTimeout(() => resolve(), 3000)
+          }
         }
       ],
       pagination: {

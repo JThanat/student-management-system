@@ -6,7 +6,18 @@ class Table extends Component {
 
   reloadTable = () => {
     this.props.loadTable(this.src, this.config)
-    this.props.changePage(1, this.config)
+  }
+
+  sliceTableView = () => {
+    try {
+      const props = this.props
+      return props.data.slice(
+        props.tableView.range[0],
+        props.tableView.range[1]
+      )
+    } catch (e) {
+      return []
+    }
   }
 
   componentWillMount () {
@@ -40,20 +51,31 @@ class Table extends Component {
           Load Table
         </div>
         {
+          props.logMsg &&
+          (<div className='alert alert-info'>
+            {props.logMsg}
+          </div>)
+        }
+        {
           props.errorMsg &&
-          (<div className='alert alert-danger' role='alert'>
+          (<div className='alert alert-danger'>
             <strong>Oops!</strong> {props.errorMsg}
           </div>)
         }
         <TableFrame
-          data={tableView.data || []}
+          data={this.sliceTableView()}
           header={config.header}
           isLoading={props.isLoading || false}
           className='table table-bordered table-striped table-md'
+
+          deleteRowFunc={this.props.deleteRow}
+          updateRowFunc={this.props.updateRow}
+          onError={this.props.onError}
+          showLog={this.props.showLog}
           />
         <nav>
           {
-            tableView.data &&
+            tableView.range &&
             <PaginationBar
               startPage={tableView.startPage}
               paginationBarSize={config.pagination.paginationBarSize}
@@ -91,6 +113,8 @@ Table.propTypes = {
   changePageTab: React.PropTypes.func.isRequired,
   deleteRow: React.PropTypes.func.isRequired,
   updateRow: React.PropTypes.func.isRequired,
+  onError: React.PropTypes.func.isRequired,
+  showLog: React.PropTypes.func.isRequired,
   data: React.PropTypes.array,
   isLoading: React.PropTypes.bool,
   errorMsg: React.PropTypes.string,

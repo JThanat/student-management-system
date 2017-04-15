@@ -10,11 +10,15 @@ class Table extends Component {
 
     this.state = {
       deleteModalShow: false,
-      editModalShow: false
+      editModalShow: false,
+      form: {
+
+      }
     }
     this.setShowModal = this.setShowModal.bind(this)
     this.confirmDeleteRow = this.confirmDeleteRow.bind(this)
     this.formEditContent = this.formEditContent.bind(this)
+    this.handleChangeForm = this.handleChangeForm.bind(this)
   }
 
   reloadTable = () => {
@@ -33,23 +37,38 @@ class Table extends Component {
     }
   }
 
-  formEditContent = () => {
+  formEditContent = (autofill) => {
     const { header } = this.props.config
 
     let content = []
     for (let i = 0; i < header.length; i++) {
-      if (header[i].prop === '_rid' || header[i].isDelete || header[i].isEdit) continue
+      const prop = header[i].prop
+      if (prop === '_rid' || header[i].isDelete || header[i].isEdit) continue
       content.push(
         <div className='form-group row'>
           <label className='col-4 col-form-label'>{header[i].title}</label>
           <div className='col-8'>
-            <input className='form-control' name={header[i].prop} />
+            <input
+              className='form-control'
+              name={prop}
+              value={this.state.form[prop] || ''}
+              onChange={(e) => this.handleChangeForm(e, prop)}
+              />
           </div>
         </div>
       )
     }
 
     return content
+  }
+
+  handleChangeForm = (event, property) => {
+    this.setState({
+      form: {
+        ...this.state.form,
+        [property]: event.target.value
+      }
+    })
   }
 
   setShowModal = (modelName, status) => {
@@ -93,7 +112,7 @@ class Table extends Component {
     return (
       <div>
         <Modal isOpen={this.state.editModalShow}>
-          <ModalHeader>Edit data</ModalHeader>
+          <ModalHeader>{this.state.editModalShow ? 'Edit' : 'Add'} data</ModalHeader>
           <ModalBody>
             {this.formEditContent()}
           </ModalBody>

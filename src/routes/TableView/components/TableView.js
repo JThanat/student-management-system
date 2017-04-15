@@ -40,8 +40,7 @@ class TableView extends Component {
           prop: 'edit',
           isEdit: true,
           onUpdate: (resolve, reject, data) => {
-            data.username = 'kosate'
-            setTimeout(() => resolve(data), 3000)
+            setTimeout(() => resolve(data), 500)
           }
         },
         {
@@ -50,7 +49,7 @@ class TableView extends Component {
           isDelete: true,
           formatter: () => <div className='btn btn-danger btn-sm' data-attach-on-delete>Delete</div>,
           onDelete: (resolve, reject, data) => {
-            setTimeout(() => resolve(), 3000)
+            setTimeout(() => resolve(), 500)
           }
         }
       ],

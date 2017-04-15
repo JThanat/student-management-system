@@ -15,8 +15,10 @@ class Table extends Component {
 
       }
     }
+
     this.setShowModal = this.setShowModal.bind(this)
     this.confirmDeleteRow = this.confirmDeleteRow.bind(this)
+    this.confirmEditRow = this.confirmEditRow.bind(this)
     this.formEditContent = this.formEditContent.bind(this)
     this.handleChangeForm = this.handleChangeForm.bind(this)
   }
@@ -37,7 +39,7 @@ class Table extends Component {
     }
   }
 
-  formEditContent = (autofill) => {
+  formEditContent = () => {
     const { header } = this.props.config
 
     let content = []
@@ -45,13 +47,13 @@ class Table extends Component {
       const prop = header[i].prop
       if (prop === '_rid' || header[i].isDelete || header[i].isEdit) continue
       content.push(
-        <div className='form-group row'>
+        <div className='form-group row' key={i}>
           <label className='col-4 col-form-label'>{header[i].title}</label>
           <div className='col-8'>
             <input
               className='form-control'
               name={prop}
-              value={this.state.form[prop] || ''}
+              value={this.state.form ? (this.state.form[prop] || '') : ''}
               onChange={(e) => this.handleChangeForm(e, prop)}
               />
           </div>
@@ -80,6 +82,15 @@ class Table extends Component {
   confirmDeleteRow = (resolve, reject) => {
     this.setShowModal('deleteModal', true)
     this._confirm = resolve
+    this._reject = reject
+  }
+
+  confirmEditRow = (resolve, reject, oldData) => {
+    this.setShowModal('editModal', true)
+    this.setState({
+      form: oldData
+    })
+    this._confirm = () => resolve(this.state.form)
     this._reject = reject
   }
 
@@ -120,7 +131,7 @@ class Table extends Component {
             <div className='btn btn-primary' onClick={() => {
               if (this._confirm) this._confirm()
               this.setShowModal('editModal', false)
-            }}>Delete</div>{' '}
+            }}>{this.state.editModalShow ? 'Edit' : 'Add'}</div>{' '}
             <div className='btn btn-secondary' onClick={() => {
               if (this._reject) this._reject()
               this.setShowModal('editModal', false)
@@ -144,8 +155,11 @@ class Table extends Component {
           </ModalFooter>
         </Modal>
         <div style={{ marginBottom: 15 }}>
-          <div className='btn btn-primary' onClick={() => this.setShowModal('editModal', true)}>
-            Launch demo modal
+          <div
+            className='btn btn-primary'
+            style={{ marginRight: 10 }} 
+            onClick={() => this.setShowModal('editModal', true)}>
+            Test Model
           </div>
           <div
             className='btn btn-primary'
@@ -175,6 +189,7 @@ class Table extends Component {
           updateRowFunc={this.props.updateRow}
 
           confirmDeleteRow={this.confirmDeleteRow}
+          confirmEditRow={this.confirmEditRow}
 
           onError={this.props.onError}
           showLog={this.props.showLog}

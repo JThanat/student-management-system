@@ -64,15 +64,25 @@ class TableFrame extends Component {
           let updateBtn = typeof header.formatter === 'function'
             ? header.formatter()
             : (<div className='btn btn-warning btn-sm'>Edit</div>)
+
           updateBtn = React.cloneElement(
             updateBtn,
             {
               onClick: () => {
-                this.log('Editing...')
-                header.onUpdate = header.onUpdate || ((resolve, reject, data) => {
-                  resolve(data)
-                })
-                new Promise((resolve, reject) => header.onUpdate(resolve, reject, JSON.parse(JSON.stringify(rowData))))
+                const confirmEditRow = props.confirmEditRow || ((resolve, reject, data) => resolve(data))
+                header.onUpdate = header.onUpdate || ((resolve, reject, data) => resolve(data))
+
+                new Promise(
+                  (resolve, reject) => confirmEditRow(resolve, reject, JSON.parse(JSON.stringify(rowData)))
+                ).then(
+                    (newData) => {
+                      this.log('Editing...')
+                      return new Promise(
+                        (resolve, reject) => header.onUpdate(resolve, reject, newData)
+                      )
+                    },
+                    () => Promise.reject('')
+                  )
                   .then(
                     (data) => {
                       this.props.updateRowFunc(rowData._rid, data)
@@ -141,6 +151,7 @@ TableFrame.propTypes = {
   deleteRowFunc: React.PropTypes.func,
   updateRowFunc: React.PropTypes.func,
   confirmDeleteRow: React.PropTypes.func,
+  confirmEditRow: React.PropTypes.func,
   onError: React.PropTypes.func,
   showLog: React.PropTypes.func
 }

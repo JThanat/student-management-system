@@ -9,10 +9,12 @@ class Table extends Component {
     super(props)
 
     this.state = {
-      deleteModalShow: false
+      deleteModalShow: false,
+      editModalShow: false
     }
     this.setShowModal = this.setShowModal.bind(this)
     this.confirmDeleteRow = this.confirmDeleteRow.bind(this)
+    this.formEditContent = this.formEditContent.bind(this)
   }
 
   reloadTable = () => {
@@ -29,6 +31,25 @@ class Table extends Component {
     } catch (e) {
       return []
     }
+  }
+
+  formEditContent = () => {
+    const { header } = this.props.config
+
+    let content = []
+    for (let i = 0; i < header.length; i++) {
+      if (header[i].prop === '_rid' || header[i].isDelete || header[i].isEdit) continue
+      content.push(
+        <div className='form-group row'>
+          <label className='col-4 col-form-label'>{header[i].title}</label>
+          <div className='col-8'>
+            <input className='form-control' name={header[i].prop} />
+          </div>
+        </div>
+      )
+    }
+
+    return content
   }
 
   setShowModal = (modelName, status) => {
@@ -71,6 +92,22 @@ class Table extends Component {
 
     return (
       <div>
+        <Modal isOpen={this.state.editModalShow}>
+          <ModalHeader>Edit data</ModalHeader>
+          <ModalBody>
+            {this.formEditContent()}
+          </ModalBody>
+          <ModalFooter>
+            <div className='btn btn-primary' onClick={() => {
+              if (this._confirm) this._confirm()
+              this.setShowModal('editModal', false)
+            }}>Delete</div>{' '}
+            <div className='btn btn-secondary' onClick={() => {
+              if (this._reject) this._reject()
+              this.setShowModal('editModal', false)
+            }}>Cancel</div>
+          </ModalFooter>
+        </Modal>
         <Modal isOpen={this.state.deleteModalShow}>
           <ModalHeader>Delete data</ModalHeader>
           <ModalBody>
@@ -88,7 +125,7 @@ class Table extends Component {
           </ModalFooter>
         </Modal>
         <div style={{ marginBottom: 15 }}>
-          <div className='btn btn-primary' onClick={() => this.setShowModal('deleteModal', true)}>
+          <div className='btn btn-primary' onClick={() => this.setShowModal('editModal', true)}>
             Launch demo modal
           </div>
           <div

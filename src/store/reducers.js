@@ -1,9 +1,11 @@
 import { combineReducers } from 'redux'
 import locationReducer from './location'
+import TableReducer from '../components/Table/TableModules'
 
 export const makeRootReducer = (asyncReducers) => {
   return combineReducers({
     location: locationReducer,
+    table: TableReducer,
     ...asyncReducers
   })
 }

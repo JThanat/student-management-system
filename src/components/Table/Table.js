@@ -4,12 +4,9 @@ import PaginationBar from '../PaginationBar'
 
 class Table extends Component {
 
-  deleteRow = (row, id) => {
-    console.log(row, id)
-  }
-
-  editRow = (row, id) => {
-    console.log(row, id)
+  reloadTable = () => {
+    this.props.loadTable(this.src, this.config)
+    this.props.changePage(1, this.config)
   }
 
   componentWillMount () {
@@ -38,7 +35,7 @@ class Table extends Component {
       <div>
         <div
           className='btn btn-primary'
-          onClick={() => this.props.loadTable(this.src, this.config)}
+          onClick={this.reloadTable}
           style={{ marginBottom: 15 }}>
           Load Table
         </div>
@@ -52,7 +49,8 @@ class Table extends Component {
           data={tableView.data || []}
           header={config.header}
           isLoading={props.isLoading || false}
-          className='table table-bordered table-striped table-md' />
+          className='table table-bordered table-striped table-md'
+          />
         <nav>
           {
             tableView.data &&
@@ -91,6 +89,8 @@ Table.propTypes = {
   loadTable: React.PropTypes.func.isRequired,
   changePage: React.PropTypes.func.isRequired,
   changePageTab: React.PropTypes.func.isRequired,
+  deleteRow: React.PropTypes.func.isRequired,
+  updateRow: React.PropTypes.func.isRequired,
   data: React.PropTypes.array,
   isLoading: React.PropTypes.bool,
   errorMsg: React.PropTypes.string,

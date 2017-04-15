@@ -1,11 +1,13 @@
 import 'whatwg-fetch'
 
-export const TABLE_LOAD_COMPLETE = 'TABLE_LOAD_COMPLETE'
-export const TABLE_LOADING = 'TABLE_LOADING'
-export const TABLE_LOAD_ERROR = 'TABLE_LOAD_ERROR'
+const TABLE_LOAD_COMPLETE = 'TABLE_LOAD_COMPLETE'
+const TABLE_LOADING = 'TABLE_LOADING'
+const TABLE_LOAD_ERROR = 'TABLE_LOAD_ERROR'
 
-export const CHANGE_PAGE = 'CHANGE_PAGE'
-export const CHANGE_PAGE_TAB = 'CHANGE_PAGE_TAB'
+const CHANGE_PAGE = 'CHANGE_PAGE'
+const CHANGE_PAGE_TAB = 'CHANGE_PAGE_TAB'
+
+const UPDATE_ROW = 'TABLE_UPDATE_ROW'
 
 const initialTableState = {
   isLoading: false,
@@ -75,12 +77,28 @@ export const loadTable = (src, config, id) => {
   }
 }
 
-// export const actions = {
-//   loadTable
-// }
+export const deleteRow = (rowID, tableID) => {
+  return {
+    type: UPDATE_ROW,
+    updateData: [],
+    rowID,
+    id: tableID
+  }
+}
+
+export const updateRow = (rowID, updateData, tableID) => {
+  return {
+    type: UPDATE_ROW,
+    rowID,
+    updateData: [updateData],
+    id: tableID
+  }
+}
 
 const findTableState = (state, id) => {
-  return state.find((tableState) => tableState.id === id)
+  const curTable = state.find((tableState) => tableState.id === id)
+  if (curTable === undefined) throw new Error(`Table ${id} not found`)
+  return curTable
 }
 
 const changeTableState = (state, tid, objToMerge) => {
@@ -101,37 +119,36 @@ const changeTableState = (state, tid, objToMerge) => {
 
 const ACTION_HANDLERS = {
   [TABLE_LOAD_COMPLETE] : (state, action) => {
-    return changeTableState(state, action.id, {
+    return {
       id: action.id,
       isLoading: false,
       error: null,
       data: action.data
-    })
+    }
   },
   [TABLE_LOADING] : (state, action) => {
-    return changeTableState(state, action.id, {
+    return {
       id: action.id,
       error: null,
       isLoading: true
-    })
+    }
   },
   [TABLE_LOAD_ERROR] : (state, action) => {
-    return changeTableState(state, action.id, {
+    return {
       id: action.id,
       isLoading: false,
       error: action.error.toString()
-    })
+    }
   },
   [CHANGE_PAGE] : (state, action) => {
     const curTable = findTableState(state, action.id)
-    if (curTable === undefined) throw new Error(`Table ${action.id} not found`)
     if (curTable.data === undefined) throw new Error(`Table ${action.id} is empty`)
     const dataSize = curTable.data.length
     const eachPageSize = action.config.pagination.pageSize
     if ((action.pageNo - 1) * eachPageSize >= dataSize) {
       throw new Error(`Page number in table ${action.id} is incorrect`)
     }
-    return changeTableState(state, action.id, {
+    return {
       id: action.id,
       tableView: {
         ...curTable.tableView,
@@ -139,23 +156,34 @@ const ACTION_HANDLERS = {
         pageAll: Math.ceil(dataSize / eachPageSize),
         data: curTable.data.slice((action.pageNo - 1) * eachPageSize, action.pageNo * eachPageSize)
       }
-    })
+    }
   },
   [CHANGE_PAGE_TAB] : (state, action) => {
     const curTable = findTableState(state, action.id)
-    if (curTable === undefined) throw new Error(`Table ${action.id} not found`)
-    return changeTableState(state, action.id, {
+    return {
       id: action.id,
       tableView: {
         ...curTable.tableView,
         startPage: action.startPage
       }
-    })
+    }
+  },
+  [UPDATE_ROW] : (state, action) => {
+    const { data } = findTableState(state, action.id)
+    if (data === undefined) throw new Error(`Table ${action.id} is empty`)
+    if (action.rowID < 0 || action.rowID >= data.length) {
+      throw new Error(`Delete at ${action.rowID} index is incorrect. Data size is ${data.length}`)
+    }
+    return {
+      id: action.id,
+      data: data.slice(action.rowID, 1, ...action.updateData)
+    }
   }
 }
 
 export default function TableReducer (state = [], action) {
   const handler = ACTION_HANDLERS[action.type]
 
-  return handler ? handler(state, action) : state
+  const newState = handler ? changeTableState(state, action.id, handler(state, action)) : state
+  return newState
 }

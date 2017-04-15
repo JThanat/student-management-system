@@ -1,5 +1,5 @@
 import { connect } from 'react-redux'
-import { loadTable, changePage, changePageTab } from './TableModules'
+import { loadTable, changePage, changePageTab, updateRow, deleteRow } from './TableModules'
 
 /*  This is a container component. Notice it does not contain any JSX,
     nor does it import React. This component is **only** responsible for
@@ -15,7 +15,9 @@ import Table from './Table'
 const mapDispatchToProps = (dispatch, ownProps) => ({
   loadTable : (src, config) => dispatch(loadTable(src, config, ownProps.id)),
   changePage : (page, config) => dispatch(changePage(page, config, ownProps.id)),
-  changePageTab : (startPage) => dispatch(changePageTab(startPage, ownProps.id))
+  changePageTab : (startPage) => dispatch(changePageTab(startPage, ownProps.id)),
+  updateRow : (rowID, updateData, tableID) => dispatch(updateRow(rowID, updateData, tableID)),
+  deleteRow : (rowID, tableID) => dispatch(deleteRow(rowID, tableID))
 })
 
 const mapStateToProps = (state, ownProps) => {

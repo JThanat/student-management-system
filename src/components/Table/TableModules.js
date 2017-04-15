@@ -50,7 +50,7 @@ export const loadTable = (src, config, id) => {
           try {
             let rawBody = JSON.parse(body)
             body = []
-            for (let i = 0; i < 42; i++) {
+            for (let i = 0; i < 150; i++) {
               body.push({
                 id: i + 1,
                 ...rawBody[i % rawBody.length]

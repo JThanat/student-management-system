@@ -1,11 +1,8 @@
 import React, { Component } from 'react'
 import TableFrame from '../TableFrame'
+import PaginationBar from '../PaginationBar'
 
 class Table extends Component {
-
-  loadTable = () => {
-    this.props.loadTable(this.src, this.config)
-  }
 
   deleteRow = (row, id) => {
     console.log(row, id)
@@ -15,21 +12,13 @@ class Table extends Component {
     console.log(row, id)
   }
 
-  changePage = (pageNo) => {
-    this.props.changePage(pageNo, this.config)
-  }
-
-  changePageTab = (startPage) => {
-    this.props.changePageTab(startPage)
-  }
-
   componentWillMount () {
     const props = this.props
     const { config } = props
 
     config.pagination = config.pagination || {
       pageSize: config.pagination.pageSize || 10,
-      paginationTabSize: config.pagination.paginationTabSize || 5
+      paginationBarSize: config.pagination.paginationBarSize || 5
     }
 
     this.config = config
@@ -47,7 +36,10 @@ class Table extends Component {
 
     return (
       <div>
-        <div className='btn btn-primary' onClick={this.loadTable} style={{ marginBottom: 15 }}>
+        <div
+          className='btn btn-primary'
+          onClick={() => this.props.loadTable(this.src, this.config)}
+          style={{ marginBottom: 15 }}>
           Load Table
         </div>
         {
@@ -62,47 +54,18 @@ class Table extends Component {
           isLoading={props.isLoading || false}
           className='table table-bordered table-striped table-md' />
         <nav>
-          <ul className='pagination'>
-            {
-              tableView && (function (thiss) {
-                let prev = (tableView.startPage || 1) - config.pagination.paginationTabSize
-                if (prev >= 1) {
-                  return (<li className='page-item' onClick={() => thiss.changePageTab(prev)}>
-                    <span className='page-link'>Prev</span>
-                  </li>)
-                } else {
-                  return null
-                }
-              })(this)
-            }
-            {
-              tableView && Array(config.pagination.paginationTabSize).fill(1).map((el, i) => {
-                const id = i + (tableView.startPage || 1)
-                if (id <= tableView.pageAll) {
-                  return (<li
-                    className={'page-item ' + (id === tableView.pageNo ? 'active' : '')}
-                    key={i}
-                    onClick={() => this.changePage(id)}>
-                    <span className='page-link'>{ id }</span>
-                  </li>)
-                } else {
-                  return null
-                }
-              })
-            }
-            {
-              tableView && (function (thiss) {
-                let next = config.pagination.paginationTabSize + (tableView.startPage || 1)
-                if (next <= tableView.pageAll) {
-                  return (<li className='page-item' onClick={() => thiss.changePageTab(next)}>
-                    <span className='page-link'>Next</span>
-                  </li>)
-                } else {
-                  return null
-                }
-              })(this)
-            }
-          </ul>
+          {
+            tableView.data &&
+            <PaginationBar
+              startPage={tableView.startPage}
+              paginationBarSize={config.pagination.paginationBarSize}
+              pageNo={tableView.pageNo}
+              pageAll={tableView.pageAll}
+
+              onChangePage={(no) => this.props.changePage(no, this.config)}
+              onChangePageTab={(startPage) => this.props.changePageTab(startPage)}
+              />
+          }
         </nav>
       </div>
     )
@@ -119,19 +82,22 @@ const configTypes = React.PropTypes.shape({
   })).isRequired,
   pagination: React.PropTypes.shape({
     pageSize: React.PropTypes.number.isRequired,
-    paginationTabSize: React.PropTypes.number.isRequired
+    paginationBarSize: React.PropTypes.number.isRequired
   })
 }).isRequired
 
 Table.propTypes = {
+  // derived from container
   loadTable: React.PropTypes.func.isRequired,
   changePage: React.PropTypes.func.isRequired,
   changePageTab: React.PropTypes.func.isRequired,
-  config: configTypes,
-  id: React.PropTypes.string.isRequired,
   data: React.PropTypes.array,
   isLoading: React.PropTypes.bool,
-  errorMsg: React.PropTypes.string
+  errorMsg: React.PropTypes.string,
+
+  config: configTypes,
+  id: React.PropTypes.string.isRequired,
+  url: React.PropTypes.string.isRequired
 }
 
 export default Table

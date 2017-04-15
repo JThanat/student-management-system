@@ -49,7 +49,7 @@ class TableView extends Component {
       ],
       pagination: {
         pageSize: 10,
-        paginationTabSize: 5
+        paginationBarSize: 5
       }
     }
     return (

@@ -25,31 +25,40 @@ class TableFrame extends Component {
         if (header.isDelete) {
           let delBtn = typeof header.formatter === 'function'
             ? header.formatter()
-            : (<div className='btn btn-danger btn-sm'>Delete</div>)
+            : (<div className='btn btn-danger btn-sm' data-attach-on-delete>Delete</div>)
+
+          const onDelete = () => {
+            const confirmDeleteRow = props.confirmDeleteRow || ((resolve) => resolve())
+            header.onDelete = header.onDelete || ((resolve) => resolve())
+            new Promise(confirmDeleteRow)
+              .then(
+                () => {
+                  this.log('Deleting...')
+                  return new Promise((resolve, reject) => header.onDelete(resolve, reject, rowData))
+                },
+                () => Promise.reject('')
+              )
+              .then(
+                () => {
+                  this.props.deleteRowFunc(rowData._rid)
+                  this.log('')
+                },
+                (reason) => {
+                  this.log('')
+                  typeof this.props.onError === 'function'
+                    ? this.props.onError(reason)
+                    : null
+                }
+              )
+          }
+
           delBtn = React.cloneElement(
             delBtn,
             {
-              onClick: () => {
-                this.log('Deleting...')
-                header.onDelete = header.onDelete || ((resolve, reject, data) => {
-                  resolve()
-                })
-                new Promise((resolve, reject) => header.onDelete(resolve, reject, rowData))
-                  .then(
-                    () => {
-                      this.props.deleteRowFunc(rowData._rid)
-                      this.log('')
-                    },
-                    (reason) => {
-                      this.log('')
-                      typeof this.props.onError === 'function'
-                        ? this.props.onError(reason)
-                        : null
-                    }
-                  )
-              }
+              onClick: delBtn.props['data-attach-on-delete'] ? onDelete : null
             }
           )
+
           return <td key={j}>{delBtn}</td>
         } else if (header.isEdit) {
           let updateBtn = typeof header.formatter === 'function'
@@ -131,6 +140,7 @@ TableFrame.propTypes = {
 
   deleteRowFunc: React.PropTypes.func,
   updateRowFunc: React.PropTypes.func,
+  confirmDeleteRow: React.PropTypes.func,
   onError: React.PropTypes.func,
   showLog: React.PropTypes.func
 }

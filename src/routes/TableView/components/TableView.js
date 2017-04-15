@@ -48,7 +48,7 @@ class TableView extends Component {
           title: 'Delete',
           prop: 'delete',
           isDelete: true,
-          formatter: () => <div className='btn btn-danger btn-sm'>Delete</div>,
+          formatter: () => <div className='btn btn-danger btn-sm' data-attach-on-delete>Delete</div>,
           onDelete: (resolve, reject, data) => {
             setTimeout(() => resolve(), 3000)
           }
@@ -60,7 +60,7 @@ class TableView extends Component {
       }
     }
     return (
-      <TableComponent id={this.tableID} config={config} url='../test/tableData.json' test />
+      <TableComponent id={this.tableID} config={config} url='../test/tableData.json' />
     )
   }
 }

@@ -37,7 +37,7 @@ export const changePageTab = (startPage, id) => {
 export const showErrorMsg = (msg, id) => {
   return {
     type: TABLE_ERROR,
-    error: msg ? msg.toString() : 'No message error.',
+    error: msg ? msg.toString() : null,
     id
   }
 }

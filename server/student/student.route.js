@@ -22,5 +22,5 @@ router.get('/', (req, res) => {
   })
 })
 
-router.pos('/')
+// router.pos('/')
 module.exports = router

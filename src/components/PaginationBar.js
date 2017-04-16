@@ -26,7 +26,7 @@ class PaginationBar extends Component {
           })()
         }
         {
-          Array(paginationBarSize).fill(1).map((el, i) => {
+          pageAll > 1 && Array(paginationBarSize).fill(1).map((el, i) => {
             const id = i + (startPage || 1)
             if (id <= pageAll) {
               return (<li

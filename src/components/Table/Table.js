@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 import TableFrame from '../TableFrame'
 import PaginationBar from '../PaginationBar'
 import { Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap'
+import Measure from 'react-measure'
 import Promise from 'bluebird'
 import './Table.scss'
 
@@ -16,7 +17,8 @@ class Table extends Component {
       addModalShow: false,
       form: {
         modal: {}
-      }
+      },
+      tableWidth: 0
     }
 
     this.setShowModal = this.setShowModal.bind(this)
@@ -30,7 +32,6 @@ class Table extends Component {
   reloadTable = (customSrc = this.props.config.src) => {
     const { config } = this.props
     config.src = Object.assign({}, config.src, customSrc)
-    console.log(config)
     this.props.loadTable(config)
   }
 
@@ -202,7 +203,7 @@ class Table extends Component {
           <div
             className='btn btn-primary'
             onClick={this.reloadTable}>
-            <i className='fa fa-refresh' /> Load Table
+            <i className='fa fa-refresh' /> Refresh
           </div>
         </div>
         {
@@ -217,7 +218,7 @@ class Table extends Component {
             <strong>Oops!</strong> {props.errorMsg}
           </div>)
         }
-        <div className='table-responsive'>
+        <div style={{ width: this.state.tableWidth, overflowX: 'scroll' }}>
           <TableFrame
             className='table table-responsive table-bordered table-striped table-md'
             data={this.sliceTableView()}
@@ -234,20 +235,27 @@ class Table extends Component {
             showLog={this.props.showLog}
             />
         </div>
-        <nav>
-          {
-            tableView.range &&
-            <PaginationBar
-              startPage={tableView.startPage}
-              paginationBarSize={config.pagination.paginationBarSize}
-              pageNo={tableView.pageNo}
-              pageAll={tableView.pageAll}
+        <Measure
+          onMeasure={(dimensions) => {
+            console.log(dimensions)
+            this.setState({
+              tableWidth: dimensions.width
+            })
+          }}>
+          <div />
+        </Measure>
+        <nav>{
+          tableView.range &&
+          <PaginationBar
+            startPage={tableView.startPage}
+            paginationBarSize={config.pagination.paginationBarSize}
+            pageNo={tableView.pageNo}
+            pageAll={tableView.pageAll}
 
-              onChangePage={(no) => this.props.changePage(no, config)}
-              onChangePageTab={(startPage) => this.props.changePageTab(startPage)}
-              />
-          }
-        </nav>
+            onChangePage={(no) => this.props.changePage(no, config)}
+            onChangePageTab={(startPage) => this.props.changePageTab(startPage)}
+            />
+        }</nav>
       </div>
     )
   }

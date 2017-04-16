@@ -2,19 +2,19 @@ const mysql = require('mysql')
 const async = require('async')
 const config = require('../config/config.js')
 
-const PRODUCTION_DB = 'app_prod_database'
-const TEST_DB = 'app_test_database'
+// const PRODUCTION_DB = 'app_prod_database'
+// const TEST_DB = 'app_test_database'
 
 const state = {
-  pool: null,
+  connection: null,
   mode: null
 }
 
-exports.MODE_TEST = 'mode_test'
-exports.MODE_PRODUCTION = 'mode_production'
+exports.MODE_TEST = 'MODE_TEST'
+exports.MODE_PRODUCTION = 'MODE_PRODUCTION'
 
 exports.connect = (mode, done) => {
-  state.pool = mysql.createPool({
+  state.connection = mysql.createConnection({
     connectionLimit: config.db.connectionLimit,
     host: config.db.hostName,
     port: config.db.port,
@@ -23,19 +23,20 @@ exports.connect = (mode, done) => {
     database: config.db.databaseName,
     debug: config.debug
   })
+
+  state.connection.connect(done)
   state.mode = mode
-  done()
 }
 
 exports.get = () => {
-  return state.pool
+  return state.connection
 }
 
 // This function will insert from bundle of table into database
 // we might not use this because we can run auto script file as well
 exports.fixtures = (data, done) => {
-  let pool = state.pool
-  if (!pool) return done(new Error('Missing database connection.'))
+  let connection = state.connection
+  if (!connection) return done(new Error('Missing database connection.'))
 
   let names = Object.keys(data.tables)
   let keys = null
@@ -48,17 +49,17 @@ exports.fixtures = (data, done) => {
         return "'" + row[key] + "'"
       })
 
-      pool.query('INSERT INTO ' + name + ' (' + keys.join(',') + ') VALUES (' + values.join(',') + ')', callBack)
+      connection.query('INSERT INTO ' + name + ' (' + keys.join(',') + ') VALUES (' + values.join(',') + ')', callBack)
     }, callBack)
   }, done)
 }
 
 // This function will clear the data in the database (This does not drop the table)
 exports.clear = (tables, done) => {
-  let pool = state.pool
-  if (!pool) return done(new Error('Missing database connection.'))
+  let connection = state.connection
+  if (!connection) return done(new Error('Missing database connection.'))
 
   async.each(tables, (name, callBack) => {
-    pool.query('DELETE * FROM ' + name, callBack)
+    connection.query('DELETE * FROM ' + name, callBack)
   }, done)
 }

@@ -6,6 +6,7 @@ const webpackConfig = require('../config/webpack.config')
 const project = require('../config/project.config')
 const compress = require('compression')
 const bodyParser = require('body-parser')
+const chalk = require('chalk')
 
 const config = require('./config/config')
 const db = require('./utilities/db')
@@ -79,18 +80,24 @@ if (project.env === 'development') {
 // ------------------------------------
 // Connecting to MySQL
 // ------------------------------------
-db.connect(config.test ? db.MODE_TEST : db.MODE_PRODUCTION, (err) => {
-  if (err) {
-    console.error('Cannot Connect To MySQL')
-    process.exit(1)
-  } else {
-    console.log('Successfully connect to MySQL on ' + config.db.hostName + ':' + config.db.port)
-  }
-})
-
-
-
-
-
+if (Object.keys(config).length === 0 && config.constructor === Object) {
+  console.error(
+    chalk.red(
+      '\n' +
+      '=============================================================================================\n' +
+      chalk.bold('Config File Error: No config file\n') +
+      'Please copy file in server/config/config.sample.js to config.js then configuration your file.\n' +
+      '=============================================================================================\n'
+    )
+  )
+} else {
+  db.connect(config.test ? db.MODE_TEST : db.MODE_PRODUCTION, (err) => {
+    if (err) {
+      console.error(chalk.red(chalk.bold('[sql] Cannot Connect To MySQL ') + err.message))
+    } else {
+      console.log(chalk.green('[sql] Successfully connect') + ' to MySQL on ' + config.db.hostName + ':' + config.db.port)
+    }
+  })
+}
 
 module.exports = app

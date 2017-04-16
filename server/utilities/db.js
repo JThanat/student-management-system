@@ -28,7 +28,7 @@ exports.connect = (mode, done) => {
   state.mode = mode
 }
 
-exports.get = () => {
+exports.getConnection = () => {
   return state.connection
 }
 

@@ -1,12 +1,16 @@
-const mysql = require('mysql')
 const db = require('../utilities/db.js')
+const utils = require('../utilities/utils.js')
 
 exports.getAllStudent = (done) => {
-  // get all student from the table
-  let pool = db.get()
+  // Get connection from dataabase
+  const connection = db.getConnection()
 
-  pool.query('SELECT * FROM student', (err, results, fields) => {
-    if (err) return done(err)
+  // Query
+  connection.query('SELECT * FROM students', (err, results, fields) => {
+    if (err) {
+      utils.log(err)
+      return done(err)
+    }
     done(null, results)
   })
 }

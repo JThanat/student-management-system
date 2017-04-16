@@ -95,7 +95,10 @@ if (Object.keys(config).length === 0 && config.constructor === Object) {
     if (err) {
       console.error(chalk.red(chalk.bold('[sql] Cannot Connect To MySQL ') + err.message))
     } else {
-      console.log(chalk.green('[sql] Successfully connect') + ' to MySQL on ' + config.db.hostName + ':' + config.db.port)
+      console.log(
+        chalk.green('[sql] Successfully connect') +
+        ' to MySQL on ' + config.db.hostName + ':' + config.db.port
+      )
     }
   })
 }

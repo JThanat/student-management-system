@@ -13,6 +13,12 @@ class TableView extends Component {
 
   render () {
     const config = {
+      table: {
+        add: (resolve, reject, newData) => {
+          console.log(newData)
+          resolve()
+        }
+      },
       header: [
         {
           title: 'ID',
@@ -20,7 +26,8 @@ class TableView extends Component {
         },
         {
           title: 'Username',
-          prop: 'username'
+          prop: 'username',
+          isEditable: false
         },
         {
           title: 'Date registered',

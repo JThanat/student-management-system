@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 import TableFrame from '../TableFrame'
 import PaginationBar from '../PaginationBar'
 import { Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap'
+import Promise from 'bluebird'
 import './Table.scss'
 
 class Table extends Component {
@@ -21,12 +22,13 @@ class Table extends Component {
     this.setShowModal = this.setShowModal.bind(this)
     this.confirmDeleteRow = this.confirmDeleteRow.bind(this)
     this.confirmEditRow = this.confirmEditRow.bind(this)
+    this.addRow = this.addRow.bind(this)
     this.formEditContent = this.formEditContent.bind(this)
     this.handleChangeForm = this.handleChangeForm.bind(this)
   }
 
-  reloadTable = () => {
-    this.props.loadTable(this.src, this.config)
+  reloadTable = (src = this.src) => {
+    this.props.loadTable(src, this.config)
   }
 
   sliceTableView = () => {
@@ -57,6 +59,7 @@ class Table extends Component {
               name={prop}
               value={this.state.form.modal ? (this.state.form.modal[prop] || '') : ''}
               onChange={(e) => this.handleChangeForm(e, prop)}
+              disabled={header[i].isEditable === false}
               />
           </div>
         </div>
@@ -108,8 +111,19 @@ class Table extends Component {
       }
     })
     this._confirm = () => {
-      // this.props.showLog('Adding data...')
-      this.reloadTable()
+      const addFunc =
+        (this.props.config.table ? this.props.config.table.add : null) ||
+        ((resolve) => resolve())
+
+      this.props.showLog('Adding data...')
+      new Promise((resolve, reject) => addFunc(resolve, reject, this.state.form.modal))
+        .then(
+          () => {
+            this.props.showLog('')
+            this.reloadTable()
+          },
+          (reason) => this.props.onError(reason)
+        )
     }
     this._reject = () => {}
   }

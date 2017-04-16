@@ -16,7 +16,9 @@ router.get('/all', (req, res) => {
   ], (err, result) => {
     result = result[0]
     if (!err) {
-      res.json(result)
+      res.json({ success: true, data: result })
+    } else {
+      res.status(500).json({ success: false })
     }
   })
 })

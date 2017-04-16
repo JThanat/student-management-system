@@ -84,8 +84,8 @@ class TableFrame extends Component {
                     () => Promise.reject('')
                   )
                   .then(
-                    (data) => {
-                      this.props.updateRowFunc(rowData._rid, data)
+                    (newData) => {
+                      this.props.updateRowFunc(rowData._rid, newData)
                       this.log('')
                     },
                     (reason) => {

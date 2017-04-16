@@ -16,7 +16,7 @@ import Table from './Table'
     implementing our wrapper around increment; the component doesn't care   */
 
 const mapDispatchToProps = (dispatch, ownProps) => ({
-  loadTable : (src, config) => dispatch(loadTable(src, config, ownProps.id)),
+  loadTable : (config) => dispatch(loadTable(config, ownProps.id)),
   changePage : (page, config) => dispatch(changePage(page, config, ownProps.id)),
   changePageTab : (startPage) => dispatch(changePageTab(startPage, ownProps.id)),
 

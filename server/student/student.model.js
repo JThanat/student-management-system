@@ -11,10 +11,10 @@ exports.getAllStudent = (done) => {
       utils.log(err)
       return done(err)
     }
-    done(null, results)
+    return done(null, results)
   })
 }
 
-exports.insert = () => {
-  // add insert function here
-}
+// exports.insert = () => {
+//   // add insert function here
+// }

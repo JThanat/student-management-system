@@ -27,8 +27,11 @@ class Table extends Component {
     this.handleChangeForm = this.handleChangeForm.bind(this)
   }
 
-  reloadTable = (src = this.src) => {
-    this.props.loadTable(src, this.config)
+  reloadTable = (customSrc = this.props.config.src) => {
+    const { config } = this.props
+    config.src = Object.assign({}, config.src, customSrc)
+    console.log(config)
+    this.props.loadTable(config)
   }
 
   sliceTableView = () => {
@@ -136,11 +139,6 @@ class Table extends Component {
       pageSize: config.pagination.pageSize || 10,
       paginationBarSize: config.pagination.paginationBarSize || 5
     }
-
-    this.config = config
-    this.src = {
-      url: props.url
-    }
   }
 
   componentDidMount () {
@@ -150,7 +148,7 @@ class Table extends Component {
   render () {
     const props = this.props
     let { tableView } = props
-    const config = this.config
+    const config = props.config
 
     tableView = tableView || {}
 
@@ -219,21 +217,23 @@ class Table extends Component {
             <strong>Oops!</strong> {props.errorMsg}
           </div>)
         }
-        <TableFrame
-          data={this.sliceTableView()}
-          header={config.header}
-          isLoading={props.isLoading || false}
-          className='table table-bordered table-striped table-md'
+        <div className='table-responsive'>
+          <TableFrame
+            className='table table-responsive table-bordered table-striped table-md'
+            data={this.sliceTableView()}
+            header={config.header}
+            isLoading={props.isLoading || false}
 
-          deleteRowFunc={this.props.deleteRow}
-          updateRowFunc={this.props.updateRow}
+            deleteRowFunc={this.props.deleteRow}
+            updateRowFunc={this.props.updateRow}
 
-          confirmDeleteRow={this.confirmDeleteRow}
-          confirmEditRow={this.confirmEditRow}
+            confirmDeleteRow={this.confirmDeleteRow}
+            confirmEditRow={this.confirmEditRow}
 
-          onError={this.props.onError}
-          showLog={this.props.showLog}
-          />
+            onError={this.props.onError}
+            showLog={this.props.showLog}
+            />
+        </div>
         <nav>
           {
             tableView.range &&
@@ -243,7 +243,7 @@ class Table extends Component {
               pageNo={tableView.pageNo}
               pageAll={tableView.pageAll}
 
-              onChangePage={(no) => this.props.changePage(no, this.config)}
+              onChangePage={(no) => this.props.changePage(no, config)}
               onChangePageTab={(startPage) => this.props.changePageTab(startPage)}
               />
           }
@@ -264,8 +264,12 @@ const configTypes = React.PropTypes.shape({
   pagination: React.PropTypes.shape({
     pageSize: React.PropTypes.number.isRequired,
     paginationBarSize: React.PropTypes.number.isRequired
-  })
-}).isRequired
+  }),
+  src: React.PropTypes.shape({
+    url: React.PropTypes.string.isRequired,
+    parser: React.PropTypes.func
+  }).isRequired
+})
 
 Table.propTypes = {
   // derived from container
@@ -280,9 +284,8 @@ Table.propTypes = {
   isLoading: React.PropTypes.bool,
   errorMsg: React.PropTypes.string,
 
-  config: configTypes,
-  id: React.PropTypes.string.isRequired,
-  url: React.PropTypes.string.isRequired
+  config: configTypes.isRequired,
+  id: React.PropTypes.string.isRequired
 }
 
 export default Table

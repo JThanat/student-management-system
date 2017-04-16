@@ -4,6 +4,7 @@ import Home from './Home'
 import Duck from './Duck'
 import CoreTable from './CoreTable'
 import CounterRoute from './Counter'
+import Student from './Student'
 import TableView from './TableView'
 
 /*  Note: Instead of using JSX, we recommend using react-router
@@ -18,7 +19,8 @@ export const createRoutes = (store) => ({
     CounterRoute(store),
     Duck,
     CoreTable,
-    TableView(store)
+    Student,
+    TableView
   ]
 })
 

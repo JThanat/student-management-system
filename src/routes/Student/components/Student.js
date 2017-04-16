@@ -1,14 +1,14 @@
 import React, { Component } from 'react'
-import TableComponent from '../../../components/Table'
+import Table from '../../../components/Table'
 import { staticID } from '../../../utils/unique'
 
 // import { Link } from 'react-router'
 
-class TableView extends Component {
+class Student extends Component {
 
   constructor (props) {
     super(props)
-    this.tableID = staticID('TableView.table')
+    this.tableID = staticID('Student.table')
   }
 
   render () {
@@ -21,26 +21,41 @@ class TableView extends Component {
       },
       header: [
         {
-          title: 'ID',
-          prop: '_rid'
-        },
-        {
-          title: 'Username',
-          prop: 'username',
+          title: 'Student ID',
+          prop: 'student_id',
           isEditable: false
         },
         {
-          title: 'Date registered',
-          prop: 'date'
+          title: 'Title',
+          prop: 'title'
         },
         {
-          title: 'Role',
-          prop: 'role'
+          title: 'First Name',
+          prop: 'firstname'
         },
         {
-          title: 'Status',
-          prop: 'status',
-          formatter: (word) => <span className='badge badge-success'>{word}</span>
+          title: 'Last Name',
+          prop: 'lastname'
+        },
+        {
+          title: 'Email',
+          prop: 'email'
+        },
+        {
+          title: 'Birthday',
+          prop: 'birthday'
+        },
+        {
+          title: 'Gender',
+          prop: 'gender'
+        },
+        {
+          title: 'Citizen ID',
+          prop: 'citizen_id'
+        },
+        {
+          title: 'Nationality',
+          prop: 'nationality'
         },
         {
           title: 'Edit',
@@ -65,13 +80,14 @@ class TableView extends Component {
         paginationBarSize: 5
       },
       src: {
-        url: '../test/tableData.json'
+        url: '../api/student/all',
+        parser: (raw) => raw.data
       }
     }
     return (
-      <TableComponent id={this.tableID} config={config} />
+      <Table id={this.tableID} config={config} url='../api/student/all' />
     )
   }
 }
 
-export default TableView
+export default Student

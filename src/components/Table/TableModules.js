@@ -50,7 +50,8 @@ export const showLogMsg = (msg, id) => {
   }
 }
 
-export const loadTable = (src, config, id) => {
+export const loadTable = (config, id) => {
+  const { src } = config
   return (dispatch, getState) => {
     if (!src || !src.url) {
       dispatch(showErrorMsg('URL did not provided', id))
@@ -64,8 +65,11 @@ export const loadTable = (src, config, id) => {
         .then((body) => {
           try {
             let rawBody = JSON.parse(body)
+            if (typeof src.parser === 'function') {
+              rawBody = src.parser(rawBody)
+            }
             body = []
-            for (let i = 0; i < 150; i++) {
+            for (let i = 0; i < rawBody.length; i++) {
               body.push({
                 _rid: i + 1,
                 ...rawBody[i % rawBody.length]

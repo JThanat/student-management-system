@@ -36,6 +36,9 @@ class Sidebar extends Component {
               <Link to={'/table'} className='nav-link'>
                 <i className='icon-speedometer' /> Table
               </Link>
+              <Link to={'/student'} className='nav-link'>
+                <i className='fa fa-users' /> Student
+              </Link>
             </li>
           </ul>
         </nav>

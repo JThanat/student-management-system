@@ -247,7 +247,7 @@ CREATE TABLE IF NOT EXISTS Punishment_Records(
 
 CREATE TABLE IF NOT EXISTS Semesters_Period(
     start_time TIMESTAMP NOT NULL,
-    end_time TIMESTAMP NOT NULL,
+    end_time TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
     semester CHAR(1) NOT NULL,
     year INT(4) NOT NULL,
     PRIMARY KEY (start_time, end_time)

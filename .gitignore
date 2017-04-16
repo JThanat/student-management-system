@@ -7,3 +7,5 @@ dist
 coverage
 
 .idea/
+
+server/config/config.js

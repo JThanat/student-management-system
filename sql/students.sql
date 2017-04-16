@@ -1,6 +1,6 @@
 -- DROP TABLE Student;
 
-CREATE TABLE Students(
+CREATE TABLE IF NOT EXISTS Students(
     sid INT(10) NOT NULL AUTO_INCREMENT NOT NULL,
     student_id CHAR(10) NOT NULL,
     curid INT(10) NOT NULL,

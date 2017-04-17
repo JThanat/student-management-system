@@ -34,6 +34,11 @@ class Sidebar extends Component {
               </Link>
             </li> */}
             <li className='nav-item'>
+              <Link to={'/home'} className='nav-link' activeClassName='active'>
+                <i className='fa fa-home' /> Home
+              </Link>
+            </li>
+            <li className='nav-item'>
               <Link to={'/coretable'} className='nav-link' activeClassName='active'>
                 <i className='fa fa-list-ul' /> Core Table
               </Link>

@@ -102,7 +102,7 @@ class TableFrame extends Component {
         } else {
           let val = rowData[header.prop]
           if (typeof header.formatter === 'function') {
-            val = header.formatter(val)
+            val = header.formatter(val, i, rowData)
           }
           return <td key={j}>{val}</td>
         }

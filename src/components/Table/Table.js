@@ -189,12 +189,20 @@ class Table extends Component {
             }}>Cancel</div>
           </ModalFooter>
         </Modal>
+        <Measure
+          onMeasure={(dimensions) => {
+            this.setState({
+              tableWidth: dimensions.width
+            })
+          }}>
+          <div />
+        </Measure>
         <div className='nav-table' style={{ marginBottom: 15 }}>
-          <div
+          {/* <div
             className='btn btn-primary'
             onClick={() => this.setShowModal('editModal', true)}>
             Test Modal
-          </div>
+          </div> */}
           <div
             className='btn btn-primary'
             onClick={this.addRow}>
@@ -235,15 +243,6 @@ class Table extends Component {
             showLog={this.props.showLog}
             />
         </div>
-        <Measure
-          onMeasure={(dimensions) => {
-            console.log(dimensions)
-            this.setState({
-              tableWidth: dimensions.width
-            })
-          }}>
-          <div />
-        </Measure>
         <nav>{
           tableView.range &&
           <PaginationBar

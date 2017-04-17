@@ -1,7 +1,7 @@
 let id = {}
 
 export const staticID = (name) => {
-  if (!id.hasOwnProperty(name)) id[name] = unique()
+  if (!id.hasOwnProperty(name)) id[name] = unique(name)
   return id[name]
 }
 

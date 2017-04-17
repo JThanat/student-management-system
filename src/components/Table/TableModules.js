@@ -61,7 +61,13 @@ export const loadTable = (config, id) => {
         id
       })
       return fetch(src.url)
-        .then((response) => response.text())
+        .then((response) => {
+          if (response.ok) {
+            return response.text()
+          } else {
+            return Promise.reject(response)
+          }
+        })
         .then((body) => {
           try {
             let rawBody = JSON.parse(body)
@@ -84,6 +90,13 @@ export const loadTable = (config, id) => {
           } catch (e) {
             console.error(e)
             dispatch(showErrorMsg(`File formatting at ${src.url} is incorrect (only JSON format)`, id))
+          }
+        })
+        .catch((err) => {
+          if (err instanceof Response) {
+            dispatch(showErrorMsg(`${err.status} ${err.statusText}`, id))
+          } else {
+            dispatch(showErrorMsg(`${err.toString()}`, id))
           }
         })
     }
@@ -110,7 +123,7 @@ export const updateRow = (rowID, updateData, tableID) => {
 
 const findTableState = (state, id) => {
   const curTable = state.find((tableState) => tableState.id === id)
-  if (curTable === undefined) throw new Error(`Table ${id} not found`)
+  if (curTable === undefined) return Object.assign({}, initialTableState)
   return curTable
 }
 
@@ -123,7 +136,7 @@ const changeTableState = (state, tid, objToMerge) => {
     objToMerge
   )
   if (id !== -1) {
-    newState[id] = newTableState
+    newState[id] = Object.assign({}, newTableState)
   } else {
     newState.push(newTableState)
   }
@@ -150,7 +163,8 @@ const ACTION_HANDLERS = {
     return {
       id: action.id,
       isLoading: false,
-      error: action.error
+      error: action.error,
+      data: []
     }
   },
   [TABLE_LOG] : (state, action) => {

@@ -23,20 +23,28 @@ class Sidebar extends Component {
       <div className='sidebar'>
         <nav className='sidebar-nav'>
           <ul className='nav'>
-            <li className='nav-item'>
+            {/* <li className='nav-item'>
               <Link to={'/counter'} className='nav-link' activeClassName='active'>
-                <i className='icon-speedometer' /> Counter <span className='badge badge-info'>NEW</span>
+                <i className='icon-speedometer' /> Counter
               </Link>
-              <Link to={'/duck'} className='nav-link'>
-                <i className='icon-speedometer' /> Duck
+            </li>
+            <li className='nav-item'>
+              <Link to={'/duck'} className='nav-link' activeClassName='active'>
+                <i className='fa fa-paw' /> Duck
               </Link>
-              <Link to={'/coretable'} className='nav-link'>
-                <i className='icon-speedometer' /> Core Table
+            </li> */}
+            <li className='nav-item'>
+              <Link to={'/coretable'} className='nav-link' activeClassName='active'>
+                <i className='fa fa-list-ul' /> Core Table
               </Link>
-              <Link to={'/table'} className='nav-link'>
-                <i className='icon-speedometer' /> Table
+            </li>
+            <li className='nav-item'>
+              <Link to={'/table'} className='nav-link' activeClassName='active'>
+                <i className='fa fa-list-ul' /> Table
               </Link>
-              <Link to={'/student'} className='nav-link'>
+            </li>
+            <li className='nav-item'>
+              <Link to={'/student'} className='nav-link' activeClassName='active'>
                 <i className='fa fa-users' /> Student
               </Link>
             </li>

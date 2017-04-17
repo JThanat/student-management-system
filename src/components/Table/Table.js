@@ -226,7 +226,7 @@ class Table extends Component {
             <strong>Oops!</strong> {props.errorMsg}
           </div>)
         }
-        <div style={{ width: this.state.tableWidth, overflowX: 'scroll' }}>
+        <div style={{ width: this.state.tableWidth, overflowX: 'auto' }}>
           <TableFrame
             className='table table-responsive table-bordered table-striped table-md'
             data={this.sliceTableView()}

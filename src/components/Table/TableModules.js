@@ -163,8 +163,7 @@ const ACTION_HANDLERS = {
     return {
       id: action.id,
       isLoading: false,
-      error: action.error,
-      data: []
+      error: action.error
     }
   },
   [TABLE_LOG] : (state, action) => {

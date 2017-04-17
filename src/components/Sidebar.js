@@ -3,6 +3,12 @@ import { Link } from 'react-router'
 
 class Sidebar extends Component {
 
+  constructor (props) {
+    super(props)
+
+    this.handleClick = this.handleClick.bind(this)
+  }
+
   handleClick (e) {
     e.preventDefault()
     e.target.parentElement.classList.toggle('open')
@@ -35,22 +41,39 @@ class Sidebar extends Component {
             </li> */}
             <li className='nav-item'>
               <Link to={'/home'} className='nav-link' activeClassName='active'>
-                <i className='fa fa-home' /> Home
-              </Link>
-            </li>
-            <li className='nav-item'>
-              <Link to={'/coretable'} className='nav-link' activeClassName='active'>
-                <i className='fa fa-list-ul' /> Core Table
-              </Link>
-            </li>
-            <li className='nav-item'>
-              <Link to={'/table'} className='nav-link' activeClassName='active'>
-                <i className='fa fa-list-ul' /> Table
+                <i className='icon-home' /> Home
               </Link>
             </li>
             <li className='nav-item'>
               <Link to={'/student'} className='nav-link' activeClassName='active'>
-                <i className='fa fa-users' /> Student
+                <i className='icon-people' /> Student
+              </Link>
+            </li>
+            {/* <li className={this.activeRoute('/icons')}>
+              <a className='nav-link nav-dropdown-toggle' href='#' onClick={this.handleClick}>
+                <i className='icon-star' /> Icons
+              </a>
+              <ul className='nav-dropdown-items'>
+                <li className='nav-item'>
+                  <Link to={'/icons/font-awesome'} className='nav-link' activeClassName='active'>
+                    <i className='icon-star' /> Font Awesome
+                  </Link>
+                </li>
+                <li className='nav-item'>
+                  <Link to={'/icons/simple-line-icons'} className='nav-link' activeClassName='active'>
+                    <i className='icon-star' /> Simple Line Icons
+                  </Link>
+                </li>
+              </ul>
+            </li> */}
+            <li className='nav-item'>
+              <Link to={'/coretable'} className='nav-link' activeClassName='active'>
+                <i className='icon-layers' /> Core Table
+              </Link>
+            </li>
+            <li className='nav-item'>
+              <Link to={'/table'} className='nav-link' activeClassName='active'>
+                <i className='icon-layers' /> Table
               </Link>
             </li>
           </ul>

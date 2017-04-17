@@ -47,7 +47,7 @@ class Table extends Component {
     }
   }
 
-  formEditContent = () => {
+  formEditContent = (isEditForm) => {
     const { header } = this.props.config
 
     let content = []
@@ -63,7 +63,7 @@ class Table extends Component {
               name={prop}
               value={this.state.form.modal ? (this.state.form.modal[prop] || '') : ''}
               onChange={(e) => this.handleChangeForm(e, prop)}
-              disabled={header[i].isEditable === false}
+              disabled={isEditForm && header[i].isEditable === false}
               />
           </div>
         </div>
@@ -158,7 +158,7 @@ class Table extends Component {
         <Modal isOpen={this.state.editModalShow || this.state.addModalShow}>
           <ModalHeader>{this.state.editModalShow ? 'Edit' : 'Add'} data</ModalHeader>
           <ModalBody>
-            {this.formEditContent()}
+            {this.formEditContent(this.state.editModalShow)}
           </ModalBody>
           <ModalFooter>
             <div className='btn btn-primary' onClick={() => {

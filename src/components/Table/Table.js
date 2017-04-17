@@ -197,6 +197,39 @@ class Table extends Component {
           }}>
           <div />
         </Measure>
+        <div className='card'>
+          <div className='card-header'>
+            Filter Data
+          </div>
+          <div className='card-block'>
+            <form action='' method='post' className='form-2orizontal '>
+              <div className='form-group row'>
+                <label className='col-2 form-control-label' htmlFor='input-small'>Student ID</label>
+                <div className='col-9'>
+                  <input type='text' id='input-small' name='input-small' className='form-control input-sm' placeholder='57XXXXXXXX' />
+                </div>
+              </div>
+              <div className='form-group row'>
+                <label className='col-2 form-control-label' htmlFor='input-normal'>Student Name</label>
+                <div className='col-9'>
+                  <input type='text' id='input-normal' name='input-normal' className='form-control' placeholder='Thanat Jatuphattharachat' />
+                </div>
+              </div>
+              <div className='form-group row'>
+                <label className='col-2 form-control-label' htmlFor='input-large'>Year</label>
+                <div className='col-9'>
+                  <input type='text' id='input-large' name='input-large' className='form-control input-lg' placeholder='1 - 6' />
+                </div>
+              </div>
+              <div className='form-group row' style={{ marginBottom: 0 }}>
+                <label className='col-2 form-control-label' htmlFor='input-large'></label>
+                <div className='col-9'>
+                  <button type='submit' className='btn btn-primary'><i className='fa fa-dot-circle-o' /> Apply</button>
+                </div>
+              </div>
+            </form>
+          </div>
+        </div>
         <div className='nav-table' style={{ marginBottom: 15 }}>
           {/* <div
             className='btn btn-primary'

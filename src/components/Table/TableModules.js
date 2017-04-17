@@ -75,7 +75,7 @@ export const loadTable = (config, id) => {
               rawBody = src.parser(rawBody)
             }
             body = []
-            for (let i = 0; i < rawBody.length; i++) {
+            for (let i = 0; i < 100; i++) {
               body.push({
                 _rid: i + 1,
                 ...rawBody[i % rawBody.length]

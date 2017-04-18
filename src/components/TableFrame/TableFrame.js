@@ -36,7 +36,7 @@ class TableFrame extends Component {
                   this.log('Deleting...')
                   return new Promise((resolve, reject) => header.onDelete(resolve, reject, rowData))
                 },
-                () => Promise.reject('')
+                () => Promise.reject('cancel')
               )
               .then(
                 () => {
@@ -46,7 +46,7 @@ class TableFrame extends Component {
                 (reason) => {
                   this.log('')
                   typeof this.props.onError === 'function'
-                    ? this.props.onError(reason)
+                    ? this.props.onError(reason === 'cancel' ? '' : reason)
                     : null
                 }
               )
@@ -81,7 +81,7 @@ class TableFrame extends Component {
                         (resolve, reject) => header.onUpdate(resolve, reject, newData)
                       )
                     },
-                    () => Promise.reject('')
+                    () => Promise.reject('cancel')
                   )
                   .then(
                     (newData) => {
@@ -91,7 +91,7 @@ class TableFrame extends Component {
                     (reason) => {
                       this.log('')
                       typeof this.props.onError === 'function'
-                        ? this.props.onError(reason)
+                        ? this.props.onError(reason === 'cancel' ? '' : reason)
                         : null
                     }
                   )

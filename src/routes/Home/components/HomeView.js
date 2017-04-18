@@ -353,7 +353,9 @@ class Home extends Component {
       <div>
         <div className='row'>
           <div className='col-sm-6 col-lg-3'>
-            <div className='card card-inverse card-primary' style={{ backgroundColor: '#4dbd74' }}>
+            <div
+              className='card card-inverse card-primary'
+              style={{ backgroundColor: '#4dbd74', borderColor: '#4dbd74' }}>
               <div className='card-block pb-0'>
                 <div className='btn-group float-right'>
                   <Dropdown isOpen={this.state.dropdownOpen} toggle={this.toggle}>

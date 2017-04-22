@@ -34,6 +34,16 @@ webpackConfig.entry = {
 }
 
 // ------------------------------------
+// Proxy
+// ------------------------------------
+webpackConfig.devServer = {
+  proxy: {
+    '/api': 'http://localhost:8000',
+  }
+}
+
+
+// ------------------------------------
 // Bundle Output
 // ------------------------------------
 webpackConfig.output = {

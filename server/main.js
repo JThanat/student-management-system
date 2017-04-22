@@ -5,11 +5,13 @@ const webpack = require('webpack')
 const webpackConfig = require('../config/webpack.config')
 const project = require('../config/project.config')
 const compress = require('compression')
-const bodyParser = require('body-parser')
-const chalk = require('chalk')
+const proxy = require('http-proxy-middleware')
 
-const config = require('./config/config')
-const db = require('./utilities/db')
+// const bodyParser = require('body-parser')
+// const chalk = require('chalk')
+
+// const config = require('./config/config')
+// const db = require('./utilities/db')
 
 const app = express()
 
@@ -17,10 +19,13 @@ const app = express()
 app.use(compress())
 
 // Apply Body-Parser Middleware
-app.use(bodyParser())
+// app.use(bodyParser())
 
 // API : App route for
-app.use('/api/', require('./routes/index'))
+// app.use('/api/', require('./routes/index'))
+
+// Proxy api to Django
+app.use('/api', proxy({target: 'http://localhost:8000', changeOrigin: true}));
 
 // ------------------------------------
 // Apply Webpack HMR Middleware
@@ -80,27 +85,27 @@ if (project.env === 'development') {
 // ------------------------------------
 // Connecting to MySQL
 // ------------------------------------
-if (Object.keys(config).length === 0 && config.constructor === Object) {
-  console.error(
-    chalk.red(
-      '\n' +
-      '=============================================================================================\n' +
-      chalk.bold('Config File Error: No config file\n') +
-      'Please copy file in server/config/config.sample.js to config.js then configuration your file.\n' +
-      '=============================================================================================\n'
-    )
-  )
-} else {
-  db.connect(config.test ? db.MODE_TEST : db.MODE_PRODUCTION, (err) => {
-    if (err) {
-      console.error(chalk.red(chalk.bold('[sql] Cannot Connect To MySQL ') + err.message))
-    } else {
-      console.log(
-        chalk.green('[sql] Successfully connect') +
-        ' to MySQL on ' + config.db.hostName + ':' + config.db.port
-      )
-    }
-  })
-}
+// if (Object.keys(config).length === 0 && config.constructor === Object) {
+//   console.error(
+//     chalk.red(
+//       '\n' +
+//       '=============================================================================================\n' +
+//       chalk.bold('Config File Error: No config file\n') +
+//       'Please copy file in server/config/config.sample.js to config.js then configuration your file.\n' +
+//       '=============================================================================================\n'
+//     )
+//   )
+// } else {
+//   db.connect(config.test ? db.MODE_TEST : db.MODE_PRODUCTION, (err) => {
+//     if (err) {
+//       console.error(chalk.red(chalk.bold('[sql] Cannot Connect To MySQL ') + err.message))
+//     } else {
+//       console.log(
+//         chalk.green('[sql] Successfully connect') +
+//         ' to MySQL on ' + config.db.hostName + ':' + config.db.port
+//       )
+//     }
+//   })
+// }
 
 module.exports = app

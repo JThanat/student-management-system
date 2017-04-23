@@ -45,6 +45,10 @@ INSTALLED_APPS = [
     'rest_framework',
 
     'backend_apps.faculties',
+    'backend_apps.departments',
+    'backend_apps.curricula',
+    # 'backend_apps.faculty_members',
+    # 'backend_apps.students'
 ]
 
 MIDDLEWARE = [

@@ -49,7 +49,8 @@ exports.fixtures = (data, done) => {
         return "'" + row[key] + "'"
       })
 
-      connection.query('INSERT INTO ' + name + ' (' + keys.join(',') + ') VALUES (' + values.join(',') + ')', callBack)
+      connection.query('INSERT INTO ' + name + ' (' + keys.join(',') +
+        ') VALUES (' + values.join(',') + ')', callBack)
     }, callBack)
   }, done)
 }

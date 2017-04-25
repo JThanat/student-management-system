@@ -1,18 +1,45 @@
-const db = require('../utilities/db.js')
-const utils = require('../utilities/utils.js')
+const StudentColumns = [
+  'student_id',
+  'curid',
+  'memid',
+  'title',
+  'firstname',
+  'lastname',
+  'email',
+  'nationality',
+  'birthdate',
+  'gender',
+  'citizen_id',
+  'religion',
+  'mobile',
+  'img',
+  'addr',
+  'zipcode',
+  'country',
+  'emer_name',
+  'emer_mobile',
+  'emer_addr',
+  'emer_zipcode',
+  'emer_country',
+  'highschool_name',
+  'highschool_grade',
+  'gpax',
+  'semester_count',
+  'summer_count',
+  'status',
+  'behavioral_score'
+]
 
-exports.getAllStudent = (done) => {
-  // Get connection from dataabase
-  const connection = db.getConnection()
+const getAllStudentSQL = () => 'SELECT * FROM students'
 
-  // Query
-  connection.query('SELECT * FROM students', (err, results, fields) => {
-    if (err) {
-      utils.log(err)
-      return done(err)
-    }
-    return done(null, results)
-  })
+const getOneStudentSQL = (studentID) => {
+  return `SELECT * FROM students WHERE student_id = "${studentID}"`
+}
+
+module.exports = {
+  StudentColumns,
+  getAllStudentSQL,
+  getOneStudentSQL
 }
 
 // exports.insert = () => {

@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import Table from '../../../components/Table'
+import Table from '../../../components/table/Table'
 import { staticID } from '../../../utils/unique'
 
 // import { Link } from 'react-router'

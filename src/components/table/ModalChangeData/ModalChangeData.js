@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 import { Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap'
+import './ModalChangeData.scss'
 // import Promise from 'bluebird'
 
 class ModalChangeData extends Component {
@@ -42,9 +43,9 @@ class ModalChangeData extends Component {
       const prop = header[i].prop
       if (prop === '_rid' || header[i].isDelete || header[i].isEdit) continue
       content.push(
-        <div className='form-group row' key={i}>
-          <label className='col-4 col-form-label'>{header[i].title}</label>
-          <div className='col-8'>
+        <div className='col-6 input-box' key={i}>
+          <label key={i}>{header[i].title}</label>
+          <div>
             <input
               className='form-control'
               name={prop}
@@ -57,7 +58,11 @@ class ModalChangeData extends Component {
       )
     }
 
-    return content
+    return (
+      <div className='row'>
+        {content}
+      </div>
+    )
   }
 
   render () {
@@ -67,10 +72,12 @@ class ModalChangeData extends Component {
     const onCancel = props.onCancel || (() => {})
 
     return (
-      <Modal isOpen={props.isShow}>
+      <Modal isOpen={props.isShow} className='modal-lg'>
         <ModalHeader>{props.type} data</ModalHeader>
         <ModalBody>
-          {this.bodyContent()}
+          <div className='modal-body'>
+            {this.bodyContent()}
+          </div>
         </ModalBody>
         <ModalFooter>
           <div className='btn btn-danger' onClick={() => onSubmit(this.state.data)}>{props.type}</div>

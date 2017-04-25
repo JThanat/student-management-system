@@ -1,8 +1,8 @@
 import React, { Component } from 'react'
-import Header from '../../components/Header'
-import Sidebar from '../../components/Sidebar'
-import Aside from '../../components/Aside'
-import Footer from '../../components/Footer'
+import Header from '../../components/core/Header'
+import Sidebar from '../../components/core/Sidebar'
+import Aside from '../../components/core/Aside'
+import Footer from '../../components/core/Footer'
 import '../../styles/core.scss'
 import '../../styles/coreui.scss'
 

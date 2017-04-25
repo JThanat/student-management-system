@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import TableComponent from '../../../components/Table'
+import TableComponent from '../../../components/table/Table'
 import { staticID } from '../../../utils/unique'
 
 // import { Link } from 'react-router'
@@ -62,10 +62,13 @@ class TableView extends Component {
       ],
       pagination: {
         pageSize: 10,
-        paginationBarSize: 5
+        paginationBarSize: 15
       },
       src: {
-        url: '../test/tableData.json'
+        url: '../api/student/all',
+        parser: (raw) => {
+          return raw.data
+        }
       }
     }
     return (

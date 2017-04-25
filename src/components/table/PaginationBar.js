@@ -15,8 +15,8 @@ class PaginationBar extends Component {
       <ul className='pagination'>
         {
           (function () {
-            let prev = startPage - paginationBarSize
-            if (prev >= 1) {
+            let prev = Math.max(startPage - paginationBarSize, 1)
+            if (startPage > 1) {
               return (<li className='page-item' onClick={() => onChangePageTab(prev)}>
                 <span className='page-link'>Prev</span>
               </li>)
@@ -27,7 +27,7 @@ class PaginationBar extends Component {
         }
         {
           pageAll > 1 && Array(paginationBarSize).fill(1).map((el, i) => {
-            const id = i + (startPage || 1)
+            const id = i + startPage
             if (id <= pageAll) {
               return (<li
                 className={'page-item ' + (id === pageNo ? 'active' : '')}

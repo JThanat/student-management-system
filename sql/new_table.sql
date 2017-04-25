@@ -1,5 +1,5 @@
 CREATE TABLE IF NOT EXISTS Faculties(
-    faculty_id INT(10) AUTO_INCREMENT NOT NULL,
+    faculty_id INT(10) NOT NULL,
     faculty_name VARCHAR(50) NOT NULL,
     PRIMARY KEY (faculty_id)
 ) DEFAULT CHARACTER SET = utf8;
@@ -8,7 +8,9 @@ CREATE TABLE IF NOT EXISTS Departments(
     faculty_id INT(10) NOT NULL,
     department_name VARCHAR(50) NOT NULL,
     PRIMARY KEY (faculty_id, department_name),
-    FOREIGN KEY (faculty_id) REFERENCES Faculties(faculty_id) ON DELETE NO ACTION
+    FOREIGN KEY (faculty_id) REFERENCES Faculties(faculty_id) 
+        ON DELETE NO ACTION
+        ON UPDATE CASCADE
 ) DEFAULT CHARACTER SET = utf8;
 
 CREATE TABLE IF NOT EXISTS Faculty_Members(
@@ -17,19 +19,25 @@ CREATE TABLE IF NOT EXISTS Faculty_Members(
     member_id INT(10) NOT NULL AUTO_INCREMENT,
     member_name VARCHAR(50) NOT NULL,
     PRIMARY KEY (member_id),
-    FOREIGN KEY (faculty_id, department_name) REFERENCES Departments(faculty_id, department_name) ON DELETE NO ACTION
+    FOREIGN KEY (faculty_id, department_name) REFERENCES Departments(faculty_id, department_name) 
+        ON DELETE NO ACTION
+        ON UPDATE CASCADE
 ) DEFAULT CHARACTER SET = utf8;
 
 CREATE TABLE IF NOT EXISTS Instructors(
     member_id INT(10) NOT NULL,
     PRIMARY KEY (member_id),
-    FOREIGN KEY (member_id) REFERENCES Faculty_Members(member_id) ON DELETE CASCADE
+    FOREIGN KEY (member_id) REFERENCES Faculty_Members(member_id) 
+        ON DELETE CASCADE
+        ON UPDATE CASCADE
 ) DEFAULT CHARACTER SET = utf8;
 
 CREATE TABLE IF NOT EXISTS Advisors(
     member_id INT(10) NOT NULL,
     PRIMARY KEY (member_id),
-    FOREIGN KEY (member_id) REFERENCES Faculty_Members(member_id) ON DELETE CASCADE
+    FOREIGN KEY (member_id) REFERENCES Faculty_Members(member_id) 
+        ON DELETE CASCADE
+        ON UPDATE CASCADE
 ) DEFAULT CHARACTER SET = utf8;
 
 CREATE TABLE IF NOT EXISTS Curricula(
@@ -38,7 +46,10 @@ CREATE TABLE IF NOT EXISTS Curricula(
     department_name VARCHAR(50) NOT NULL,
     semester_system_type CHAR(1) NOT NULL,
     PRIMARY KEY (curriculum_id),
-    FOREIGN KEY (faculty_id, department_name) REFERENCES Departments(faculty_id, department_name) ON DELETE NO ACTION
+    FOREIGN KEY (faculty_id, department_name) REFERENCES Departments(faculty_id, department_name) 
+        ON DELETE NO ACTION
+        ON UPDATE NO ACTION  
+        # Should create new curricula instead
 ) DEFAULT CHARACTER SET = utf8;
 
 CREATE TABLE IF NOT EXISTS Courses(
@@ -55,16 +66,24 @@ CREATE TABLE IF NOT EXISTS Required_Courses(
     requirer_course_id INT(10) NOT NULL,
     required_course_id INT(10) NOT NULL,
     PRIMARY KEY (requirer_course_id, required_course_id),
-    FOREIGN KEY (requirer_course_id) REFERENCES Courses(course_id) ON DELETE CASCADE,
-    FOREIGN KEY (required_course_id) REFERENCES Courses(course_id) ON DELETE CASCADE
+    FOREIGN KEY (requirer_course_id) REFERENCES Courses(course_id) 
+        ON DELETE CASCADE 
+        ON UPDATE CASCADE,
+    FOREIGN KEY (required_course_id) REFERENCES Courses(course_id) 
+        ON DELETE CASCADE
+        ON UPDATE CASCADE
 ) DEFAULT CHARACTER SET = utf8;
 
 CREATE TABLE IF NOT EXISTS Courses_Curricula(
     curriculum_id INT(10) NOT NULL,
     course_id INT(10) NOT NULL,
     PRIMARY KEY (curriculum_id, course_id),
-    FOREIGN KEY (curriculum_id) REFERENCES Curricula(curriculum_id) ON DELETE CASCADE,
-    FOREIGN KEY (course_id) REFERENCES Courses(course_id) ON DELETE CASCADE
+    FOREIGN KEY (curriculum_id) REFERENCES Curricula(curriculum_id) 
+        ON DELETE CASCADE
+        ON UPDATE CASCADE,
+    FOREIGN KEY (course_id) REFERENCES Courses(course_id) 
+        ON DELETE CASCADE
+        ON UPDATE CASCADE
 ) DEFAULT CHARACTER SET = utf8;
 
 CREATE TABLE IF NOT EXISTS Sections(
@@ -75,8 +94,12 @@ CREATE TABLE IF NOT EXISTS Sections(
     member_id INT(10),
     capacity INT(3) NOT NULL,
     PRIMARY KEY (course_id, semester, year, section_no),
-    FOREIGN KEY (course_id) REFERENCES Courses(course_id) ON DELETE CASCADE,
-    FOREIGN KEY (member_id) REFERENCES Instructors(member_id) ON DELETE SET NULL
+    FOREIGN KEY (course_id) REFERENCES Courses(course_id) 
+        ON DELETE CASCADE
+        ON UPDATE CASCADE,
+    FOREIGN KEY (member_id) REFERENCES Instructors(member_id) 
+        ON DELETE SET NULL
+        ON UPDATE CASCADE
 ) DEFAULT CHARACTER SET = utf8;
 
 CREATE TABLE IF NOT EXISTS Zipcode(
@@ -118,8 +141,12 @@ CREATE TABLE IF NOT EXISTS Students(
     status CHAR(1) NOT NULL,
     behavioral_score INT(3) NOT NULL,
     PRIMARY KEY (sid),
-    FOREIGN KEY (curriculum_id) REFERENCES Curricula(curriculum_id) ON DELETE NO ACTION,
-    FOREIGN KEY (member_id) REFERENCES Advisors(member_id) ON DELETE SET NULL
+    FOREIGN KEY (curriculum_id) REFERENCES Curricula(curriculum_id) 
+        ON DELETE NO ACTION
+        ON UPDATE CASCADE,
+    FOREIGN KEY (member_id) REFERENCES Advisors(member_id) 
+        ON DELETE SET NULL
+        ON UPDATE CASCADE
 );
 
 CREATE TABLE IF NOT EXISTS Enrollment_Records(
@@ -131,8 +158,12 @@ CREATE TABLE IF NOT EXISTS Enrollment_Records(
     grade VARCHAR(2) NOT NULL,
     status CHAR(1),
     PRIMARY KEY (sid, course_id, semester, year, section_no),
-    FOREIGN KEY (sid) REFERENCES Students(sid) ON DELETE NO ACTION,
-    FOREIGN KEY (course_id, semester, year, section_no) REFERENCES Sections(course_id, semester, year, section_no) ON DELETE NO ACTION
+    FOREIGN KEY (sid) REFERENCES Students(sid) 
+        ON DELETE NO ACTION
+        ON UPDATE CASCADE,
+    FOREIGN KEY (course_id, semester, year, section_no) REFERENCES Sections(course_id, semester, year, section_no) 
+        ON DELETE NO ACTION
+        ON UPDATE NO ACTION  # Should create new section instead
 ) DEFAULT CHARACTER SET = utf8;
 
 CREATE TABLE IF NOT EXISTS Grades(
@@ -142,7 +173,9 @@ CREATE TABLE IF NOT EXISTS Grades(
     gpa REAL,
     gpax REAL,
     PRIMARY KEY (sid, semester, year),
-    FOREIGN KEY (sid) REFERENCES Students(sid) ON DELETE NO ACTION
+    FOREIGN KEY (sid) REFERENCES Students(sid) 
+        ON DELETE NO ACTION
+        ON UPDATE CASCADE
 ) DEFAULT CHARACTER SET = utf8;
 
 CREATE TABLE IF NOT EXISTS Leaves(
@@ -152,7 +185,9 @@ CREATE TABLE IF NOT EXISTS Leaves(
     leave_type CHAR(1) NOT NULL,
     leave_description VARCHAR(255),
     PRIMARY KEY (sid, semester, year),
-    FOREIGN KEY (sid) REFERENCES Students(sid) ON DELETE NO ACTION
+    FOREIGN KEY (sid) REFERENCES Students(sid) 
+        ON DELETE NO ACTION
+        ON UPDATE CASCADE
 ) DEFAULT CHARACTER SET = utf8;
 
 CREATE TABLE IF NOT EXISTS Projects(
@@ -166,8 +201,12 @@ CREATE TABLE IF NOT EXISTS Does_Projects(
     project_id INT(10) NOT NULL,
     sid INT(10) NOT NULL,
     PRIMARY KEY (project_id, sid),
-    FOREIGN KEY (project_id) REFERENCES Projects(project_id) ON DELETE CASCADE,
-    FOREIGN KEY (sid) REFERENCES Students(sid) ON DELETE NO ACTION
+    FOREIGN KEY (project_id) REFERENCES Projects(project_id) 
+        ON DELETE CASCADE
+        ON UPDATE CASCADE,
+    FOREIGN KEY (sid) REFERENCES Students(sid) 
+        ON DELETE NO ACTION
+        ON UPDATE CASCADE
 ) DEFAULT CHARACTER SET = utf8;
 
 CREATE TABLE IF NOT EXISTS Advises_Senior(
@@ -175,9 +214,15 @@ CREATE TABLE IF NOT EXISTS Advises_Senior(
     member_id INT(10) NOT NULL,
     sid INT(10) NOT NULL,
     PRIMARY KEY (project_id, member_id, sid),
-    FOREIGN KEY (project_id) REFERENCES Projects(project_id) ON DELETE CASCADE,
-    FOREIGN KEY (member_id) REFERENCES Advisors(member_id) ON DELETE CASCADE,
-    FOREIGN KEY (sid) REFERENCES Students(sid) ON DELETE NO ACTION
+    FOREIGN KEY (project_id) REFERENCES Projects(project_id) 
+        ON DELETE CASCADE
+        ON UPDATE CASCADE,
+    FOREIGN KEY (member_id) REFERENCES Advisors(member_id) 
+        ON DELETE CASCADE
+        ON UPDATE CASCADE,
+    FOREIGN KEY (sid) REFERENCES Students(sid) 
+        ON DELETE NO ACTION
+        ON UPDATE CASCADE
 ) DEFAULT CHARACTER SET = utf8;
 
 CREATE TABLE IF NOT EXISTS Competition_Teams(
@@ -190,16 +235,24 @@ CREATE TABLE IF NOT EXISTS Teams_Students(
     sid INT(10) NOT NULL,
     team_id INT(10) NOT NULL,
     PRIMARY KEY (sid, team_id),
-    FOREIGN KEY (sid) REFERENCES Students(sid) ON DELETE NO ACTION,
-    FOREIGN KEY (team_id) REFERENCES Competition_Teams(team_id) ON DELETE CASCADE
+    FOREIGN KEY (sid) REFERENCES Students(sid) 
+        ON DELETE NO ACTION
+        ON UPDATE CASCADE,
+    FOREIGN KEY (team_id) REFERENCES Competition_Teams(team_id) 
+        ON DELETE CASCADE
+        ON UPDATE CASCADE
 ) DEFAULT CHARACTER SET = utf8;
 
 CREATE TABLE IF NOT EXISTS Teams_Advisors(
     member_id INT(10) NOT NULL,
     team_id INT(10) NOT NULL,
     PRIMARY KEY (member_id, team_id),
-    FOREIGN KEY (member_id) REFERENCES Advisors(member_id) ON DELETE CASCADE,
-    FOREIGN KEY (team_id) REFERENCES Competition_Teams(team_id) ON DELETE CASCADE
+    FOREIGN KEY (member_id) REFERENCES Advisors(member_id) 
+        ON DELETE CASCADE
+        ON UPDATE CASCADE,
+    FOREIGN KEY (team_id) REFERENCES Competition_Teams(team_id) 
+        ON DELETE CASCADE
+        ON UPDATE CASCADE
 ) DEFAULT CHARACTER SET = utf8;
 
 CREATE TABLE IF NOT EXISTS Competitions(
@@ -208,7 +261,9 @@ CREATE TABLE IF NOT EXISTS Competitions(
     prize VARCHAR(255) NOT NULL,
     competition_description VARCHAR(255), 
     PRIMARY KEY (team_id, competition_name, prize),
-    FOREIGN KEY (team_id) REFERENCES Competition_Teams(team_id) ON DELETE NO ACTION
+    FOREIGN KEY (team_id) REFERENCES Competition_Teams(team_id) 
+        ON DELETE NO ACTION  # If team is deleted, we cannot track student's award.
+        ON UPDATE CASCADE
 ) DEFAULT CHARACTER SET = utf8;
 
 CREATE TABLE IF NOT EXISTS Activities(
@@ -224,8 +279,12 @@ CREATE TABLE IF NOT EXISTS Does(
     sid INT(10) NOT NULL,
     received_score INT(3) NOT NULL,
     PRIMARY KEY (activity_id, sid),
-    FOREIGN KEY (activity_id) REFERENCES Activities(activity_id) ON DELETE CASCADE,
-    FOREIGN KEY (sid) REFERENCES Students(sid) ON DELETE NO ACTION
+    FOREIGN KEY (activity_id) REFERENCES Activities(activity_id) 
+        ON DELETE CASCADE
+        ON UPDATE CASCADE,
+    FOREIGN KEY (sid) REFERENCES Students(sid) 
+        ON DELETE NO ACTION
+        ON UPDATE CASCADE
 ) DEFAULT CHARACTER SET = utf8;
 
 CREATE TABLE IF NOT EXISTS Punishment_Criteria(
@@ -241,8 +300,12 @@ CREATE TABLE IF NOT EXISTS Punishment_Records(
     punishment_id INT(10) NOT NULL,
     timestamp TIMESTAMP NOT NULL,
     PRIMARY KEY (sid, punishment_id, timestamp),
-    FOREIGN KEY (sid) REFERENCES Students(sid) ON DELETE NO ACTION,
-    FOREIGN KEY (punishment_id) REFERENCES Punishment_Criteria(punishment_id) ON DELETE NO ACTION
+    FOREIGN KEY (sid) REFERENCES Students(sid) 
+        ON DELETE NO ACTION
+        ON UPDATE CASCADE,
+    FOREIGN KEY (punishment_id) REFERENCES Punishment_Criteria(punishment_id) 
+        ON DELETE NO ACTION
+        ON UPDATE NO ACTION  # Should create new criteria instead
 ) DEFAULT CHARACTER SET = utf8;
 
 CREATE TABLE IF NOT EXISTS Semesters_Period(

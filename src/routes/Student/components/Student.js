@@ -85,7 +85,7 @@ class Student extends Component {
       }
     }
     return (
-      <Table id={this.tableID} config={config} url='../api/student/all' />
+      <Table id={this.tableID} config={config} />
     )
   }
 }

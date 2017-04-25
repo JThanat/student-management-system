@@ -47,7 +47,7 @@ CREATE TABLE IF NOT EXISTS Courses(
     course_name VARCHAR(50) NOT NULL,
     credit INT(1) NOT NULL,
     course_description VARCHAR(255),
-    type CHAR(1) NOT NULL,
+    course_type CHAR(1) NOT NULL,
     PRIMARY KEY (course_id)
 ) DEFAULT CHARACTER SET = utf8;
 

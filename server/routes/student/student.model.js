@@ -1,3 +1,5 @@
+const query = require('../../utilities/query')
+
 const StudentColumns = [
   'student_id',
   'curid',
@@ -36,12 +38,24 @@ const getOneStudentSQL = (studentID) => {
   return `SELECT * FROM students WHERE student_id = "${studentID}"`
 }
 
+const deleteStudentSQL = (studentID) => {
+  return `DELETE FROM students WHERE student_id = "${studentID}"`
+}
+
+const updateStudentSQL = (studentID, dataSet) => {
+  return query.transformToSQL.update('students', dataSet,
+    `student_id = ${studentID}`)
+}
+
+const insertStudentSQL = (studentID, dataSet) => {
+  return query.transformToSQL.insert('students', dataSet)
+}
+
 module.exports = {
   StudentColumns,
   getAllStudentSQL,
-  getOneStudentSQL
+  getOneStudentSQL,
+  deleteStudentSQL,
+  updateStudentSQL,
+  insertStudentSQL
 }
-
-// exports.insert = () => {
-//   // add insert function here
-// }

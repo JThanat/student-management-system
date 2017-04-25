@@ -23,7 +23,8 @@ export default [
   {
     title: 'รหัสนิสิต',
     prop: 'student_id',
-    isEditable: false
+    isEditable: false,
+    isNullable: false
   },
   {
     title: 'CurID',

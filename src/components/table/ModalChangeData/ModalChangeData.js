@@ -9,7 +9,9 @@ class ModalChangeData extends Component {
     super(props)
 
     this.state = {
-      data: {}
+      data: {},
+      error: {},
+      errorOverall: ''
     }
 
     this.handleChangeForm = this.handleChangeForm.bind(this)
@@ -35,6 +37,38 @@ class ModalChangeData extends Component {
     })
   }
 
+  addError (errorData, errorOverall) {
+    this.setState({
+      error: {
+        ...this.state.error,
+        ...errorData
+      },
+      errorOverall
+    })
+  }
+
+  validate (headers, datas) {
+    if (!datas) {
+      this.setState({ errorOverall: 'Data is empty' })
+      return false
+    }
+    for (let i = 0; i < headers.length; i++) {
+      const header = headers[i]
+      const prop = header.prop
+      const data = datas[header.prop]
+      if (header.isNullable === false) {
+        if (!data) {
+          this.addError(
+            { [prop]: 'This field is not nullable.' },
+            `'${prop}' field is not nullable.`
+          )
+        } else {
+          this.addError({ [prop]: '' }, '')
+        }
+      }
+    }
+  }
+
   bodyContent () {
     const { header, type } = this.props
 
@@ -44,7 +78,7 @@ class ModalChangeData extends Component {
       if (prop === '_rid' || header[i].isDelete || header[i].isEdit) continue
       content.push(
         <div className='col-6 input-box' key={i}>
-          <label key={i}>{header[i].title}</label>
+          <label key={i}>{header[i].title} <strong>({ header[i].prop })</strong></label>
           <div>
             <input
               className='form-control'
@@ -54,6 +88,10 @@ class ModalChangeData extends Component {
               disabled={this.isEditable(type) && header[i].isEditable === false}
               />
           </div>
+          {
+            this.state.error[prop] &&
+            (<div className='alert alert-danger'>{this.state.error[prop]}</div>)
+          }
         </div>
       )
     }
@@ -77,10 +115,18 @@ class ModalChangeData extends Component {
         <ModalBody>
           <div className='modal-body'>
             {this.bodyContent()}
+            {
+              this.state.errorOverall &&
+              (<div className='alert alert-danger'>{this.state.errorOverall}</div>)
+            }
           </div>
         </ModalBody>
         <ModalFooter>
-          <div className='btn btn-danger' onClick={() => onSubmit(this.state.data)}>{props.type}</div>
+          <div className='btn btn-primary' onClick={() => {
+            if (this.validate(props.header, this.state.data) === true) {
+              onSubmit(this.state.data)
+            }
+          }}>{props.type}</div>
           {' '}
           <div className='btn btn-secondary' onClick={onCancel}>Cancel</div>
         </ModalFooter>

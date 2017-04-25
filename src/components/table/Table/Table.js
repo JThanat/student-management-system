@@ -1,10 +1,12 @@
 import React, { Component } from 'react'
-import TableFrame from '../TableFrame'
-import PaginationBar from '../PaginationBar'
 import { Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap'
 import Measure from 'react-measure'
 import Promise from 'bluebird'
+
 import './Table.scss'
+import TableFrame from '../TableFrame'
+import PaginationBar from '../PaginationBar'
+import ModalChangeData from '../ModalChangeData'
 
 class Table extends Component {
 
@@ -15,9 +17,7 @@ class Table extends Component {
       deleteModalShow: false,
       editModalShow: false,
       addModalShow: false,
-      form: {
-        modal: {}
-      },
+      editForm: {},
       tableWidth: 0
     }
 
@@ -25,8 +25,6 @@ class Table extends Component {
     this.confirmDeleteRow = this.confirmDeleteRow.bind(this)
     this.confirmEditRow = this.confirmEditRow.bind(this)
     this.addRow = this.addRow.bind(this)
-    this.formEditContent = this.formEditContent.bind(this)
-    this.handleChangeForm = this.handleChangeForm.bind(this)
   }
 
   reloadTable = (customSrc = this.props.config.src) => {
@@ -47,43 +45,6 @@ class Table extends Component {
     }
   }
 
-  formEditContent = (isEditForm) => {
-    const { header } = this.props.config
-
-    let content = []
-    for (let i = 0; i < header.length; i++) {
-      const prop = header[i].prop
-      if (prop === '_rid' || header[i].isDelete || header[i].isEdit) continue
-      content.push(
-        <div className='form-group row' key={i}>
-          <label className='col-4 col-form-label'>{header[i].title}</label>
-          <div className='col-8'>
-            <input
-              className='form-control'
-              name={prop}
-              value={this.state.form.modal ? (this.state.form.modal[prop] || '') : ''}
-              onChange={(e) => this.handleChangeForm(e, prop)}
-              disabled={isEditForm && header[i].isEditable === false}
-              />
-          </div>
-        </div>
-      )
-    }
-
-    return content
-  }
-
-  handleChangeForm = (event, property) => {
-    this.setState({
-      form: {
-        modal: {
-          ...this.state.form.modal,
-          [property]: event.target.value
-        }
-      }
-    })
-  }
-
   setShowModal = (modelName, status) => {
     this.setState({
       [modelName + 'Show']: status
@@ -98,29 +59,24 @@ class Table extends Component {
 
   confirmEditRow = (resolve, reject, oldData) => {
     this.setShowModal('editModal', true)
-    this.setState({
-      form: {
-        modal: oldData
-      }
-    })
-    this._confirm = () => resolve(this.state.form.modal)
+    this.modalEditForm.fillData(oldData)
+    this._confirm = (formData) => resolve(formData)
     this._reject = reject
+  }
+
+  getFillEditFormData () {
+    return this.state.editForm
   }
 
   addRow = () => {
     this.setShowModal('addModal', true)
-    this.setState({
-      form: {
-        modal: {}
-      }
-    })
-    this._confirm = () => {
+    this._confirm = (formData) => {
       const addFunc =
         (this.props.config.table ? this.props.config.table.add : null) ||
         ((resolve) => resolve())
 
       this.props.showLog('Adding data...')
-      new Promise((resolve, reject) => addFunc(resolve, reject, this.state.form.modal))
+      new Promise((resolve, reject) => addFunc(resolve, reject, formData))
         .then(
           () => {
             this.props.showLog('')
@@ -155,24 +111,31 @@ class Table extends Component {
 
     return (
       <div>
-        <Modal isOpen={this.state.editModalShow || this.state.addModalShow}>
-          <ModalHeader>{this.state.editModalShow ? 'Edit' : 'Add'} data</ModalHeader>
-          <ModalBody>
-            {this.formEditContent(this.state.editModalShow)}
-          </ModalBody>
-          <ModalFooter>
-            <div className='btn btn-primary' onClick={() => {
-              if (this._confirm) this._confirm()
-              this.setShowModal('editModal', false)
-              this.setShowModal('addModal', false)
-            }}>{this.state.editModalShow ? 'Edit' : 'Add'}</div>{' '}
-            <div className='btn btn-secondary' onClick={() => {
-              if (this._reject) this._reject()
-              this.setShowModal('editModal', false)
-              this.setShowModal('addModal', false)
-            }}>Cancel</div>
-          </ModalFooter>
-        </Modal>
+        <ModalChangeData
+          header={props.config.header}
+          type='Add'
+          isShow={this.state.addModalShow}
+          onSubmit={(formData) => {
+            if (this._confirm) this._confirm(formData)
+            this.setShowModal('addModal', false)
+          }}
+          onCancel={() => {
+            if (this._reject) this._reject()
+            this.setShowModal('addModal', false)
+          }} />
+        <ModalChangeData
+          header={props.config.header}
+          type='Edit'
+          isShow={this.state.editModalShow}
+          ref={(modal) => { this.modalEditForm = modal }}
+          onSubmit={(formData) => {
+            if (this._confirm) this._confirm(formData)
+            this.setShowModal('editModal', false)
+          }}
+          onCancel={() => {
+            if (this._reject) this._reject()
+            this.setShowModal('editModal', false)
+          }} />
         <Modal isOpen={this.state.deleteModalShow}>
           <ModalHeader>Delete data</ModalHeader>
           <ModalBody>
@@ -261,13 +224,17 @@ class Table extends Component {
 }
 
 // Configuration Type
-const configTypes = React.PropTypes.shape({
+
+const tableConfigTypes = {
+  table: React.PropTypes.shape({
+    add: React.PropTypes.func
+  }),
   header: React.PropTypes.arrayOf(React.PropTypes.shape({
     title: React.PropTypes.string.isRequired,
     prop: React.PropTypes.string.isRequired,
     formatter: React.PropTypes.func,
     isDelete: React.PropTypes.bool
-  })).isRequired,
+  })),
   pagination: React.PropTypes.shape({
     pageSize: React.PropTypes.number.isRequired,
     paginationBarSize: React.PropTypes.number.isRequired
@@ -275,8 +242,8 @@ const configTypes = React.PropTypes.shape({
   src: React.PropTypes.shape({
     url: React.PropTypes.string.isRequired,
     parser: React.PropTypes.func
-  }).isRequired
-})
+  })
+}
 
 Table.propTypes = {
   // derived from container
@@ -291,7 +258,12 @@ Table.propTypes = {
   isLoading: React.PropTypes.bool,
   errorMsg: React.PropTypes.string,
 
-  config: configTypes.isRequired,
+  config: React.PropTypes.shape({
+    table: tableConfigTypes.table.isRequired,
+    header: tableConfigTypes.header.isRequired,
+    pagination: tableConfigTypes.pagination,
+    src: tableConfigTypes.src.isRequired
+  }).isRequired,
   id: React.PropTypes.string.isRequired
 }
 

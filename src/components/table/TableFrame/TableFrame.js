@@ -68,8 +68,6 @@ class TableFrame extends Component {
     }
   }
 
-  create
-
   render () {
     const props = this.props
     let { header, data } = props
@@ -121,7 +119,7 @@ class TableFrame extends Component {
           /**
            * Handle data format when current column is normal value
            */
-          let val = rowData[header.prop]
+          let val = rowData ? rowData[header.prop] : ''
           if (typeof header.formatter === 'function') {
             val = header.formatter(val, i, rowData)
           }

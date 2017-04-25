@@ -17,7 +17,10 @@ class PaginationBar extends Component {
           (function () {
             let prev = Math.max(startPage - paginationBarSize, 1)
             if (startPage > 1) {
-              return (<li className='page-item' onClick={() => onChangePageTab(prev)}>
+              return (<li
+                style={{ 'cursor': 'pointer' }}
+                className='page-item'
+                onClick={() => onChangePageTab(prev)}>
                 <span className='page-link'>Prev</span>
               </li>)
             } else {
@@ -30,6 +33,7 @@ class PaginationBar extends Component {
             const id = i + startPage
             if (id <= pageAll) {
               return (<li
+                style={{ 'cursor': 'pointer' }}
                 className={'page-item ' + (id === pageNo ? 'active' : '')}
                 key={i}
                 onClick={() => onChangePage(id)}>
@@ -44,7 +48,10 @@ class PaginationBar extends Component {
           (function () {
             let next = paginationBarSize + startPage
             if (next <= pageAll) {
-              return (<li className='page-item' onClick={() => onChangePageTab(next)}>
+              return (<li
+                style={{ 'cursor': 'pointer' }}
+                className='page-item'
+                onClick={() => onChangePageTab(next)}>
                 <span className='page-link'>Next</span>
               </li>)
             } else {

@@ -65,10 +65,7 @@ class TableView extends Component {
         paginationBarSize: 15
       },
       src: {
-        url: '../api/student/all',
-        parser: (raw) => {
-          return raw.data
-        }
+        url: '../test/tableData.json'
       }
     }
     return (

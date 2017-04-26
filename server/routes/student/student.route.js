@@ -28,11 +28,7 @@ router.get('/id/:id', (req, res) => {
 })
 
 router.post('/insert', (req, res) => {
-  const {
-    student_id,
-    data
-  } = req.body
-  res.send(Student.insertStudentSQL(student_id, data))
+  res.send(Student.insertStudentSQL(req.body.data))
 })
 
 router.post('/update', (req, res) => {

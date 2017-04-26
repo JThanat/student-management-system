@@ -25,6 +25,7 @@ class Table extends Component {
     this.confirmDeleteRow = this.confirmDeleteRow.bind(this)
     this.confirmEditRow = this.confirmEditRow.bind(this)
     this.addRow = this.addRow.bind(this)
+    this.onError = this.onError.bind(this)
   }
 
   reloadTable = (customSrc = this.props.config.src) => {
@@ -54,8 +55,9 @@ class Table extends Component {
   confirmDeleteRow = (resolve, reject, deleteData) => {
     this.setShowModal('deleteModal', true)
     this.onModalConfirm = () => {
-      delete deleteData['_rid']
-      resolve(deleteData)
+      let newFormData = { ...deleteData }
+      delete newFormData['_rid']
+      resolve(newFormData)
     }
     this.onModalCancel = () => reject(new Error('cancel'))
   }
@@ -64,13 +66,14 @@ class Table extends Component {
     this.setShowModal('editModal', true)
     this.modalEditForm.fillData(oldData)
     this.onModalConfirm = (formData) => {
-      delete formData['_rid']
-      resolve(formData)
+      let newFormData = { ...formData }
+      delete newFormData['_rid']
+      resolve(newFormData)
     }
     this.onModalCancel = () => reject(new Error('cancel'))
   }
 
-  addRow = () => {
+  addRow () {
     this.setShowModal('addModal', true)
     this.onModalConfirm = (formData) => {
       const addFunc =
@@ -88,6 +91,22 @@ class Table extends Component {
         )
     }
     this.onModalCancel = () => {}
+  }
+
+  onError (reason) {
+    console.log(reason)
+    if (this.state.editModalShow) {
+      if (this.modalEditForm) {
+        this.modalEditForm.updateErrorOverall(reason.toString())
+      }
+    } else if (this.state.deleteModalShow) {
+      if (this.modalDeleteForm) {
+        this.modalDeleteForm.updateErrorOverall(reason.toString())
+      }
+    } else if (this.state.addModalShow) {
+
+    }
+    this.props.onError(reason)
   }
 
   /**
@@ -119,7 +138,10 @@ class Table extends Component {
       deleteRow: this.props.deleteRow,
       updateRow: this.props.updateRow,
       confirmDeleteRow: this.confirmDeleteRow,
-      confirmEditRow: this.confirmEditRow
+      confirmUpdateRow: this.confirmEditRow,
+      afterDeleteRow: () => this.setShowModal('deleteModal', false),
+      afterUpdateRow: () => this.setShowModal('editModal', false),
+      afterAddRow: () => this.setShowModal('addModal', false)
     }
 
     return (
@@ -128,41 +150,69 @@ class Table extends Component {
           header={props.config.header}
           type='Add'
           isShow={this.state.addModalShow}
-          onSubmit={(formData) => {
-            if (this.onModalConfirm) this.onModalConfirm(formData)
-            this.setShowModal('addModal', false)
-          }}
-          onCancel={() => {
-            if (this.onModalCancel) this.onModalCancel()
-            this.setShowModal('addModal', false)
-          }} />
+          ref={
+            (modal) => { this.modalDeleteForm = modal }
+          }
+          onSubmit={
+            (formData) => {
+              if (this.onModalConfirm) this.onModalConfirm(formData)
+              this.setShowModal('addModal', false)
+            }
+          }
+          onCancel={
+            () => {
+              if (this.onModalCancel) this.onModalCancel()
+              this.setShowModal('addModal', false)
+            }
+          }
+          />
         <ModalChangeData
           header={props.config.header}
           type='Edit'
           isShow={this.state.editModalShow}
-          ref={(modal) => { this.modalEditForm = modal }}
-          onSubmit={(formData) => {
-            if (this.onModalConfirm) this.onModalConfirm(formData)
-            this.setShowModal('editModal', false)
-          }}
-          onCancel={() => {
-            if (this.onModalCancel) this.onModalCancel()
-            this.setShowModal('editModal', false)
-          }} />
+          ref={
+            (modal) => { this.modalEditForm = modal }
+          }
+          onSubmit={
+            (formData) => {
+              if (this.onModalConfirm) this.onModalConfirm(formData)
+              this.setShowModal('editModal', false)
+            }
+          }
+          onCancel={
+            () => {
+              if (this.onModalCancel) this.onModalCancel()
+              this.setShowModal('editModal', false)
+            }
+          }
+          />
         <Modal isOpen={this.state.deleteModalShow}>
           <ModalHeader>Delete data</ModalHeader>
           <ModalBody>
             Are you sure to delete data.
           </ModalBody>
           <ModalFooter>
-            <div className='btn btn-danger' onClick={() => {
-              if (this.onModalConfirm) this.onModalConfirm()
-              this.setShowModal('deleteModal', false)
-            }}>Delete</div>{' '}
-            <div className='btn btn-secondary' onClick={() => {
-              if (this.onModalCancel) this.onModalCancel()
-              this.setShowModal('deleteModal', false)
-            }}>Cancel</div>
+            <div
+              className='btn btn-danger'
+              onClick={
+                () => {
+                  if (this.onModalConfirm) this.onModalConfirm()
+                  this.setShowModal('deleteModal', false)
+                }
+              }>
+              Delete
+            </div>
+            {' '}
+            <div
+              className='btn btn-secondary'
+              onClick={
+                () => {
+                  if (this.onModalCancel) this.onModalCancel()
+                  this.setShowModal('deleteModal', false)
+                }
+              }>
+              Cancel
+            </div>
           </ModalFooter>
         </Modal>
         <Measure
@@ -211,7 +261,7 @@ class Table extends Component {
 
             func={tableFrameFunc}
 
-            onError={this.props.onError}
+            onError={this.onError}
             showLog={this.props.showLog}
             />
         </div>

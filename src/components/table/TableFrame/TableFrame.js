@@ -50,11 +50,11 @@ class TableFrame extends Component {
 
   generateOnUpdate (header, rowData) {
     return () => {
-      const confirmEditRow = this.props.func.confirmEditRow || ((resolve, reject, data) => resolve(data))
+      const confirmUpdateRow = this.props.func.confirmUpdateRow || ((resolve, reject, data) => resolve(data))
       header.onUpdate = header.onUpdate || ((resolve, reject, data) => resolve(data))
 
       new Promise(
-        (resolve, reject) => confirmEditRow(resolve, reject, JSON.parse(JSON.stringify(rowData)))
+        (resolve, reject) => confirmUpdateRow(resolve, reject, JSON.parse(JSON.stringify(rowData)))
       ).then(
           (newData) => {
             this.log('Editing...')
@@ -71,6 +71,10 @@ class TableFrame extends Component {
               return this.onError(new Error('Update data is not object type. Please check your `config.header`.'))
             }
             this.props.func.updateRow(rowData._rid, newData)
+
+            if (typeof this.props.func.afterUpdateRow === 'function') {
+              // this.props.func.afterUpdateRow()
+            }
           },
           (reason) => {
             this.log('')
@@ -189,7 +193,10 @@ TableFrame.propTypes = {
     deleteRow: React.PropTypes.func,
     updateRow: React.PropTypes.func,
     confirmDeleteRow: React.PropTypes.func,
-    confirmEditRow: React.PropTypes.func
+    confirmUpdateRow: React.PropTypes.func,
+    afterDeleteRow: React.PropTypes.func,
+    afterUpdateRow: React.PropTypes.func,
+    afterAddRow: React.PropTypes.func
   }),
 
   onError: React.PropTypes.func,

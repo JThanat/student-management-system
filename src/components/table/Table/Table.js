@@ -51,26 +51,28 @@ class Table extends Component {
     })
   }
 
-  confirmDeleteRow = (resolve, reject) => {
+  confirmDeleteRow = (resolve, reject, deleteData) => {
     this.setShowModal('deleteModal', true)
-    this._confirm = resolve
-    this._reject = reject
+    this.onModalConfirm = () => {
+      delete deleteData['_rid']
+      resolve(deleteData)
+    }
+    this.onModalCancel = () => reject(new Error('cancel'))
   }
 
   confirmEditRow = (resolve, reject, oldData) => {
     this.setShowModal('editModal', true)
     this.modalEditForm.fillData(oldData)
-    this._confirm = (formData) => resolve(formData)
-    this._reject = reject
-  }
-
-  getFillEditFormData () {
-    return this.state.editForm
+    this.onModalConfirm = (formData) => {
+      delete formData['_rid']
+      resolve(formData)
+    }
+    this.onModalCancel = () => reject(new Error('cancel'))
   }
 
   addRow = () => {
     this.setShowModal('addModal', true)
-    this._confirm = (formData) => {
+    this.onModalConfirm = (formData) => {
       const addFunc =
         (this.props.config.table ? this.props.config.table.add : null) ||
         ((resolve) => resolve())
@@ -85,8 +87,12 @@ class Table extends Component {
           (reason) => this.props.onError(reason)
         )
     }
-    this._reject = () => {}
+    this.onModalCancel = () => {}
   }
+
+  /**
+   * Mount function
+   */
 
   componentWillMount () {
     const props = this.props
@@ -109,6 +115,13 @@ class Table extends Component {
 
     tableView = tableView || {}
 
+    const tableFrameFunc = {
+      deleteRow: this.props.deleteRow,
+      updateRow: this.props.updateRow,
+      confirmDeleteRow: this.confirmDeleteRow,
+      confirmEditRow: this.confirmEditRow
+    }
+
     return (
       <div>
         <ModalChangeData
@@ -116,11 +129,11 @@ class Table extends Component {
           type='Add'
           isShow={this.state.addModalShow}
           onSubmit={(formData) => {
-            if (this._confirm) this._confirm(formData)
+            if (this.onModalConfirm) this.onModalConfirm(formData)
             this.setShowModal('addModal', false)
           }}
           onCancel={() => {
-            if (this._reject) this._reject()
+            if (this.onModalCancel) this.onModalCancel()
             this.setShowModal('addModal', false)
           }} />
         <ModalChangeData
@@ -129,11 +142,11 @@ class Table extends Component {
           isShow={this.state.editModalShow}
           ref={(modal) => { this.modalEditForm = modal }}
           onSubmit={(formData) => {
-            if (this._confirm) this._confirm(formData)
+            if (this.onModalConfirm) this.onModalConfirm(formData)
             this.setShowModal('editModal', false)
           }}
           onCancel={() => {
-            if (this._reject) this._reject()
+            if (this.onModalCancel) this.onModalCancel()
             this.setShowModal('editModal', false)
           }} />
         <Modal isOpen={this.state.deleteModalShow}>
@@ -143,11 +156,11 @@ class Table extends Component {
           </ModalBody>
           <ModalFooter>
             <div className='btn btn-danger' onClick={() => {
-              if (this._confirm) this._confirm()
+              if (this.onModalConfirm) this.onModalConfirm()
               this.setShowModal('deleteModal', false)
             }}>Delete</div>{' '}
             <div className='btn btn-secondary' onClick={() => {
-              if (this._reject) this._reject()
+              if (this.onModalCancel) this.onModalCancel()
               this.setShowModal('deleteModal', false)
             }}>Cancel</div>
           </ModalFooter>
@@ -196,11 +209,7 @@ class Table extends Component {
             header={config.header}
             isLoading={props.isLoading || false}
 
-            deleteRowFunc={this.props.deleteRow}
-            updateRowFunc={this.props.updateRow}
-
-            confirmDeleteRow={this.confirmDeleteRow}
-            confirmEditRow={this.confirmEditRow}
+            func={tableFrameFunc}
 
             onError={this.props.onError}
             showLog={this.props.showLog}

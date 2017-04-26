@@ -35,7 +35,7 @@ router.post('/insert', (req, res) => {
   res.send(Student.insertStudentSQL(student_id, data))
 })
 
-router.get('/update', (req, res) => {
+router.post('/update', (req, res) => {
   const {
     student_id,
     data

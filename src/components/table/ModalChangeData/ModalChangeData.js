@@ -96,7 +96,8 @@ class ModalChangeData extends Component {
             errorOverall: `'${prop}' field is not nullable.`
           })))
         }
-      } else if (typeof header.validate === 'function') {
+      }
+      if (typeof header.validate === 'function') {
         // Custom validation function
 
         validateList.push(new Promise((resolve, reject) => {

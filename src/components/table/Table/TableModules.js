@@ -65,7 +65,7 @@ export const loadTable = (config, id) => {
           if (response.ok) {
             return response.text()
           } else {
-            return Promise.reject(response)
+            return Promise.reject(new Error(`Can't load table`))
           }
         })
         .then((body) => {

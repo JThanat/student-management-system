@@ -1,3 +1,4 @@
+import 'whatwg-fetch'
 import React from 'react'
 
 export default [
@@ -28,13 +29,7 @@ export default [
   },
   {
     title: 'CurID',
-    prop: 'curid',
-    validate: (resolve, reject, data) => {
-      setTimeout(() => {
-        if (data === '123') resolve()
-        else reject('CurID is not 123')
-      }, 2000)
-    }
+    prop: 'curid'
   },
   {
     title: 'MemID',

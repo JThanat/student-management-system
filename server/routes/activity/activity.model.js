@@ -19,9 +19,14 @@ const insertActivity = (dataSet) => {
   return query.transformToSQL.insert(TABLE_NAME, dataSet)
 }
 
+const deleteActivity = (conditionSet) => {
+  return query.transformToSQL.delete(TABLE_NAME, conditionSet)
+}
+
 module.exports = {
   ActivityColumns,
   getAllActivities,
   filterActivities,
-  insertActivity
+  insertActivity,
+  deleteActivity
 }

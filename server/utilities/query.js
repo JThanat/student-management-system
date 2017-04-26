@@ -9,8 +9,8 @@ const queryAndResponse = (params) => {
   const {
     sql,
     parse,
-    res,
-    req
+    req,
+    res
   } = params
 
   if (!sql) throw new Error('sql is not defined')

@@ -19,8 +19,8 @@ const queryAndResponse = (params) => {
   const {
     sql,
     parse,
-    res,
-    req
+    req,
+    res
   } = params
 
   if (!sql) throw new Error('sql is not defined')
@@ -80,6 +80,19 @@ const transformToSQL = {
       setCondition.push(`${key} = "${dataSet[key]}"`)
     }
     return `UPDATE ${tableName} SET ${setCondition.join(', ')} WHERE ${where}`
+  },
+  /**
+   * receive tableName and filterList which consists of the key and value which
+   * is needed to be queried
+   */
+  filter: (tableName, filterList) => {
+    const keys = Object.keys(filterList)
+    let queryString = `SELECT * FROM ${tableName} WHERE `
+    for (let i = 0; i < keys.length; i++) {
+      const key = keys[i]
+      queryString += `${key} = ${filterList[key]}` + `${(i < keys.length - 1) ? ' AND ' : ''}`
+    }
+    return queryString
   }
 }
 

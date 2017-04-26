@@ -53,15 +53,21 @@ class Table extends Component {
 
   confirmDeleteRow = (resolve, reject) => {
     this.setShowModal('deleteModal', true)
-    this._confirm = resolve
-    this._reject = reject
+    this.onModalConfirm = (formData) => {
+      delete formData['_rid']
+      resolve(formData)
+    }
+    this.onModalCancel = reject
   }
 
   confirmEditRow = (resolve, reject, oldData) => {
     this.setShowModal('editModal', true)
     this.modalEditForm.fillData(oldData)
-    this._confirm = (formData) => resolve(formData)
-    this._reject = reject
+    this.onModalConfirm = (formData) => {
+      delete formData['_rid']
+      resolve(formData)
+    }
+    this.onModalCancel = reject
   }
 
   getFillEditFormData () {
@@ -70,7 +76,7 @@ class Table extends Component {
 
   addRow = () => {
     this.setShowModal('addModal', true)
-    this._confirm = (formData) => {
+    this.onModalConfirm = (formData) => {
       const addFunc =
         (this.props.config.table ? this.props.config.table.add : null) ||
         ((resolve) => resolve())
@@ -85,7 +91,7 @@ class Table extends Component {
           (reason) => this.props.onError(reason)
         )
     }
-    this._reject = () => {}
+    this.onModalCancel = () => {}
   }
 
   componentWillMount () {
@@ -116,11 +122,11 @@ class Table extends Component {
           type='Add'
           isShow={this.state.addModalShow}
           onSubmit={(formData) => {
-            if (this._confirm) this._confirm(formData)
+            if (this.onModalConfirm) this.onModalConfirm(formData)
             this.setShowModal('addModal', false)
           }}
           onCancel={() => {
-            if (this._reject) this._reject()
+            if (this.onModalCancel) this.onModalCancel()
             this.setShowModal('addModal', false)
           }} />
         <ModalChangeData
@@ -129,11 +135,11 @@ class Table extends Component {
           isShow={this.state.editModalShow}
           ref={(modal) => { this.modalEditForm = modal }}
           onSubmit={(formData) => {
-            if (this._confirm) this._confirm(formData)
+            if (this.onModalConfirm) this.onModalConfirm(formData)
             this.setShowModal('editModal', false)
           }}
           onCancel={() => {
-            if (this._reject) this._reject()
+            if (this.onModalCancel) this.onModalCancel()
             this.setShowModal('editModal', false)
           }} />
         <Modal isOpen={this.state.deleteModalShow}>
@@ -143,11 +149,11 @@ class Table extends Component {
           </ModalBody>
           <ModalFooter>
             <div className='btn btn-danger' onClick={() => {
-              if (this._confirm) this._confirm()
+              if (this.onModalConfirm) this.onModalConfirm()
               this.setShowModal('deleteModal', false)
             }}>Delete</div>{' '}
             <div className='btn btn-secondary' onClick={() => {
-              if (this._reject) this._reject()
+              if (this.onModalCancel) this.onModalCancel()
               this.setShowModal('deleteModal', false)
             }}>Cancel</div>
           </ModalFooter>

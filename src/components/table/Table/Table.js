@@ -51,13 +51,13 @@ class Table extends Component {
     })
   }
 
-  confirmDeleteRow = (resolve, reject) => {
+  confirmDeleteRow = (resolve, reject, deleteData) => {
     this.setShowModal('deleteModal', true)
-    this.onModalConfirm = (formData) => {
-      delete formData['_rid']
-      resolve(formData)
+    this.onModalConfirm = () => {
+      delete deleteData['_rid']
+      resolve(deleteData)
     }
-    this.onModalCancel = reject
+    this.onModalCancel = () => reject(new Error('cancel'))
   }
 
   confirmEditRow = (resolve, reject, oldData) => {
@@ -67,7 +67,7 @@ class Table extends Component {
       delete formData['_rid']
       resolve(formData)
     }
-    this.onModalCancel = reject
+    this.onModalCancel = () => reject(new Error('cancel'))
   }
 
   getFillEditFormData () {

@@ -14,13 +14,14 @@ class TableFrame extends Component {
     return () => {
       const confirmDeleteRow = this.props.confirmDeleteRow || ((resolve) => resolve())
       header.onDelete = header.onDelete || ((resolve) => resolve())
-      new Promise(confirmDeleteRow)
+
+      new Promise((resolve, reject) => confirmDeleteRow(resolve, reject, rowData))
         .then(
           () => {
             this.log('Deleting...')
             return new Promise((resolve, reject) => header.onDelete(resolve, reject, rowData))
           },
-          () => Promise.reject('cancel')
+          () => Promise.reject(new Error('cancel'))
         )
         .then(
           () => {
@@ -29,9 +30,11 @@ class TableFrame extends Component {
           },
           (reason) => {
             this.log('')
-            typeof this.props.onError === 'function'
-              ? this.props.onError(reason === 'cancel' ? '' : reason)
-              : null
+            if (typeof this.props.onError === 'function') {
+              if (!(reason instanceof Error && reason.message === 'cancel')) {
+                this.props.onError(reason)
+              }
+            }
           }
         )
     }
@@ -47,11 +50,12 @@ class TableFrame extends Component {
       ).then(
           (newData) => {
             this.log('Editing...')
+            console.log('editing...')
             return new Promise(
               (resolve, reject) => header.onUpdate(resolve, reject, newData)
             )
           },
-          () => Promise.reject('cancel')
+          () => Promise.reject(new Error('cancel'))
         )
         .then(
           (newData) => {
@@ -60,9 +64,11 @@ class TableFrame extends Component {
           },
           (reason) => {
             this.log('')
-            typeof this.props.onError === 'function'
-              ? this.props.onError(reason === 'cancel' ? '' : reason)
-              : null
+            if (typeof this.props.onError === 'function') {
+              if (!(reason instanceof Error && reason.message === 'cancel')) {
+                this.props.onError(reason)
+              }
+            }
           }
         )
     }

@@ -17,7 +17,8 @@ const app = express()
 app.use(compress())
 
 // Apply Body-Parser Middleware
-app.use(bodyParser())
+app.use(bodyParser.json())
+app.use(bodyParser.urlencoded({ extended: false }))
 
 // API : App route for
 app.use('/api/', require('./routes/index'))

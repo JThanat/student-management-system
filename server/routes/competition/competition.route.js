@@ -3,7 +3,6 @@ const queryHelper = require('../../utilities/query')
 const Competition = require('./competition.model')
 
 const router = express.Router()
-const TABLE = 'Competitions'
 
 router.get('/all', (req, res) => {
   queryHelper.queryAndResponse({
@@ -16,11 +15,13 @@ router.get('/all', (req, res) => {
 router.get('/filter', (req, res) => {
   const filterList = req.query
   queryHelper.queryAndResponse({
-    sql: queryHelper.transformToSQL(TABLE, filterList),
+    sql: Competition.filterCompetition(filterList),
     req: req,
     res: res
   })
 })
+
+// TODO - For insert we should move the prize out first
 
 module.exports = router
 

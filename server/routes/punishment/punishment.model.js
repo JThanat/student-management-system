@@ -18,9 +18,14 @@ const insertPunishment = (dataSet) => {
   return query.transformToSQL.insert(TABLE_NAME, dataSet)
 }
 
+const deletePunishment = (dataSet) => {
+  return query.transformToSQL.delete(TABLE_NAME, dataSet)
+}
+
 module.exports = {
   PunishmentRecordColumns,
   getAllPunishment,
   filterStudentSQL,
-  insertPunishment
+  insertPunishment,
+  deletePunishment
 }

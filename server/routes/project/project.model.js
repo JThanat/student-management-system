@@ -18,9 +18,14 @@ const insertProject = (dataSet) => {
   return query.transformToSQL.insert(TABLE_NAME, dataSet)
 }
 
+const deleteProject = (dataSet) => {
+  return query.transformToSQL.delete(TABLE_NAME, dataSet)
+}
+
 module.exports = {
   ProjectsColumns,
   getAllProjects,
   filterProjects,
-  insertProject
+  insertProject,
+  deleteProject
 }

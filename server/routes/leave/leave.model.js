@@ -16,13 +16,18 @@ const filterLeaves = (filterList) => {
   return query.transformToSQL.filter(TABLE_NAME, filterList)
 }
 
-const insertLeaves = (dataSet) => {
+const insertLeave = (dataSet) => {
   return query.transformToSQL.insert(TABLE_NAME, dataSet)
+}
+
+const deleteLeave = (conditionSet) => {
+  return query.transformToSQL.delete(TABLE_NAME, conditionSet)
 }
 
 module.exports = {
   LeavesColumns,
   getAllLeaves,
   filterLeaves,
-  insertLeaves
+  insertLeave,
+  deleteLeave
 }

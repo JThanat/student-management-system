@@ -31,28 +31,28 @@ const StudentColumns = [
   'status',
   'behavioral_score'
 ]
-
-const getAllStudentSQL = () => 'SELECT * FROM students'
+const TABLE_NAME = 'students'
+const getAllStudentSQL = () => `SELECT * FROM ${TABLE_NAME}`
 
 const getOneStudentSQL = (studentID) => {
-  return `SELECT * FROM students WHERE student_id = "${studentID}"`
+  return `SELECT * FROM ${TABLE_NAME} WHERE student_id = "${studentID}"`
 }
 
-const deleteStudentSQL = (studentID) => {
-  return `DELETE FROM students WHERE student_id = "${studentID}"`
+const deleteStudentSQL = (dataSet) => {
+  return query.transformToSQL.delete(TABLE_NAME, dataSet)
 }
 
 const updateStudentSQL = (studentID, dataSet) => {
-  return query.transformToSQL.update('students', dataSet,
+  return query.transformToSQL.update(TABLE_NAME, dataSet,
     `student_id = "${studentID}"`)
 }
 
 const insertStudentSQL = (studentID, dataSet) => {
-  return query.transformToSQL.insert('students', dataSet)
+  return query.transformToSQL.insert(TABLE_NAME, dataSet)
 }
 
 const filterStudentSQL = (filterList) => {
-  return query.transformToSQL.filter('students', filterList)
+  return query.transformToSQL.filter(TABLE_NAME, filterList)
 }
 
 module.exports = {

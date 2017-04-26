@@ -21,6 +21,14 @@ router.get('/filter', (req, res) => {
   })
 })
 
+router.post('/delete', (req, res) => {
+  const data = req.body.data
+  queryHelper.queryAndResponse({
+    sql: Competition.deleteCompetition(data),
+    req: req,
+    res: res
+  })
+})
 // TODO - For insert we should move the prize out first
 
 module.exports = router

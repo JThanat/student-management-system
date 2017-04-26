@@ -30,4 +30,14 @@ router.post('/create', (req, res) => {
   })
 })
 
+router.post('/delete', (req, res) => {
+  const data = req.body.data
+  queryHelper.queryAndResponse({
+    sql: Project.deleteProject(data),
+    req: req,
+    res: res
+  })
+})
+
+
 module.exports = router

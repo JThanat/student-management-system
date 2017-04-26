@@ -15,8 +15,13 @@ const filterCompetition = (filterList) => {
   return query.transformToSQL.filter(TABLE_NAME, filterList)
 }
 
+const deleteCompetition = (conditionSet) => {
+  return query.transformToSQL.delete(TABLE_NAME, conditionSet)
+}
+
 module.exports = {
   CompetitionColumns,
   getAllCompetitions,
-  filterCompetition
+  filterCompetition,
+  deleteCompetition
 }

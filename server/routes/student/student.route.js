@@ -55,7 +55,12 @@ router.post('/update', (req, res) => {
 })
 
 router.post('/delete', (req, res) => {
-  res.send(Student.deleteStudentSQL(req.body.student_id))
+  const data = req.body.data
+  queryHelper.queryAndResponse({
+    sql: Student.deleteStudent(data),
+    req: req,
+    res: res
+  })
 })
 
 router.get('/test', (req, res) => {

@@ -1,14 +1,37 @@
 import 'whatwg-fetch'
 import React from 'react'
 
-export default [
+const studentHeader = [
   {
     title: 'Edit',
     prop: 'edit',
     isEdit: true,
     onUpdate: (resolve, reject, data) => {
-      console.log('edit', data)
-      setTimeout(() => resolve(data), 500)
+      fetch('../api/student/update', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          student_id: data.student_id,
+          data: data
+        })
+      }).then((response) => {
+        return response.json().then((data) => {
+          if (Response.status === 200) {
+            if (data.success) return data
+            return data.err
+          } else {
+            return Promise.reject(`Response with ${response.status} (${data.err})`)
+          }
+        })
+      }).then(
+        (response) => {
+          console.log(response)
+          resolve(data)
+        },
+        (err) => reject(err)
+      )
     }
   },
   {
@@ -167,3 +190,23 @@ export default [
 //       }
 //     }
 //   ]
+
+
+export default {
+  table: {
+    add: (resolve, reject, newData) => {
+      console.log('add', newData)
+      resolve()
+    }
+  },
+  header: studentHeader,
+  pagination: {
+    pageSize: 25,
+    paginationBarSize: 10
+  },
+  src: {
+    url: '../api/student/all',
+    parser: (raw) => raw.data
+  }
+}
+

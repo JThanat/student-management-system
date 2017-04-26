@@ -30,15 +30,17 @@ export default [
     title: 'CurID',
     prop: 'curid',
     validate: (resolve, reject, data) => {
-      if (data === '123') resolve(true)
-      else reject('CurID is not 123')
+      setTimeout(() => {
+        if (data === '123') resolve()
+        else reject('CurID is not 123')
+      }, 2000)
     }
   },
   {
     title: 'MemID',
     prop: 'memid',
     validate: (resolve, reject, data) => {
-      resolve('eiei')
+      setTimeout(() => resolve('eiei'), 500)
     }
   },
   {

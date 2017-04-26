@@ -35,7 +35,6 @@ class ModalChangeData extends Component {
     this.setState({
       data: newData
     })
-    this.validate(() => {}, () => {}, this.props.header, newData)
   }
 
   isEditable (type) {
@@ -72,7 +71,10 @@ class ModalChangeData extends Component {
   }
 
   validate (validResolve, validReject, headers, datas) {
-    this.showError({}, 'Validating...')
+    this.showError(
+      this.state.error,
+      'Validating...'
+    )
 
     if (!datas) {
       return validReject({ errorOverall: 'Data is empty' })
@@ -99,7 +101,7 @@ class ModalChangeData extends Component {
 
         validateList.push(new Promise((resolve, reject) => {
           const rejectWithError = (str) => {
-            return reject(new ValidationError({
+            reject(new ValidationError({
               error: { [prop]: str.toString() },
               errorOverall: `Field '${prop}' is not valid (${str.toString()})`
             }))
@@ -117,17 +119,15 @@ class ModalChangeData extends Component {
     Promise
       .all(validateList)
       .then(results => {
-        console.log(results)
         const rejectList = results.filter(result => result.status === 'reject')
         if (rejectList.length > 0) {
           const rejectErr = rejectList.reduce((acc, val) => {
-            console.log(val.obj)
             return {
               error: {
                 ...acc.error,
                 ...val.obj.error
               },
-              errorOverall: val.obj.errorOverall
+              errorOverall: acc.errorOverall ? acc.errorOverall : val.obj.errorOverall
             }
           }, {
             error: {},

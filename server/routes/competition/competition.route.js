@@ -3,6 +3,7 @@ const queryHelper = require('../../utilities/query')
 const Competition = require('./competition.model')
 
 const router = express.Router()
+const TABLE = 'Competitions'
 
 router.get('/all', (req, res) => {
   queryHelper.queryAndResponse({
@@ -13,9 +14,9 @@ router.get('/all', (req, res) => {
 })
 
 router.get('/filter', (req, res) => {
-  const filterList = req.query.filterList
+  const filterList = req.query
   queryHelper.queryAndResponse({
-    sql: queryHelper.transformToSQL('Competition', filterList),
+    sql: queryHelper.transformToSQL(TABLE, filterList),
     req: req,
     res: res
   })

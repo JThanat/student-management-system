@@ -51,4 +51,13 @@ router.get('/test', (req, res) => {
   res.send('done')
 })
 
+router.get('/filter', (req, res) => {
+  const filterList = req.query
+  queryHelper.queryAndResponse({
+    sql: Student.filterStudentSQL(filterList),
+    req: req,
+    res: res
+  })
+})
+
 module.exports = router

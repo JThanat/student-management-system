@@ -1,7 +1,15 @@
 import React, { Component } from 'react'
 import { Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap'
+import Promise from 'bluebird'
+
 import './ModalChangeData.scss'
-// import Promise from 'bluebird'
+
+class ValidationError extends Error {
+  constructor (obj) {
+    super(obj)
+    this.obj = obj
+  }
+}
 
 class ModalChangeData extends Component {
 
@@ -15,15 +23,19 @@ class ModalChangeData extends Component {
     }
 
     this.handleChangeForm = this.handleChangeForm.bind(this)
+    this.validateAndSubmit = this.validateAndSubmit.bind(this)
+    this.validate = this.validate.bind(this)
   }
 
   handleChangeForm (event, property) {
+    const newData = {
+      ...this.state.data,
+      [property]: event.target.value
+    }
     this.setState({
-      data: {
-        ...this.state.data,
-        [property]: event.target.value
-      }
+      data: newData
     })
+    this.validate(() => {}, () => {}, this.props.header, newData)
   }
 
   isEditable (type) {
@@ -37,36 +49,100 @@ class ModalChangeData extends Component {
     })
   }
 
-  addError (errorData, errorOverall) {
+  showError (errorData, errorOverall) {
     this.setState({
       error: {
-        ...this.state.error,
         ...errorData
       },
       errorOverall
     })
   }
 
-  validate (headers, datas) {
+  clearError () {
+    this.showError({}, '')
+  }
+
+  validateAndSubmit () {
+    const onSubmit = this.props.onSubmit || (() => {})
+
+    new Promise((resolve, reject) => (
+        this.validate(resolve, reject, this.props.header, this.state.data)
+      ))
+      .then(() => onSubmit(this.state.data))
+  }
+
+  validate (validResolve, validReject, headers, datas) {
+    this.showError({}, 'Validating...')
+
     if (!datas) {
-      this.setState({ errorOverall: 'Data is empty' })
-      return false
+      return validReject({ errorOverall: 'Data is empty' })
     }
+
+    let validateList = []
+
     for (let i = 0; i < headers.length; i++) {
       const header = headers[i]
       const prop = header.prop
       const data = datas[header.prop]
+
       if (header.isNullable === false) {
+        // Check nullable of data
+
         if (!data) {
-          this.addError(
-            { [prop]: 'This field is not nullable.' },
-            `'${prop}' field is not nullable.`
-          )
-        } else {
-          this.addError({ [prop]: '' }, '')
+          validateList.push(Promise.reject(new ValidationError({
+            error: { [prop]: 'This field is not nullable.' },
+            errorOverall: `'${prop}' field is not nullable.`
+          })))
         }
+      } else if (typeof header.validate === 'function') {
+        // Custom validation function
+
+        validateList.push(new Promise((resolve, reject) => {
+          const rejectWithError = (str) => {
+            return reject(new ValidationError({
+              error: { [prop]: str.toString() },
+              errorOverall: `Field '${prop}' is not valid (${str.toString()})`
+            }))
+          }
+          header.validate(resolve, rejectWithError, data)
+        }))
       }
     }
+
+    validateList = validateList.map((obj) => obj.then(
+      () => ({ status: 'resolve' }),
+      (err) => ({ status: 'reject', obj: err.obj })
+    ))
+
+    Promise
+      .all(validateList)
+      .then(results => {
+        console.log(results)
+        const rejectList = results.filter(result => result.status === 'reject')
+        if (rejectList.length > 0) {
+          const rejectErr = rejectList.reduce((acc, val) => {
+            console.log(val.obj)
+            return {
+              error: {
+                ...acc.error,
+                ...val.obj.error
+              },
+              errorOverall: val.obj.errorOverall
+            }
+          }, {
+            error: {},
+            errorOverall: ''
+          })
+
+          this.showError(
+            rejectErr.error,
+            rejectErr.errorOverall
+          )
+        } else {
+          this.clearError()
+          validResolve()
+        }
+      })
   }
 
   bodyContent () {
@@ -106,7 +182,6 @@ class ModalChangeData extends Component {
   render () {
     const { props } = this
 
-    const onSubmit = props.onSubmit || (() => {})
     const onCancel = props.onCancel || (() => {})
 
     return (
@@ -122,13 +197,13 @@ class ModalChangeData extends Component {
           </div>
         </ModalBody>
         <ModalFooter>
-          <div className='btn btn-primary' onClick={() => {
-            if (this.validate(props.header, this.state.data) === true) {
-              onSubmit(this.state.data)
-            }
-          }}>{props.type}</div>
+          <div className='btn btn-primary' onClick={this.validateAndSubmit}>
+            {props.type}
+          </div>
           {' '}
-          <div className='btn btn-secondary' onClick={onCancel}>Cancel</div>
+          <div className='btn btn-secondary' onClick={onCancel}>
+            Cancel
+          </div>
         </ModalFooter>
       </Modal>
     )

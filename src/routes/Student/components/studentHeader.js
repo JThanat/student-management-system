@@ -28,11 +28,18 @@ export default [
   },
   {
     title: 'CurID',
-    prop: 'curid'
+    prop: 'curid',
+    validate: (resolve, reject, data) => {
+      if (data === '123') resolve(true)
+      else reject('CurID is not 123')
+    }
   },
   {
     title: 'MemID',
-    prop: 'memid'
+    prop: 'memid',
+    validate: (resolve, reject, data) => {
+      resolve('eiei')
+    }
   },
   {
     title: 'คำนำหน้าชื่อ',

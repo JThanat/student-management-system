@@ -12,7 +12,7 @@ class TableFrame extends Component {
 
   generateOnDelete (header, rowData) {
     return () => {
-      const confirmDeleteRow = this.props.confirmDeleteRow || ((resolve) => resolve())
+      const confirmDeleteRow = this.props.func.confirmDeleteRow || ((resolve) => resolve())
       header.onDelete = header.onDelete || ((resolve) => resolve())
 
       new Promise((resolve, reject) => confirmDeleteRow(resolve, reject, rowData))
@@ -25,7 +25,7 @@ class TableFrame extends Component {
         )
         .then(
           () => {
-            this.props.deleteRowFunc(rowData._rid)
+            this.props.func.deleteRow(rowData._rid)
             this.log('')
           },
           (reason) => {
@@ -42,7 +42,7 @@ class TableFrame extends Component {
 
   generateOnUpdate (header, rowData) {
     return () => {
-      const confirmEditRow = this.props.confirmEditRow || ((resolve, reject, data) => resolve(data))
+      const confirmEditRow = this.props.func.confirmEditRow || ((resolve, reject, data) => resolve(data))
       header.onUpdate = header.onUpdate || ((resolve, reject, data) => resolve(data))
 
       new Promise(
@@ -50,7 +50,6 @@ class TableFrame extends Component {
       ).then(
           (newData) => {
             this.log('Editing...')
-            console.log('editing...')
             return new Promise(
               (resolve, reject) => header.onUpdate(resolve, reject, newData)
             )
@@ -59,7 +58,7 @@ class TableFrame extends Component {
         )
         .then(
           (newData) => {
-            this.props.updateRowFunc(rowData._rid, newData)
+            this.props.func.updateRow(rowData._rid, newData)
             this.log('')
           },
           (reason) => {
@@ -173,10 +172,13 @@ TableFrame.propTypes = {
   header: React.PropTypes.array.isRequired,
   isLoading: React.PropTypes.bool.isRequired,
 
-  deleteRowFunc: React.PropTypes.func,
-  updateRowFunc: React.PropTypes.func,
-  confirmDeleteRow: React.PropTypes.func,
-  confirmEditRow: React.PropTypes.func,
+  func: React.PropTypes.shape({
+    deleteRow: React.PropTypes.func,
+    updateRow: React.PropTypes.func,
+    confirmDeleteRow: React.PropTypes.func,
+    confirmEditRow: React.PropTypes.func
+  }),
+
   onError: React.PropTypes.func,
   showLog: React.PropTypes.func
 }

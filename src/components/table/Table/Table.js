@@ -70,10 +70,6 @@ class Table extends Component {
     this.onModalCancel = () => reject(new Error('cancel'))
   }
 
-  getFillEditFormData () {
-    return this.state.editForm
-  }
-
   addRow = () => {
     this.setShowModal('addModal', true)
     this.onModalConfirm = (formData) => {
@@ -93,6 +89,10 @@ class Table extends Component {
     }
     this.onModalCancel = () => {}
   }
+
+  /**
+   * Mount function
+   */
 
   componentWillMount () {
     const props = this.props
@@ -114,6 +114,13 @@ class Table extends Component {
     const config = props.config
 
     tableView = tableView || {}
+
+    const tableFrameFunc = {
+      deleteRow: this.props.deleteRow,
+      updateRow: this.props.updateRow,
+      confirmDeleteRow: this.confirmDeleteRow,
+      confirmEditRow: this.confirmEditRow
+    }
 
     return (
       <div>
@@ -202,11 +209,7 @@ class Table extends Component {
             header={config.header}
             isLoading={props.isLoading || false}
 
-            deleteRowFunc={this.props.deleteRow}
-            updateRowFunc={this.props.updateRow}
-
-            confirmDeleteRow={this.confirmDeleteRow}
-            confirmEditRow={this.confirmEditRow}
+            func={tableFrameFunc}
 
             onError={this.props.onError}
             showLog={this.props.showLog}

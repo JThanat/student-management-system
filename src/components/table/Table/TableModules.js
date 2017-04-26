@@ -143,6 +143,11 @@ const changeTableState = (state, tid, objToMerge) => {
   return newState
 }
 
+export const actions = {
+  loadTable, changePage, changePageTab, updateRow, deleteRow,
+  showErrorMsg, showLogMsg
+}
+
 const ACTION_HANDLERS = {
   [TABLE_LOAD_COMPLETE] : (state, action) => {
     return {

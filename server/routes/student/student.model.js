@@ -51,11 +51,16 @@ const insertStudentSQL = (studentID, dataSet) => {
   return query.transformToSQL.insert('students', dataSet)
 }
 
+const filterStudentSQL = (filterList) => {
+  return query.transformToSQL.filter('students', filterList)
+}
+
 module.exports = {
   StudentColumns,
   getAllStudentSQL,
   getOneStudentSQL,
   deleteStudentSQL,
   updateStudentSQL,
-  insertStudentSQL
+  insertStudentSQL,
+  filterStudentSQL
 }

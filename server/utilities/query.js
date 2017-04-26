@@ -92,7 +92,16 @@ const transformToSQL = {
       queryString += `${key} = "${filterList[key]}"` + `${(i < keys.length - 1) ? ' AND ' : ''}`
     }
     return queryString
-  }
+  },
+  delete: (tableName, conditionList) => {
+    const keys = Object.keys(conditionList)
+    let queryString = `DELETE FROM ${tableName} WHERE `
+    for (let i = 0; i < keys.length; i++) {
+      const key = keys[i]
+      queryString += `${key} = "${conditionList[key]}"` + `${(i < keys.length - 1) ? ' AND ' : ''}`
+    }
+    return queryString
+  },
 }
 
 module.exports = {

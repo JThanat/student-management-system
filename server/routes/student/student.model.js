@@ -44,7 +44,7 @@ const deleteStudentSQL = (studentID) => {
 
 const updateStudentSQL = (studentID, dataSet) => {
   return query.transformToSQL.update('students', dataSet,
-    `student_id = ${studentID}`)
+    `student_id = "${studentID}"`)
 }
 
 const insertStudentSQL = (studentID, dataSet) => {

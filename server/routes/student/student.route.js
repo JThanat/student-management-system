@@ -40,7 +40,18 @@ router.post('/update', (req, res) => {
     student_id,
     data
   } = req.body
-  res.send(Student.updateStudentSQL(student_id, data))
+
+  queryHelper.queryAndResponse({
+    sql: Student.updateStudentSQL(student_id, data),
+    parse: (data) => {
+      if (!data) {
+        return {}
+      }
+      return data[0]
+    },
+    req: req,
+    res: res
+  })
 })
 
 router.post('/delete', (req, res) => {

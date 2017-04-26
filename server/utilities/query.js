@@ -5,6 +5,16 @@ const utils = require('../utilities/utils.js')
  * Query and response helper
  */
 
+const responseWithError = (res, err) => {
+  let errMsg = 'No error log found'
+  if (typeof err === 'string') errMsg = err
+  if (err instanceof Error) errMsg = err.message
+  res.status(500).json({
+    success: false,
+    err: errMsg
+  })
+}
+
 const queryAndResponse = (params) => {
   const {
     sql,
@@ -30,7 +40,7 @@ const queryAndResponse = (params) => {
         (err, results) => {
           if (err) {
             utils.log(err)
-            return reject(err)
+            reject(err)
           } else {
             resolve(results)
           }
@@ -42,10 +52,9 @@ const queryAndResponse = (params) => {
       success: true,
       data: parse ? parse(result) : result
     }),
-    (err) => res.status(500).json({
-      success: false,
-      err: err ? 'No error specify' : err.toString()
-    })
+    (err) => responseWithError(res, err)
+  ).catch(
+    (err) => responseWithError(res, err)
   )
 }
 

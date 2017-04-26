@@ -10,6 +10,12 @@ class TableFrame extends Component {
     }
   }
 
+  onError (reason) {
+    if (typeof this.props.onError === 'function') {
+      this.props.onError(reason)
+    }
+  }
+
   generateOnDelete (header, rowData) {
     return () => {
       const confirmDeleteRow = this.props.func.confirmDeleteRow || ((resolve) => resolve())
@@ -31,8 +37,10 @@ class TableFrame extends Component {
           (reason) => {
             this.log('')
             if (typeof this.props.onError === 'function') {
-              if (!(reason instanceof Error && reason.message === 'cancel')) {
-                this.props.onError(reason)
+              if (reason instanceof Error && reason.message === 'cancel') {
+                this.onError('')
+              } else {
+                this.onError(reason)
               }
             }
           }
@@ -58,14 +66,19 @@ class TableFrame extends Component {
         )
         .then(
           (newData) => {
-            this.props.func.updateRow(rowData._rid, newData)
             this.log('')
+            if (typeof newData !== 'object') {
+              return this.onError(new Error('Update data is not object type. Please check your `config.header`.'))
+            }
+            this.props.func.updateRow(rowData._rid, newData)
           },
           (reason) => {
             this.log('')
             if (typeof this.props.onError === 'function') {
-              if (!(reason instanceof Error && reason.message === 'cancel')) {
-                this.props.onError(reason)
+              if (reason instanceof Error && reason.message === 'cancel') {
+                this.onError('')
+              } else {
+                this.onError(reason)
               }
             }
           }

@@ -4,6 +4,8 @@ import Promise from 'bluebird'
 
 import './ModalChangeData.scss'
 
+const VALIDATING_MESSAGE = 'Validating...'
+
 class ValidationError extends Error {
   constructor (obj) {
     super(obj)
@@ -57,8 +59,14 @@ class ModalChangeData extends Component {
     })
   }
 
+  updateErrorOverall (errorOverall) {
+    this.setState({
+      errorOverall
+    })
+  }
+
   clearError () {
-    this.showError({}, '')
+    this.showError({}, null)
   }
 
   validateAndSubmit () {
@@ -73,7 +81,7 @@ class ModalChangeData extends Component {
   validate (validResolve, validReject, headers, datas) {
     this.showError(
       this.state.error,
-      'Validating...'
+      VALIDATING_MESSAGE
     )
 
     if (!datas) {
@@ -193,7 +201,10 @@ class ModalChangeData extends Component {
             {this.bodyContent()}
             {
               this.state.errorOverall &&
-              (<div className='alert alert-danger'>{this.state.errorOverall}</div>)
+              (<div
+                className={`alert ${this.state.errorOverall === VALIDATING_MESSAGE ? 'alert-info' : 'alert-danger'}`}>
+                {this.state.errorOverall}
+              </div>)
             }
           </div>
         </ModalBody>

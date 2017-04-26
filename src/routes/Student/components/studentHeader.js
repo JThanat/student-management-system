@@ -22,7 +22,7 @@ const studentHeader = [
             if (data.success) return data
             return data.err
           } else {
-            return Promise.reject(`Response with ${response.status} (${data.err})`)
+            return Promise.reject(new Error(`Response with ${response.status} (${data.err})`))
           }
         })
       }).then(
@@ -190,7 +190,6 @@ const studentHeader = [
 //       }
 //     }
 //   ]
-
 
 export default {
   table: {

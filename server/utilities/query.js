@@ -26,8 +26,7 @@ const queryAndResponse = (params) => {
   const connection = db.getConnection()
   new Promise(
     (resolve, reject) => {
-      connection.query(
-        sql,
+      connection.query(sql,
         (err, results) => {
           if (err) {
             utils.log(err)
@@ -81,7 +80,7 @@ const transformToSQL = {
     let queryString = `SELECT * FROM ${tableName} WHERE `
     for (let i = 0; i < keys.length; i++) {
       const key = keys[i]
-      queryString += `${key} = ${filterList[key]}` + `${(i < keys.length - 1) ? ' AND ' : ''}`
+      queryString += `${key} = "${filterList[key]}"` + `${(i < keys.length - 1) ? ' AND ' : ''}`
     }
     return queryString
   }

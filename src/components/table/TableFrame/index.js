@@ -1,3 +1,3 @@
-import TableFrame from './TableFrame'
+import TableFrameContainer from './TableFrameContainer'
 
-export default TableFrame
+export default TableFrameContainer

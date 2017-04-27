@@ -2,10 +2,12 @@ const MODAL_CHANGE_DATA_SHOW = 'MODAL_CHANGE_DATA_SHOW'
 const MODAL_CHANGE_DATA_ADD_DATA = 'MODAL_CHANGE_DATA_ADD_DATA'
 const MODAL_CHANGE_DATA_ERROR = 'MODAL_CHANGE_DATA_ERROR'
 const MODAL_CHANGE_DATA_ERROR_OVERALL = 'MODAL_CHANGE_DATA_OVERALL'
+const MODAL_CHANGE_DATA_FILL = 'MODAL_CHANGE_DATA_FILL'
 
 export const initialState = {
   data: {},
   error: {},
+  fill: {},
   errorOverall: '',
   isShow: false
 }
@@ -27,17 +29,38 @@ export const changeData = (data, id) => {
 }
 
 export const showError = (error, id) => {
+  let errorSerialize = {}
+  for (let key in error) {
+    if (error[key] instanceof Error) {
+      errorSerialize[key] = error[key].message
+    } else {
+      errorSerialize[key] = error[key].toString()
+    }
+  }
   return {
     type: MODAL_CHANGE_DATA_ERROR,
-    error,
+    error: errorSerialize,
     id
   }
 }
 
 export const showErrorOverall = (errorOverall, id) => {
+  if (errorOverall instanceof Error) {
+    errorOverall = errorOverall.message
+  } else {
+    errorOverall = errorOverall.toString()
+  }
   return {
     type: MODAL_CHANGE_DATA_ERROR_OVERALL,
-    errorOverall,
+    errorOverall: errorOverall,
+    id
+  }
+}
+
+export const changeFillData = (fill, id) => {
+  return {
+    type: MODAL_CHANGE_DATA_FILL,
+    fill,
     id
   }
 }
@@ -46,7 +69,8 @@ export const actions = {
   showModal,
   changeData,
   showError,
-  showErrorOverall
+  showErrorOverall,
+  changeFillData
 }
 
 const actionHandler = {
@@ -72,6 +96,12 @@ const actionHandler = {
     return {
       ...state,
       errorOverall: action.errorOverall
+    }
+  },
+  [MODAL_CHANGE_DATA_FILL]: (state, action) => {
+    return {
+      ...state,
+      fill: action.fill
     }
   }
 }

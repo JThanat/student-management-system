@@ -1,89 +1,12 @@
-import React, { Component } from 'react'
-import Promise from 'bluebird'
+import React, { Component, PropTypes } from 'react'
 import './TableFrame.scss'
 
 class TableFrame extends Component {
 
-  log (msg) {
-    if (typeof this.props.showLog === 'function') {
-      this.props.showLog(msg)
-    }
-  }
-
-  onError (reason) {
-    if (typeof this.props.onError === 'function') {
-      this.props.onError(reason)
-    }
-  }
-
-  generateOnDelete (header, rowData) {
-    return () => {
-      const confirmDeleteRow = this.props.func.confirmDeleteRow || ((resolve) => resolve())
-      header.onDelete = header.onDelete || ((resolve) => resolve())
-
-      new Promise((resolve, reject) => confirmDeleteRow(resolve, reject, rowData))
-        .then(
-          () => {
-            this.log('Deleting...')
-            return new Promise((resolve, reject) => header.onDelete(resolve, reject, rowData))
-          },
-          () => Promise.reject(new Error('cancel'))
-        )
-        .then(
-          () => {
-            this.props.func.deleteRow(rowData._rid)
-            this.log('')
-          },
-          (reason) => {
-            this.log('')
-            if (typeof this.props.onError === 'function') {
-              if (reason instanceof Error && reason.message === 'cancel') {
-                this.onError('')
-              } else {
-                this.onError(reason)
-              }
-            }
-          }
-        )
-    }
-  }
-
-  generateOnUpdate (header, rowData) {
-    return () => {
-      const confirmUpdateRow = this.props.func.confirmUpdateRow || ((resolve, reject, data) => resolve(data))
-      header.onUpdate = header.onUpdate || ((resolve, reject, data) => resolve(data))
-
-      new Promise(
-        (resolve, reject) => confirmUpdateRow(resolve, reject, JSON.parse(JSON.stringify(rowData)))
-      ).then(
-          (newData) => {
-            this.log('Editing...')
-            return new Promise(
-              (resolve, reject) => header.onUpdate(resolve, reject, newData)
-            )
-          },
-          () => Promise.reject(new Error('cancel'))
-        )
-        .then(
-          (newData) => {
-            this.log('')
-            if (typeof newData !== 'object') {
-              return this.onError(new Error('Update data is not object type. Please check your `config.header`.'))
-            }
-            this.props.func.updateRow(rowData._rid, newData)
-          },
-          (reason) => {
-            this.log('')
-            if (typeof this.props.onError === 'function') {
-              if (reason instanceof Error && reason.message === 'cancel') {
-                this.onError('')
-              } else {
-                this.onError(reason)
-              }
-            }
-          }
-        )
-    }
+  removeRID (data) {
+    let newData = { ...data }
+    delete newData._rid
+    return newData
   }
 
   render () {
@@ -108,7 +31,18 @@ class TableFrame extends Component {
             ? header.formatter()
             : (<div className='btn btn-danger btn-sm' data-attach-on-delete>Delete</div>)
 
-          const onDelete = this.generateOnDelete(header, rowData)
+          const onDelete = () => {
+            if (this.props.deleteRowModalID) {
+              this.props.changeModalData(
+                {
+                  rowData: this.removeRID(rowData),
+                  header
+                },
+                this.props.deleteRowModalID
+              )
+              this.props.showModal(true, this.props.deleteRowModalID)
+            }
+          }
 
           delBtn = React.cloneElement(
             delBtn,
@@ -122,6 +56,7 @@ class TableFrame extends Component {
           /**
            * Handle data format when current column is edit column
            */
+
           let updateBtn = typeof header.formatter === 'function'
             ? header.formatter()
             : (<div className='btn btn-warning btn-sm'>Edit</div>)
@@ -129,9 +64,22 @@ class TableFrame extends Component {
           updateBtn = React.cloneElement(
             updateBtn,
             {
-              onClick: this.generateOnUpdate(header, rowData)
+              onClick: () => {
+                if (this.props.editRowModalID) {
+                  this.props.changeModalFillData(this.removeRID(rowData), this.props.editRowModalID)
+                  this.props.changeModalData(
+                    {
+                      rowData: this.removeRID(rowData),
+                      header
+                    },
+                    this.props.editRowModalID
+                  )
+                  this.props.showModal(true, this.props.editRowModalID)
+                }
+              }
             }
           )
+
           return <td key={j}>{updateBtn}</td>
         } else {
           /**
@@ -180,20 +128,25 @@ class TableFrame extends Component {
 }
 
 TableFrame.propTypes = {
-  className: React.PropTypes.string.isRequired,
-  data: React.PropTypes.array.isRequired,
-  header: React.PropTypes.array.isRequired,
-  isLoading: React.PropTypes.bool.isRequired,
+  /**
+   * Derived from redux
+   */
 
-  func: React.PropTypes.shape({
-    deleteRow: React.PropTypes.func,
-    updateRow: React.PropTypes.func,
-    confirmDeleteRow: React.PropTypes.func,
-    confirmUpdateRow: React.PropTypes.func
-  }),
+  changeModalFillData: PropTypes.func.isRequired,
+  changeModalData: PropTypes.func.isRequired,
+  showModal: PropTypes.func.isRequired,
 
-  onError: React.PropTypes.func,
-  showLog: React.PropTypes.func
+  /**
+   * Props values
+   */
+
+  className: PropTypes.string.isRequired,
+  data: PropTypes.array.isRequired,
+  header: PropTypes.array.isRequired,
+  isLoading: PropTypes.bool.isRequired,
+
+  editRowModalID: PropTypes.string,
+  deleteRowModalID: PropTypes.string
 }
 
 export default TableFrame

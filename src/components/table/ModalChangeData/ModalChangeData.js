@@ -24,11 +24,10 @@ class ModalChangeData extends Component {
   }
 
   handleChangeForm (event, property) {
-    const newData = {
-      ...this.props.data,
+    this.props.changeFillData({
+      ...this.props.fillData,
       [property]: event.target.value
-    }
-    this.props.changeData(newData)
+    })
   }
 
   isEditable (type) {
@@ -40,14 +39,14 @@ class ModalChangeData extends Component {
     const onSubmit = this.props.onSubmit || (() => {})
 
     new Promise((resolve, reject) => (
-        this.validate(resolve, reject, this.props.header, this.props.data)
+        this.validate(resolve, reject, this.props.header, this.props.fillData)
       ))
-      .then(() => onSubmit(this.props.data))
+      .then(() => onSubmit(this.props.fillData))
   }
 
   validate (validResolve, validReject, headers, datas) {
-    this.showError(this.props.error)
-    this.showErrorOverall(VALIDATING_MESSAGE)
+    this.props.showError(this.props.error)
+    this.props.showErrorOverall(VALIDATING_MESSAGE)
 
     if (!datas) {
       return validReject({ errorOverall: 'Data is empty' })
@@ -108,12 +107,11 @@ class ModalChangeData extends Component {
             errorOverall: ''
           })
 
-          this.showError(
-            rejectErr.error,
-            rejectErr.errorOverall
-          )
+          this.props.showError(rejectErr.error)
+          this.props.showErrorOverall(rejectErr.errorOverall)
         } else {
-          this.clearError()
+          this.props.showError({})
+          this.props.showErrorOverall('')
           validResolve()
         }
       })
@@ -133,7 +131,7 @@ class ModalChangeData extends Component {
             <input
               className='form-control'
               name={prop}
-              value={this.props.data ? (this.props.data[prop] || '') : ''}
+              value={this.props.fillData ? (this.props.fillData[prop] || '') : ''}
               onChange={(e) => this.handleChangeForm(e, prop)}
               disabled={this.isEditable(type) && header[i].isEditable === false}
               />
@@ -192,11 +190,11 @@ ModalChangeData.propTypes = {
    * Derived from redux
    */
   isShow: PropTypes.bool.isRequired,
-  data: PropTypes.object.isRequired,
+  fillData: PropTypes.object.isRequired,
   error: PropTypes.object.isRequired,
   errorOverall: PropTypes.string.isRequired,
 
-  changeData: PropTypes.func.isRequired,
+  changeFillData: PropTypes.func.isRequired,
   showError: PropTypes.func.isRequired,
   showErrorOverall: PropTypes.func.isRequired,
 

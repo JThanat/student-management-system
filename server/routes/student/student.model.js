@@ -38,8 +38,8 @@ const getOneStudentSQL = (studentID) => {
   return `SELECT * FROM ${TABLE_NAME} WHERE student_id = "${studentID}"`
 }
 
-const deleteStudentSQL = (dataSet) => {
-  return query.transformToSQL.delete(TABLE_NAME, dataSet)
+const deleteStudentSQL = (where) => {
+  return query.transformToSQL.delete(TABLE_NAME, where)
 }
 
 const updateStudentSQL = (studentID, dataSet) => {

@@ -18,3 +18,14 @@ export const requestAndResponse = (url, reqObj, resolve, reject) => {
     (err) => reject(err)
   )
 }
+
+export const removeNull = (obj) => {
+  let newObj = {}
+  for (let key in obj) {
+    if (obj[key]) {
+      newObj[key] = obj[key]
+    }
+  }
+  console.log(newObj)
+  return newObj
+}

@@ -3,12 +3,6 @@ import './TableFrame.scss'
 
 class TableFrame extends Component {
 
-  removeRID (data) {
-    let newData = { ...data }
-    delete newData._rid
-    return newData
-  }
-
   render () {
     const props = this.props
     let { header, data } = props
@@ -35,7 +29,7 @@ class TableFrame extends Component {
             if (this.props.deleteRowModalID) {
               this.props.changeModalData(
                 {
-                  rowData: this.removeRID(rowData),
+                  rowData,
                   header
                 },
                 this.props.deleteRowModalID
@@ -66,10 +60,10 @@ class TableFrame extends Component {
             {
               onClick: () => {
                 if (this.props.editRowModalID) {
-                  this.props.changeModalFillData(this.removeRID(rowData), this.props.editRowModalID)
+                  this.props.changeModalFillData(rowData, this.props.editRowModalID)
                   this.props.changeModalData(
                     {
-                      rowData: this.removeRID(rowData),
+                      rowData,
                       header
                     },
                     this.props.editRowModalID

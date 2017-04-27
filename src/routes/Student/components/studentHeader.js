@@ -1,6 +1,6 @@
 import React from 'react'
 
-import { requestAndResponse } from '../../../utils/query'
+import { requestAndResponse, removeNull } from '../../../utils/query'
 
 const studentHeader = [
   {
@@ -17,7 +17,7 @@ const studentHeader = [
           },
           body: JSON.stringify({
             student_id: data.student_id,
-            data: data
+            data: removeNull(data)
           })
         },
         resolve,

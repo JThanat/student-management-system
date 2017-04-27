@@ -42,6 +42,12 @@ class Table extends Component {
     }
   }
 
+  removeRID = (data) => {
+    let newData = { ...data }
+    delete newData._rid
+    return newData
+  }
+
   submitDelete = () => {
     const { header, rowData } = this.props.getModalData(this.MODAL_DELETE_ID)
 
@@ -49,7 +55,7 @@ class Table extends Component {
 
     new Promise((resolve, reject) => {
       if (header.onDelete) {
-        header.onDelete(resolve, reject, rowData)
+        header.onDelete(resolve, reject, this.removeRID(rowData))
       } else {
         throw new Error('Table config `onDelete` is not implemented')
       }
@@ -81,7 +87,7 @@ class Table extends Component {
 
     new Promise((resolve, reject) => {
       if (header.onEdit) {
-        header.onEdit(resolve, reject, newData)
+        header.onEdit(resolve, reject, this.removeRID(newData))
       } else {
         throw new Error('Table config `onEdit` is not implemented')
       }
@@ -91,7 +97,7 @@ class Table extends Component {
         this.props.showTableError('')
         this.props.setModalErrorOverall('', this.MODAL_EDIT_ID)
         this.props.setModalShow(false, this.MODAL_EDIT_ID)
-        this.reloadTable()
+        this.props.updateRow(newData._rid, newData)
       },
       (reason) => {
         this.props.showTableLog('')
@@ -113,7 +119,7 @@ class Table extends Component {
 
     this.props.showTableLog('Adding data...')
 
-    new Promise((resolve, reject) => addFunc(resolve, reject, newData))
+    new Promise((resolve, reject) => addFunc(resolve, reject, this.removeRID(newData)))
       .then(
         () => {
           this.props.showTableLog('')

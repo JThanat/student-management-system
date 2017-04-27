@@ -13,7 +13,7 @@ export const requestAndResponse = (url, reqObj, resolve, reject) => {
   }).then(
     (response) => {
       console.log(response)
-      resolve(data)
+      resolve()
     },
     (err) => reject(err)
   )

@@ -1,4 +1,4 @@
-import React, { Component } from 'react'
+import React, { Component, PropTypes } from 'react'
 import { Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap'
 import Promise from 'bluebird'
 
@@ -18,24 +18,15 @@ class ModalChangeData extends Component {
   constructor (props) {
     super(props)
 
-    this.state = {
-      data: {},
-      error: {},
-      errorOverall: ''
-    }
-
     this.handleChangeForm = this.handleChangeForm.bind(this)
     this.validateAndSubmit = this.validateAndSubmit.bind(this)
     this.validate = this.validate.bind(this)
   }
 
   handleChangeForm (event, property) {
-    const newData = {
-      ...this.state.data,
+    this.props.changeFillData({
+      ...this.props.fillData,
       [property]: event.target.value
-    }
-    this.setState({
-      data: newData
     })
   }
 
@@ -44,45 +35,18 @@ class ModalChangeData extends Component {
     return false
   }
 
-  fillData (fillData) {
-    this.setState({
-      data: fillData
-    })
-  }
-
-  showError (errorData, errorOverall) {
-    this.setState({
-      error: {
-        ...errorData
-      },
-      errorOverall
-    })
-  }
-
-  updateErrorOverall (errorOverall) {
-    this.setState({
-      errorOverall
-    })
-  }
-
-  clearError () {
-    this.showError({}, null)
-  }
-
   validateAndSubmit () {
     const onSubmit = this.props.onSubmit || (() => {})
 
     new Promise((resolve, reject) => (
-        this.validate(resolve, reject, this.props.header, this.state.data)
+        this.validate(resolve, reject, this.props.header, this.props.fillData)
       ))
-      .then(() => onSubmit(this.state.data))
+      .then(() => onSubmit(this.props.fillData))
   }
 
   validate (validResolve, validReject, headers, datas) {
-    this.showError(
-      this.state.error,
-      VALIDATING_MESSAGE
-    )
+    this.props.showError(this.props.error)
+    this.props.showErrorOverall(VALIDATING_MESSAGE)
 
     if (!datas) {
       return validReject({ errorOverall: 'Data is empty' })
@@ -143,12 +107,11 @@ class ModalChangeData extends Component {
             errorOverall: ''
           })
 
-          this.showError(
-            rejectErr.error,
-            rejectErr.errorOverall
-          )
+          this.props.showError(rejectErr.error)
+          this.props.showErrorOverall(rejectErr.errorOverall)
         } else {
-          this.clearError()
+          this.props.showError({})
+          this.props.showErrorOverall('')
           validResolve()
         }
       })
@@ -168,14 +131,14 @@ class ModalChangeData extends Component {
             <input
               className='form-control'
               name={prop}
-              value={this.state.data ? (this.state.data[prop] || '') : ''}
+              value={this.props.fillData ? (this.props.fillData[prop] || '') : ''}
               onChange={(e) => this.handleChangeForm(e, prop)}
               disabled={this.isEditable(type) && header[i].isEditable === false}
               />
           </div>
           {
-            this.state.error[prop] &&
-            (<div className='alert alert-danger'>{this.state.error[prop]}</div>)
+            this.props.error[prop] &&
+            (<div className='alert alert-danger'>{this.props.error[prop]}</div>)
           }
         </div>
       )
@@ -200,10 +163,10 @@ class ModalChangeData extends Component {
           <div className='modal-body'>
             {this.bodyContent()}
             {
-              this.state.errorOverall &&
+              this.props.errorOverall &&
               (<div
-                className={`alert ${this.state.errorOverall === VALIDATING_MESSAGE ? 'alert-info' : 'alert-danger'}`}>
-                {this.state.errorOverall}
+                className={`alert ${this.props.errorOverall === VALIDATING_MESSAGE ? 'alert-info' : 'alert-danger'}`}>
+                {this.props.errorOverall}
               </div>)
             }
           </div>
@@ -223,11 +186,28 @@ class ModalChangeData extends Component {
 }
 
 ModalChangeData.propTypes = {
-  header: React.PropTypes.arrayOf(React.PropTypes.object),
-  type: React.PropTypes.oneOf(['Edit', 'Add']),
-  isShow: React.PropTypes.bool.isRequired,
-  onSubmit: React.PropTypes.func,
-  onCancel: React.PropTypes.func
+  /**
+   * Derived from redux
+   */
+  isShow: PropTypes.bool.isRequired,
+  fillData: PropTypes.object.isRequired,
+  error: PropTypes.object.isRequired,
+  errorOverall: PropTypes.string.isRequired,
+
+  changeFillData: PropTypes.func.isRequired,
+  showError: PropTypes.func.isRequired,
+  showErrorOverall: PropTypes.func.isRequired,
+
+  /**
+   * Prop values
+   */
+
+  header: PropTypes.arrayOf(PropTypes.object),
+  type: PropTypes.oneOf(['Edit', 'Add']),
+  onSubmit: PropTypes.func,
+  onCancel: PropTypes.func,
+
+  id: PropTypes.string.isRequired
 }
 
 export default ModalChangeData

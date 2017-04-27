@@ -51,9 +51,9 @@ router.post('/update', (req, res) => {
 })
 
 router.post('/delete', (req, res) => {
-  const data = req.body.data
+  const where = req.body.where
   queryHelper.queryAndResponse({
-    sql: Student.deleteStudent(data),
+    sql: Student.deleteStudentSQL(where),
     req: req,
     res: res
   })

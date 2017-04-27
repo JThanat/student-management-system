@@ -101,7 +101,7 @@ const transformToSQL = {
       queryString += `${key} = "${conditionList[key]}"` + `${(i < keys.length - 1) ? ' AND ' : ''}`
     }
     return queryString
-  },
+  }
 }
 
 module.exports = {

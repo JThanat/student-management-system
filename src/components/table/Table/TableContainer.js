@@ -1,5 +1,6 @@
 import { connect } from 'react-redux'
 import { actions } from './TableModules'
+import { actions as modalActions } from '../ModalChangeData/ModalChangeDataModules'
 
 /*  This is a container component. Notice it does not contain any JSX,
     nor does it import React. This component is **only** responsible for
@@ -19,18 +20,31 @@ const mapDispatchToProps = (dispatch, ownProps) => ({
 
   updateRow : (rowID, updateData) => dispatch(actions.updateRow(rowID, updateData, ownProps.id)),
   deleteRow : (rowID) => dispatch(actions.deleteRow(rowID, ownProps.id)),
-  onError : (msg) => dispatch(actions.showErrorMsg(msg, ownProps.id)),
-  showLog : (msg) => dispatch(actions.showLogMsg(msg, ownProps.id))
+  showTableError : (msg) => dispatch(actions.showErrorMsg(msg, ownProps.id)),
+  showTableLog : (msg) => dispatch(actions.showLogMsg(msg, ownProps.id)),
+
+  setModalShow: (isShow, id) => dispatch(modalActions.showModal(isShow, id)),
+  setModalData: (data, id) => dispatch(modalActions.changeData(data, id)),
+  setModalFillData: (data, id) => dispatch(modalActions.changeFillData(data, id)),
+  setModalErrorOverall: (data, id) => dispatch(modalActions.showErrorOverall(data, id))
 })
 
 const mapStateToProps = (state, ownProps) => {
   const table = state.table.find((x) => x.id === ownProps.id) || []
   return {
     data: table.data || [],
-    isLoading: table.isLoading,
-    errorMsg: table.error,
+    tableIsLoading: table.isLoading,
+    tableErrorMsg: table.error,
     tableView: table.tableView,
-    logMsg: table.logMsg
+    tableLogMsg: table.logMsg,
+    getModalData: (modalID) => {
+      const modal = state.modal.find((x) => x.id === modalID)
+      return modal ? modal.data : null
+    },
+    getModalFillData: (modalID) => {
+      const modal = state.modal.find((x) => x.id === modalID)
+      return modal ? modal.fill : null
+    }
   }
 }
 

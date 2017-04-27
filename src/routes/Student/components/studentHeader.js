@@ -1,36 +1,27 @@
-import 'whatwg-fetch'
 import React from 'react'
+
+import { requestAndResponse } from '../../../utils/query'
 
 const studentHeader = [
   {
     title: 'Edit',
     prop: 'edit',
     isEdit: true,
-    onUpdate: (resolve, reject, data) => {
-      fetch('../api/student/update', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'
+    onEdit: (resolve, reject, data) => {
+      requestAndResponse(
+        '../api/student/update',
+        {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({
+            student_id: data.student_id,
+            data: data
+          })
         },
-        body: JSON.stringify({
-          student_id: data.student_id,
-          data: data
-        })
-      }).then((response) => {
-        return response.json().then((data) => {
-          if (Response.status === 200) {
-            if (data.success) return data
-            return data.err
-          } else {
-            return Promise.reject(new Error(`Response with ${response.status} (${data.err})`))
-          }
-        })
-      }).then(
-        (response) => {
-          console.log(response)
-          resolve(data)
-        },
-        (err) => reject(err)
+        resolve,
+        reject
       )
     }
   },
@@ -40,8 +31,22 @@ const studentHeader = [
     isDelete: true,
     formatter: () => <div className='btn btn-danger btn-sm' data-attach-on-delete>Delete</div>,
     onDelete: (resolve, reject, data) => {
-      console.log('delete', data)
-      setTimeout(() => resolve(), 500)
+      requestAndResponse(
+        '../api/student/delete',
+        {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({
+            where: {
+              student_id: data.student_id
+            }
+          })
+        },
+        resolve,
+        reject
+      )
     }
   },
   {

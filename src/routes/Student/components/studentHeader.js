@@ -52,11 +52,11 @@ const studentHeader = [
   },
   {
     title: 'CurID',
-    prop: 'curid'
+    prop: 'curriculum_id'
   },
   {
     title: 'MemID',
-    prop: 'memid',
+    prop: 'member_id',
     validate: (resolve, reject, data) => {
       setTimeout(() => resolve('eiei'), 500)
     }

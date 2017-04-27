@@ -1,9 +1,10 @@
 const query = require('../../utilities/query')
 
 const StudentColumns = [
+  'sid',
   'student_id',
-  'curid',
-  'memid',
+  'curriculum_id',
+  'member_id',
   'title',
   'firstname',
   'lastname',

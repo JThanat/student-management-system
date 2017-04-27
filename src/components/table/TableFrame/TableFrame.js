@@ -83,7 +83,7 @@ class TableFrame extends Component {
           if (typeof header.formatter === 'function') {
             val = header.formatter(val, i, rowData)
           }
-          return <td key={j}>{val}</td>
+          return <td key={j}>{val && val}</td>
         }
       })
       return <tr key={i}>{rowbody}</tr>

@@ -57,7 +57,8 @@ const studentHeader = [
   },
   {
     title: 'CurID',
-    prop: 'curriculum_id'
+    prop: 'curid',
+    isNullable: false
   },
   {
     title: 'MemID',
@@ -68,15 +69,18 @@ const studentHeader = [
   },
   {
     title: 'คำนำหน้าชื่อ',
-    prop: 'title'
+    prop: 'title',
+    isNullable: false
   },
   {
     title: 'ชื่อ',
-    prop: 'firstname'
+    prop: 'firstname',
+    isNullable: false
   },
   {
     title: 'นามสกุล',
-    prop: 'lastname'
+    prop: 'lastname',
+    isNullable: false
   },
   {
     title: 'อีเมล์',
@@ -88,15 +92,22 @@ const studentHeader = [
   },
   {
     title: 'วันเกิด',
-    prop: 'birthdate'
+    prop: 'birthdate',
+    formatter: (date) => {
+      if (date) return date.slice(0, 10)
+      return null
+    }
   },
   {
     title: 'เพศ',
-    prop: 'gender'
+    prop: 'gender',
+    isNullable: false
+    // TODO: option F M
   },
   {
     title: 'รหัสประชาชน',
-    prop: 'citizen_id'
+    prop: 'citizen_id',
+    isNullable: false
   },
   {
     title: 'ศาสนา',
@@ -156,51 +167,43 @@ const studentHeader = [
   },
   {
     title: 'จำนวนเทอม',
-    prop: 'semester_count'
+    prop: 'semester_count',
+    isNullable: false
   },
   {
     title: 'SummerCount',
-    prop: 'summer_count'
+    prop: 'summer_count',
+    isNullable: false
   },
   {
     title: 'สถานะ',
-    prop: 'status'
+    prop: 'status',
+    isNullable: false
   },
   {
     title: 'คะแนนความประพฤติ',
-    prop: 'behavioral_score'
+    prop: 'behavioral_score',
+    isNullable: false
   }
 ]
-// [
-//     {
-//       title: 'Student ID',
-//       prop: 'student_id',
-//       isEditable: false
-//     },
-//     {
-//       title: 'Edit',
-//       prop: 'edit',
-//       isEdit: true,
-//       onUpdate: (resolve, reject, data) => {
-//         setTimeout(() => resolve(data), 500)
-//       }
-//     },
-//     {
-//       title: 'Delete',
-//       prop: 'delete',
-//       isDelete: true,
-//       formatter: () => <div className='btn btn-danger btn-sm' data-attach-on-delete>Delete</div>,
-//       onDelete: (resolve, reject, data) => {
-//         setTimeout(() => resolve(), 500)
-//       }
-//     }
-//   ]
 
 export default {
   table: {
     add: (resolve, reject, newData) => {
-      console.log('add', newData)
-      resolve()
+      requestAndResponse(
+        '../api/student/insert',
+        {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({
+            data: removeNull(newData)
+          })
+        },
+        resolve,
+        reject
+      )
     }
   },
   header: studentHeader,

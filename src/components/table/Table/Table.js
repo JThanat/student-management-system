@@ -52,6 +52,7 @@ class Table extends Component {
     const { header, rowData } = this.props.getModalData(this.MODAL_DELETE_ID)
 
     this.props.showTableLog('Deleting...')
+    this.props.showTableError('')
 
     new Promise((resolve, reject) => {
       if (header.onDelete) {
@@ -69,12 +70,8 @@ class Table extends Component {
       },
       (reason) => {
         this.props.showTableLog('')
-        if (reason instanceof Error && reason.message === 'cancel') {
-          this.props.showTableError('')
-        } else {
-          this.props.showTableError(reason)
-          this.props.setModalErrorOverall(reason, this.MODAL_DELETE_ID)
-        }
+        this.props.showTableError(reason)
+        this.props.setModalErrorOverall(reason, this.MODAL_DELETE_ID)
       }
     )
   }
@@ -84,6 +81,7 @@ class Table extends Component {
     const newData = this.props.getModalFillData(this.MODAL_EDIT_ID)
 
     this.props.showTableLog('Editing...')
+    this.props.showTableError('')
 
     new Promise((resolve, reject) => {
       if (header.onEdit) {
@@ -101,31 +99,36 @@ class Table extends Component {
       },
       (reason) => {
         this.props.showTableLog('')
-        if (reason instanceof Error && reason.message === 'cancel') {
-          this.props.showTableError('')
-        } else {
-          this.props.showTableError(reason)
-          this.props.setModalErrorOverall(reason, this.MODAL_EDIT_ID)
-        }
+        this.props.showTableError(reason)
+        this.props.setModalErrorOverall(reason, this.MODAL_EDIT_ID)
       }
     )
   }
 
   submitAdd = () => {
-    const newData = this.props.getModalData(this.MODAL_ADD_ID)
+    const newData = this.props.getModalFillData(this.MODAL_ADD_ID)
     const addFunc =
       (this.props.config.table ? this.props.config.table.add : null) ||
       ((resolve) => resolve())
 
     this.props.showTableLog('Adding data...')
+    this.props.showTableError('')
 
     new Promise((resolve, reject) => addFunc(resolve, reject, this.removeRID(newData)))
       .then(
         () => {
           this.props.showTableLog('')
+          this.props.showTableError('')
+          this.props.setModalErrorOverall('', this.MODAL_ADD_ID)
+          this.props.setModalShow(false, this.MODAL_ADD_ID)
+          this.props.setModalFillData({}, this.MODAL_ADD_ID)
           this.reloadTable()
         },
-        (reason) => this.props.showTableError(reason)
+        (reason) => {
+          this.props.showTableLog('')
+          this.props.showTableError(reason)
+          this.props.setModalErrorOverall(reason, this.MODAL_ADD_ID)
+        }
       )
   }
 

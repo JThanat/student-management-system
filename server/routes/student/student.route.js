@@ -28,7 +28,11 @@ router.get('/id/:id', (req, res) => {
 })
 
 router.post('/insert', (req, res) => {
-  res.send(Student.insertStudentSQL(req.body.data))
+  queryHelper.queryAndResponse({
+    sql: Student.insertStudentSQL(req.body.data),
+    req: req,
+    res: res
+  })
 })
 
 router.post('/update', (req, res) => {

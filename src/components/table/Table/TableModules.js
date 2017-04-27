@@ -5,8 +5,8 @@ const TABLE_LOADING = 'TABLE_LOADING'
 const TABLE_ERROR = 'TABLE_ERROR'
 const TABLE_LOG = 'TABLE_LOG'
 
-const CHANGE_PAGE = 'CHANGE_PAGE'
-const CHANGE_PAGE_TAB = 'CHANGE_PAGE_TAB'
+const PAGINATION_CHANGE_PAGE = 'PAGINATION_CHANGE_PAGE'
+const PAGINATION_CHANGE_PAGE_TAB = 'PAGINATION_CHANGE_PAGE_TAB'
 
 const UPDATE_ROW = 'TABLE_UPDATE_ROW'
 
@@ -19,7 +19,7 @@ const initialTableState = {
 
 export const changePage = (page, config, id) => {
   return {
-    type: CHANGE_PAGE,
+    type: PAGINATION_CHANGE_PAGE,
     pageNo: page,
     config,
     id
@@ -28,7 +28,7 @@ export const changePage = (page, config, id) => {
 
 export const changePageTab = (startPage, id) => {
   return {
-    type: CHANGE_PAGE_TAB,
+    type: PAGINATION_CHANGE_PAGE_TAB,
     startPage,
     id
   }
@@ -144,8 +144,13 @@ const changeTableState = (state, tid, objToMerge) => {
 }
 
 export const actions = {
-  loadTable, changePage, changePageTab, updateRow, deleteRow,
-  showErrorMsg, showLogMsg
+  loadTable,
+  changePage,
+  changePageTab,
+  updateRow,
+  deleteRow,
+  showErrorMsg,
+  showLogMsg
 }
 
 const ACTION_HANDLERS = {
@@ -177,7 +182,7 @@ const ACTION_HANDLERS = {
       logMsg: action.msg
     }
   },
-  [CHANGE_PAGE] : (state, action) => {
+  [PAGINATION_CHANGE_PAGE] : (state, action) => {
     const curTable = findTableState(state, action.id)
     if (curTable.data === undefined) throw new Error(`Table ${action.id} is empty`)
     const dataSize = curTable.data.length
@@ -195,7 +200,7 @@ const ACTION_HANDLERS = {
       }
     }
   },
-  [CHANGE_PAGE_TAB] : (state, action) => {
+  [PAGINATION_CHANGE_PAGE_TAB] : (state, action) => {
     const curTable = findTableState(state, action.id)
     return {
       id: action.id,

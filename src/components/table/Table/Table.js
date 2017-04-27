@@ -7,6 +7,7 @@ import './Table.scss'
 import TableFrame from '../TableFrame'
 import PaginationBar from '../PaginationBar'
 import ModalChangeData from '../ModalChangeData'
+import { staticID } from '../../../utils/unique'
 
 class Table extends Component {
 
@@ -14,66 +15,55 @@ class Table extends Component {
     super(props)
 
     this.state = {
-      deleteModalShow: false,
-      editModalShow: false,
-      addModalShow: false,
-      tableWidth: 0
+      deleteModalShow: false
     }
 
-    this.setShowModal = this.setShowModal.bind(this)
+    this.MODAL_ADD_ID = staticID(`${this.props.id}.addModal`)
+    this.MODAL_EDIT_ID = staticID(`${this.props.id}.editModal`)
+
     this.confirmDeleteRow = this.confirmDeleteRow.bind(this)
     this.confirmEditRow = this.confirmEditRow.bind(this)
     this.addRow = this.addRow.bind(this)
     this.onError = this.onError.bind(this)
   }
 
-  reloadTable = (customSrc = this.props.config.src) => {
-    const { config } = this.props
-    config.src = Object.assign({}, config.src, customSrc)
-    this.props.loadTable(config)
+  reloadTable = () => {
+    this.props.loadTable(this.props.config)
   }
 
   sliceTableView = () => {
     try {
-      const props = this.props
-      return props.data.slice(
-        props.tableView.range[0],
-        props.tableView.range[1]
+      return this.props.data.slice(
+        this.props.tableView.range[0],
+        this.props.tableView.range[1]
       )
     } catch (e) {
       return []
     }
   }
 
-  setShowModal = (modelName, status) => {
-    this.setState({
-      [modelName + 'Show']: status
-    })
-  }
-
   confirmDeleteRow = (resolve, reject, deleteData) => {
-    this.setShowModal('deleteModal', true)
+    this.setState({
+      ...this.state,
+      deleteModalShow: true
+    })
     this.onModalConfirm = () => {
-      let newFormData = { ...deleteData }
-      delete newFormData['_rid']
-      resolve(newFormData)
+      resolve(deleteData)
     }
     this.onModalCancel = () => reject(new Error('cancel'))
   }
 
   confirmEditRow = (resolve, reject, oldData) => {
-    this.setShowModal('editModal', true)
-    this.modalEditForm.fillData(oldData)
+    this.props.setModalShow(true, this.MODAL_EDIT_ID)
+    this.props.setModalData(oldData, this.MODAL_EDIT_ID)
     this.onModalConfirm = (formData) => {
-      let newFormData = { ...formData }
-      delete newFormData['_rid']
-      resolve(newFormData)
+      resolve(formData)
     }
     this.onModalCancel = () => reject(new Error('cancel'))
   }
 
   addRow () {
-    this.setShowModal('addModal', true)
+    this.props.setModalShow(true, this.MODAL_ADD_ID)
     this.onModalConfirm = (formData) => {
       const addFunc =
         (this.props.config.table ? this.props.config.table.add : null) ||
@@ -135,21 +125,15 @@ class Table extends Component {
       deleteRow: this.props.deleteRow,
       updateRow: this.props.updateRow,
       confirmDeleteRow: this.confirmDeleteRow,
-      confirmUpdateRow: this.confirmEditRow,
-      afterDeleteRow: () => this.setShowModal('deleteModal', false),
-      afterUpdateRow: () => this.setShowModal('editModal', false),
-      afterAddRow: () => this.setShowModal('addModal', false)
+      confirmUpdateRow: this.confirmEditRow
     }
 
     return (
       <div>
         <ModalChangeData
+          id={this.MODAL_ADD_ID}
           header={this.props.config.header}
           type='Add'
-          isShow={this.state.addModalShow}
-          ref={
-            (modal) => { this.modalDeleteForm = modal }
-          }
           onSubmit={
             (formData) => {
               if (this.onModalConfirm) this.onModalConfirm(formData)
@@ -159,17 +143,14 @@ class Table extends Component {
           onCancel={
             () => {
               if (this.onModalCancel) this.onModalCancel()
-              this.setShowModal('addModal', false)
+              this.props.setModalShow(false, this.MODAL_ADD_ID)
             }
           }
           />
         <ModalChangeData
+          id={this.MODAL_EDIT_ID}
           header={this.props.config.header}
           type='Edit'
-          isShow={this.state.editModalShow}
-          ref={
-            (modal) => { this.modalEditForm = modal }
-          }
           onSubmit={
             (formData) => {
               if (this.onModalConfirm) this.onModalConfirm(formData)
@@ -179,7 +160,7 @@ class Table extends Component {
           onCancel={
             () => {
               if (this.onModalCancel) this.onModalCancel()
-              this.setShowModal('editModal', false)
+              this.props.setModalShow(false, this.MODAL_EDIT_ID)
             }
           }
           />
@@ -194,7 +175,6 @@ class Table extends Component {
               onClick={
                 () => {
                   if (this.onModalConfirm) this.onModalConfirm()
-                  this.setShowModal('deleteModal', false)
                 }
               }>
               Delete
@@ -205,7 +185,10 @@ class Table extends Component {
               onClick={
                 () => {
                   if (this.onModalCancel) this.onModalCancel()
-                  this.setShowModal('deleteModal', false)
+                  this.setState({
+                    ...this.state,
+                    deleteModalShow: false
+                  })
                 }
               }>
               Cancel
@@ -321,8 +304,12 @@ Table.propTypes = {
   tableView: PropTypes.object,
   logMsg: PropTypes.string,
 
+  setModalShow: PropTypes.func.isRequired,
+  setModalData: PropTypes.func.isRequired,
+  setModalErrorOverall: PropTypes.func.isRequired,
+
   /**
-   * Props value
+   * Props values
    */
 
   config: PropTypes.shape({

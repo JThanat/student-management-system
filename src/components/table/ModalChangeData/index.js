@@ -1,3 +1,3 @@
-import ModalChangeData from './ModalChangeData'
+import ModalChangeData from './ModalChangeDataContainer'
 
 export default ModalChangeData

@@ -71,10 +71,6 @@ class TableFrame extends Component {
               return this.onError(new Error('Update data is not object type. Please check your `config.header`.'))
             }
             this.props.func.updateRow(rowData._rid, newData)
-
-            if (typeof this.props.func.afterUpdateRow === 'function') {
-              // this.props.func.afterUpdateRow()
-            }
           },
           (reason) => {
             this.log('')
@@ -193,10 +189,7 @@ TableFrame.propTypes = {
     deleteRow: React.PropTypes.func,
     updateRow: React.PropTypes.func,
     confirmDeleteRow: React.PropTypes.func,
-    confirmUpdateRow: React.PropTypes.func,
-    afterDeleteRow: React.PropTypes.func,
-    afterUpdateRow: React.PropTypes.func,
-    afterAddRow: React.PropTypes.func
+    confirmUpdateRow: React.PropTypes.func
   }),
 
   onError: React.PropTypes.func,

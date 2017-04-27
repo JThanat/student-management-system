@@ -1,5 +1,6 @@
 import { connect } from 'react-redux'
 import { actions } from './TableModules'
+import { actions as modalActions } from '../ModalChangeData/ModalChangeDataModules'
 
 /*  This is a container component. Notice it does not contain any JSX,
     nor does it import React. This component is **only** responsible for
@@ -20,7 +21,11 @@ const mapDispatchToProps = (dispatch, ownProps) => ({
   updateRow : (rowID, updateData) => dispatch(actions.updateRow(rowID, updateData, ownProps.id)),
   deleteRow : (rowID) => dispatch(actions.deleteRow(rowID, ownProps.id)),
   onError : (msg) => dispatch(actions.showErrorMsg(msg, ownProps.id)),
-  showLog : (msg) => dispatch(actions.showLogMsg(msg, ownProps.id))
+  showLog : (msg) => dispatch(actions.showLogMsg(msg, ownProps.id)),
+
+  setModalShow: (isShow, id) => dispatch(modalActions.showModal(isShow, id)),
+  setModalData: (data, id) => dispatch(modalActions.changeData(data, id)),
+  setModalErrorOverall: (data, id) => dispatch(modalActions.showErrorOverall)
 })
 
 const mapStateToProps = (state, ownProps) => {

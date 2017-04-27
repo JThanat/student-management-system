@@ -48,7 +48,7 @@ const updateStudentSQL = (studentID, dataSet) => {
     `student_id = "${studentID}"`)
 }
 
-const insertStudentSQL = (studentID, dataSet) => {
+const insertStudentSQL = (dataSet) => {
   return query.transformToSQL.insert(TABLE_NAME, dataSet)
 }
 

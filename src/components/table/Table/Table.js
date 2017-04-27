@@ -1,4 +1,4 @@
-import React, { Component } from 'react'
+import React, { Component, PropTypes } from 'react'
 import { Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap'
 import Measure from 'react-measure'
 import Promise from 'bluebird'
@@ -17,7 +17,6 @@ class Table extends Component {
       deleteModalShow: false,
       editModalShow: false,
       addModalShow: false,
-      editForm: {},
       tableWidth: 0
     }
 
@@ -95,17 +94,17 @@ class Table extends Component {
 
   onError (reason) {
     console.log(reason)
-    if (this.state.editModalShow) {
-      if (this.modalEditForm) {
-        this.modalEditForm.updateErrorOverall(reason.toString())
-      }
-    } else if (this.state.deleteModalShow) {
-      if (this.modalDeleteForm) {
-        this.modalDeleteForm.updateErrorOverall(reason.toString())
-      }
-    } else if (this.state.addModalShow) {
+    // if (this.state.editModalShow) {
+    //   if (this.modalEditForm) {
+    //     this.modalEditForm.updateErrorOverall(reason.toString())
+    //   }
+    // } else if (this.state.deleteModalShow) {
+    //   if (this.modalDeleteForm) {
+    //     this.modalDeleteForm.updateErrorOverall(reason.toString())
+    //   }
+    // } else if (this.state.addModalShow) {
 
-    }
+    // }
     this.props.onError(reason)
   }
 
@@ -114,8 +113,7 @@ class Table extends Component {
    */
 
   componentWillMount () {
-    const props = this.props
-    const { config } = props
+    const { config } = this.props
 
     config.pagination = config.pagination || {
       pageSize: config.pagination.pageSize || 10,
@@ -128,9 +126,8 @@ class Table extends Component {
   }
 
   render () {
-    const props = this.props
-    let { tableView } = props
-    const config = props.config
+    let { tableView } = this.props
+    const config = this.props.config
 
     tableView = tableView || {}
 
@@ -147,7 +144,7 @@ class Table extends Component {
     return (
       <div>
         <ModalChangeData
-          header={props.config.header}
+          header={this.props.config.header}
           type='Add'
           isShow={this.state.addModalShow}
           ref={
@@ -167,7 +164,7 @@ class Table extends Component {
           }
           />
         <ModalChangeData
-          header={props.config.header}
+          header={this.props.config.header}
           type='Edit'
           isShow={this.state.editModalShow}
           ref={
@@ -241,15 +238,15 @@ class Table extends Component {
           </div>
         </div>
         {
-          props.logMsg &&
+          this.props.logMsg &&
           (<div className='alert alert-info'>
-            {props.logMsg}
+            {this.props.logMsg}
           </div>)
         }
         {
-          props.errorMsg &&
+          this.props.errorMsg &&
           (<div className='alert alert-danger'>
-            <strong>Oops!</strong> {props.errorMsg}
+            <strong>Oops!</strong> {this.props.errorMsg}
           </div>)
         }
         <div style={{ width: this.state.tableWidth, overflowX: 'auto' }}>
@@ -257,7 +254,7 @@ class Table extends Component {
             className='table table-responsive table-bordered table-striped table-md'
             data={this.sliceTableView()}
             header={config.header}
-            isLoading={props.isLoading || false}
+            isLoading={this.props.isLoading || false}
 
             func={tableFrameFunc}
 
@@ -285,45 +282,56 @@ class Table extends Component {
 // Configuration Type
 
 const tableConfigTypes = {
-  table: React.PropTypes.shape({
-    add: React.PropTypes.func
+  table: PropTypes.shape({
+    add: PropTypes.func
   }),
-  header: React.PropTypes.arrayOf(React.PropTypes.shape({
-    title: React.PropTypes.string.isRequired,
-    prop: React.PropTypes.string.isRequired,
-    formatter: React.PropTypes.func,
-    isDelete: React.PropTypes.bool
+  header: PropTypes.arrayOf(PropTypes.shape({
+    title: PropTypes.string.isRequired,
+    prop: PropTypes.string.isRequired,
+    formatter: PropTypes.func,
+    isDelete: PropTypes.bool
   })),
-  pagination: React.PropTypes.shape({
-    pageSize: React.PropTypes.number.isRequired,
-    paginationBarSize: React.PropTypes.number.isRequired
+  pagination: PropTypes.shape({
+    pageSize: PropTypes.number.isRequired,
+    paginationBarSize: PropTypes.number.isRequired
   }),
-  src: React.PropTypes.shape({
-    url: React.PropTypes.string.isRequired,
-    parser: React.PropTypes.func
+  src: PropTypes.shape({
+    url: PropTypes.string.isRequired,
+    parser: PropTypes.func
   })
 }
 
 Table.propTypes = {
-  // derived from container
-  loadTable: React.PropTypes.func.isRequired,
-  changePage: React.PropTypes.func.isRequired,
-  changePageTab: React.PropTypes.func.isRequired,
-  deleteRow: React.PropTypes.func.isRequired,
-  updateRow: React.PropTypes.func.isRequired,
-  onError: React.PropTypes.func.isRequired,
-  showLog: React.PropTypes.func.isRequired,
-  data: React.PropTypes.array,
-  isLoading: React.PropTypes.bool,
-  errorMsg: React.PropTypes.string,
+  /**
+   * Derived from redux
+   */
 
-  config: React.PropTypes.shape({
+  loadTable: PropTypes.func.isRequired,
+  changePage: PropTypes.func.isRequired,
+  changePageTab: PropTypes.func.isRequired,
+
+  deleteRow: PropTypes.func.isRequired,
+  updateRow: PropTypes.func.isRequired,
+  onError: PropTypes.func.isRequired,
+  showLog: PropTypes.func.isRequired,
+
+  data: PropTypes.array,
+  isLoading: PropTypes.bool,
+  errorMsg: PropTypes.string,
+  tableView: PropTypes.object,
+  logMsg: PropTypes.string,
+
+  /**
+   * Props value
+   */
+
+  config: PropTypes.shape({
     table: tableConfigTypes.table.isRequired,
     header: tableConfigTypes.header.isRequired,
     pagination: tableConfigTypes.pagination,
     src: tableConfigTypes.src.isRequired
   }).isRequired,
-  id: React.PropTypes.string.isRequired
+  id: PropTypes.string.isRequired
 }
 
 export default Table

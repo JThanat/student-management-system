@@ -209,7 +209,7 @@ export default {
   header: studentHeader,
   pagination: {
     pageSize: 25,
-    paginationBarSize: 10
+    paginationBarSize: 20
   },
   src: {
     url: '../api/student/all',

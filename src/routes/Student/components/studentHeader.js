@@ -7,7 +7,8 @@ const studentHeader = [
     title: 'Edit',
     prop: 'edit',
     isEdit: true,
-    onEdit: (resolve, reject, data) => {
+    onEdit: (resolve, reject, data, oldData) => {
+      console.log(data, oldData)
       requestAndResponse(
         '../api/student/update',
         {

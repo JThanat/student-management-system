@@ -62,10 +62,10 @@ class TableFrame extends Component {
           onClick: () => {
             if (this.props.editRowModalID) {
               const fillData = this.formatBeforeEdit(rowData)
-              this.props.changeModalFillData(fillData, this.props.editRowModalID)
+              this.props.changeModalFillData({ ...fillData }, this.props.editRowModalID)
               this.props.changeModalData(
                 {
-                  fillData,
+                  data: { ...fillData },
                   header
                 },
                 this.props.editRowModalID

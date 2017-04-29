@@ -79,7 +79,7 @@ class Table extends Component {
   }
 
   submitEdit = () => {
-    const { header } = this.props.getModalData(this.MODAL_EDIT_ID)
+    const { header, data } = this.props.getModalData(this.MODAL_EDIT_ID)
     const newData = this.props.getModalFillData(this.MODAL_EDIT_ID)
 
     this.props.showTableLog('Editing...')
@@ -87,7 +87,7 @@ class Table extends Component {
 
     new Promise((resolve, reject) => {
       if (header.onEdit) {
-        header.onEdit(resolve, reject, this.removeRID(newData))
+        header.onEdit(resolve, reject, this.removeRID(newData), this.removeRID(data))
       } else {
         throw new Error('Table config `onEdit` is not implemented')
       }

@@ -12,7 +12,6 @@ export const requestAndResponse = (url, reqObj, resolve, reject) => {
     })
   }).then(
     (response) => {
-      console.log(response)
       resolve()
     },
     (err) => reject(err)
@@ -26,6 +25,5 @@ export const removeNull = (obj) => {
       newObj[key] = obj[key]
     }
   }
-  console.log(newObj)
   return newObj
 }

@@ -1,5 +1,5 @@
 import { connect } from 'react-redux'
-import { changeData, changeFillData, showModal } from '../ModalChangeData/ModalChangeDataModules'
+import { changeData, changeFillData, showModal } from '../../core/modules/ModalModules'
 
 import TableFrame from './TableFrame'
 

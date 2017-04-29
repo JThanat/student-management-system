@@ -3,7 +3,7 @@ import Table from '../../../components/table/Table'
 import { staticID } from '../../../utils/unique'
 import TableConfig from './pusnishmentHeader'
 
-class Student extends Component {
+class Punishment extends Component {
 
   constructor (props) {
     super(props)
@@ -16,4 +16,4 @@ class Student extends Component {
   }
 }
 
-export default Student
+export default Punishment

@@ -9,3 +9,4 @@ coverage
 .idea/
 
 server/config/config.js
+last.sql

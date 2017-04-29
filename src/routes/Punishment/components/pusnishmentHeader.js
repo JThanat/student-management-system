@@ -72,6 +72,11 @@ const punishmentHeader = [
     isNullable: true
   },
   {
+    title: 'รหัสการลงโทษ',
+    prop: 'punishment_id',
+    isNullable: false
+  },
+  {
     title: 'คะแนนที่ถูกหัก',
     prop: 'score_deduction',
     validate: (resolve, reject, data) => {

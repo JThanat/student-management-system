@@ -39,4 +39,13 @@ router.post('/delete', (req, res) => {
   })
 })
 
+router.post('/update', (req, res) => {
+  const data = req.body.data
+  queryHelper.queryAndResponse({
+    sql: Punishment.updatePunishment(data),
+    req: req,
+    res: res
+  })
+})
+
 module.exports = router

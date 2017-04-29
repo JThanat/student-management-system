@@ -72,12 +72,14 @@ const studentHeader = [
   {
     title: 'คำนำหน้าชื่อ',
     prop: 'title',
-    isNullable: false
+    isNullable: false,
+    isEditable: false
   },
   {
     title: 'ชื่อ',
     prop: 'firstname',
-    isNullable: false
+    isNullable: false,
+    isAddable: false
   },
   {
     title: 'นามสกุล',

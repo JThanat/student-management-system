@@ -30,8 +30,22 @@ class ModalChangeData extends Component {
     })
   }
 
-  isEditable (type) {
-    if (type === 'Edit') return true
+  isEditModal (type) {
+    if (this.props.type === 'Edit') return true
+    return false
+  }
+
+  isAddModal (type) {
+    if (this.props.type === 'Add') return true
+    return false
+  }
+
+  shouldInputDisable (header) {
+    if (this.isAddModal()) {
+      if (header.isAddable === false) return true
+    } else {
+      if (header.isEditable === false) return true
+    }
     return false
   }
 
@@ -118,7 +132,7 @@ class ModalChangeData extends Component {
   }
 
   bodyContent () {
-    const { header, type } = this.props
+    const { header } = this.props
 
     let content = []
     for (let i = 0; i < header.length; i++) {
@@ -133,7 +147,7 @@ class ModalChangeData extends Component {
               name={prop}
               value={this.props.fillData ? (this.props.fillData[prop] || '') : ''}
               onChange={(e) => this.handleChangeForm(e, prop)}
-              disabled={this.isEditable(type) && header[i].isEditable === false}
+              disabled={this.shouldInputDisable(header[i])}
               />
           </div>
           {

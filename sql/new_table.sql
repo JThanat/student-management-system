@@ -120,7 +120,7 @@ CREATE TABLE IF NOT EXISTS Students(
     email VARCHAR(30),
     nationality VARCHAR(30),
     birthdate DATE,
-    gender VARCHAR(10) NOT NULL, #FIX: Should be nullable?
+    gender VARCHAR(10), #FIX: Should be nullable?
     citizen_id VARCHAR(15) NOT NULL,
     religion VARCHAR(20),
     mobile VARCHAR(15),
@@ -136,10 +136,10 @@ CREATE TABLE IF NOT EXISTS Students(
     highschool_name VARCHAR(50),
     highschool_grade VARCHAR(5),
     gpax REAL,
-    semester_count INT(2) NOT NULL, #FIX: Should be nullable or should have default value??
-    summer_count INT(2) NOT NULL,
-    status CHAR(1) NOT NULL, #FIX: Shouldn't this field has default value like status 'NORMAL'
-    behavioral_score INT(3) NOT NULL, #FIX: Shouldn't this field has default value like status 100
+    semester_count INT(2) NOT NULL DEFAULT 0, #FIX: Should be nullable or should have default value??
+    summer_count INT(2) NOT NULL DEFAULT 0,
+    status CHAR(1) NOT NULL DEFAULT 'N', #FIX: Shouldn't this field has default value like status 'NORMAL'
+    behavioral_score INT(3) NOT NULL DEFAULT 100, #FIX: Shouldn't this field has default value like status 100
     PRIMARY KEY (sid),
     FOREIGN KEY (curriculum_id) REFERENCES Curricula(curriculum_id) 
         ON DELETE NO ACTION

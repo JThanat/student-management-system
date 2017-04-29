@@ -56,5 +56,21 @@ db.connect(config.test ? db.MODE_TEST : db.MODE_PRODUCTION, (err) => {
   } else {
     connection = db.getConnection()
     dumpFacultyTable(db.getConnection())
+    dumpFacultyMemberTable(db.getConnection())
   }
 })
+
+// ---------------------------- Faculty Member -------------------------
+function dumpFacultyMemberTable () {
+  Object.keys(faculties).map((key, index) => {
+    const sql = `INSERT INTO ${SCHEMA} (faculty_id,faculty_name) VALUES (${key},"${faculties[key]}")`
+    console.log(sql)
+    createQueryPromise(sql).then((result) => {
+      console.log(result)
+      return result
+    }).catch((err) => {
+      console.error(err)
+      return err
+    })
+  })
+}

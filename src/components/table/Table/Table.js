@@ -5,9 +5,9 @@ import Promise from 'bluebird'
 import './Table.scss'
 import TableFrame from '../TableFrame'
 import PaginationBar from '../PaginationBar'
-import ModalChangeData from '../ModalChangeData'
-import ModalDeleteData from '../ModalDeleteData'
-import ModalFilter from '../ModalFilter'
+import ModalChangeData from '../../modal/ModalChangeData'
+import ModalDeleteData from '../../modal/ModalDeleteData'
+import ModalFilter from '../../modal/ModalFilter'
 import { staticID } from '../../../utils/unique'
 
 class Table extends Component {

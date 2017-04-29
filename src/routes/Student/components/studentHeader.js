@@ -107,7 +107,12 @@ const studentHeader = [
   {
     title: 'เพศ',
     prop: 'gender',
-    isNullable: false
+    isNullable: false,
+    type: (resolve, reject) => {
+      setTimeout(() => {
+        resolve(['F','M'])
+      }, 5000)
+    }
     // TODO: option F M
   },
   {

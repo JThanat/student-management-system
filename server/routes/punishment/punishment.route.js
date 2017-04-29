@@ -21,7 +21,7 @@ router.get('/filter', (req, res) => {
   })
 })
 
-router.post('/create', (req, res) => {
+router.post('/insert', (req, res) => {
   const data = req.body.data
   queryHelper.queryAndResponse({
     sql: Punishment.insertPunishment(data),

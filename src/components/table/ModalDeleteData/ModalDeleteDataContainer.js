@@ -1,5 +1,5 @@
 import { connect } from 'react-redux'
-import { initialState } from '../ModalChangeData/ModalChangeDataModules'
+import { initialState } from '../../core/modules/ModalModules'
 
 import ModalDeleteData from './ModalDeleteData'
 

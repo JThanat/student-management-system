@@ -57,15 +57,17 @@ const studentHeader = [
   },
   {
     title: 'CurID',
-    prop: 'curid',
+    prop: 'curriculum_id',
+    isEditable: false,
     isNullable: false
   },
   {
     title: 'MemID',
     prop: 'member_id',
-    validate: (resolve, reject, data) => {
-      setTimeout(() => resolve('eiei'), 500)
-    }
+    isEditable: false
+    // validate: (resolve, reject, data) => {
+    //   setTimeout(() => resolve('eiei'), 500)
+    // }
   },
   {
     title: 'คำนำหน้าชื่อ',
@@ -94,6 +96,10 @@ const studentHeader = [
     title: 'วันเกิด',
     prop: 'birthdate',
     formatter: (date) => {
+      if (date) return date.slice(0, 10)
+      return null
+    },
+    formatBeforeEdit: (date) => {
       if (date) return date.slice(0, 10)
       return null
     }

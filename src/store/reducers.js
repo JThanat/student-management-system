@@ -1,13 +1,13 @@
 import { combineReducers } from 'redux'
 import locationReducer from './location'
 import TableReducer from '../components/table/Table/TableModules'
-import modalChangeDataReducer from '../components/table/ModalChangeData/ModalChangeDataModules'
+import modalReducer from '../components/core/modules/ModalModules'
 
 export const makeRootReducer = (asyncReducers) => {
   return combineReducers({
     location: locationReducer,
     table: TableReducer,
-    modal: modalChangeDataReducer,
+    modal: modalReducer,
     ...asyncReducers
   })
 }

@@ -21,6 +21,7 @@ class Table extends Component {
     this.MODAL_ADD_ID = staticID(`${this.props.id}.addModal`)
     this.MODAL_EDIT_ID = staticID(`${this.props.id}.editModal`)
     this.MODAL_DELETE_ID = staticID(`${this.props.id}.deleteModal`)
+    this.MODAL_FILTER_ID = staticID(`${this.props.id}.filterModal`)
 
     this.submitDelete = this.submitDelete.bind(this)
     this.submitEdit = this.submitEdit.bind(this)
@@ -176,6 +177,11 @@ class Table extends Component {
           onSubmit={this.submitDelete}
           onCancel={() => { this.props.setModalShow(false, this.MODAL_DELETE_ID) }}
           />
+        <ModalDeleteData
+          id={this.MODAL_FILTER_ID}
+          onSubmit={() => {}}
+          onCancel={() => { this.props.setModalShow(false, this.MODAL_FILTER_ID) }}
+          />
         <Measure
           onMeasure={(dimensions) => {
             this.setState({
@@ -194,6 +200,11 @@ class Table extends Component {
             className='btn btn-primary'
             onClick={this.reloadTable}>
             <i className='fa fa-refresh' /> Refresh
+          </div>
+          <div
+            className='btn btn-primary'
+            onClick={() => this.props.setModalShow(true, this.MODAL_FILTER_ID)}>
+            <i className='fa fa-search' /> Filter
           </div>
         </div>
         {

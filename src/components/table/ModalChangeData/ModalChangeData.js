@@ -126,7 +126,7 @@ class ModalChangeData extends Component {
       if (prop === '_rid' || header[i].isDelete || header[i].isEdit) continue
       content.push(
         <div className='col-6 input-box' key={i}>
-          <label key={i}>{header[i].title} <strong>({ header[i].prop })</strong></label>
+          <label key={i}><strong>{header[i].title}</strong> ({ header[i].prop })</label>
           <div>
             <input
               className='form-control'

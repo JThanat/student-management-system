@@ -5,6 +5,16 @@ import './ModalFilter.scss'
 
 class ModalFilter extends Component {
 
+  getSelectFieldList () {
+    let list = []
+    for (let i = 0; i < this.props.header.length; i++) {
+      const header = this.props.header[i]
+      if (header.isEdit || header.isDelete) continue
+      list.push(<option value={header.prop} key={i}>{header.title} ({header.prop})</option>)
+    }
+    return list
+  }
+
   render () {
     return (
       <Modal isOpen={this.props.isShow} className='modal-lg'>
@@ -12,22 +22,16 @@ class ModalFilter extends Component {
         <ModalBody>
           <div className='modal-body'>
             <div className='title' style={{ marginTop: 0 }}>Add your filter</div>
-            <form className='form-inline'>
-              <label className='mr-sm-2'>Preference</label>
-              <label className='custom-control custom-checkbox mb-2 mr-sm-2 mb-sm-0'>
-                <input type='checkbox' className='custom-control-input' />
-                <span className='custom-control-indicator'></span>
-                <span className='custom-control-description'>Remember my preference</span>
-              </label>
-
-              <button type='submit' className='btn btn-primary'>Submit</button>
-            </form>
             <div className='form-inline'>
-              <select className='form-control mb-2 mr-sm-2 mb-sm-0'>
-                <option selected>Choose...</option>
-                <option value='1'>One</option>
-                <option value='2'>Two</option>
-                <option value='3'>Three</option>
+              <div className='mb-2 mr-sm-2 mb-sm-0'>Operator</div>
+              <select className='form-control mb-2 mr-sm-2 mb-sm-0' defaultValue='='>
+                <option value='='>=</option>
+                <option value='>'>&gt;</option>
+                <option value='<'>&lt;</option>
+                <option value='LIKE'>LIKE</option>
+              </select>
+              <select className='filter-rule-select form-control mb-2 mr-sm-2 mb-sm-0'>
+                {this.getSelectFieldList()}
               </select>
               <button className='btn btn-primary'>เพิ่ม</button>
             </div>

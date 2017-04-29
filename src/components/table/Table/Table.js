@@ -180,6 +180,7 @@ class Table extends Component {
           />
         <ModalFilter
           id={this.MODAL_FILTER_ID}
+          header={this.props.config.header}
           onSubmit={() => {}}
           onCancel={() => { this.props.setModalShow(false, this.MODAL_FILTER_ID) }}
           />

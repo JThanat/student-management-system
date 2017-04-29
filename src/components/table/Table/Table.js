@@ -7,6 +7,7 @@ import TableFrame from '../TableFrame'
 import PaginationBar from '../PaginationBar'
 import ModalChangeData from '../ModalChangeData'
 import ModalDeleteData from '../ModalDeleteData'
+import ModalFilter from '../ModalFilter'
 import { staticID } from '../../../utils/unique'
 
 class Table extends Component {
@@ -177,7 +178,7 @@ class Table extends Component {
           onSubmit={this.submitDelete}
           onCancel={() => { this.props.setModalShow(false, this.MODAL_DELETE_ID) }}
           />
-        <ModalDeleteData
+        <ModalFilter
           id={this.MODAL_FILTER_ID}
           onSubmit={() => {}}
           onCancel={() => { this.props.setModalShow(false, this.MODAL_FILTER_ID) }}

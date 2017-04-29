@@ -97,11 +97,13 @@ class TableFrame extends Component {
     data = data || []
 
     let thead = header.map((header, i) => {
+      if (header.isVisible === false) return null
       return <th key={i}>{header.title}</th>
     })
 
     let tbody = data.map((rowData, i) => {
       let rowbody = header.map((header, j) => {
+        if (header.isVisible === false) return null
         return this.getRenderTableElement(rowData, header, i, j)
       })
       return <tr key={i}>{rowbody}</tr>

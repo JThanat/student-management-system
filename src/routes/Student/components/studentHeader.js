@@ -79,7 +79,8 @@ const studentHeader = [
     title: 'ชื่อ',
     prop: 'firstname',
     isNullable: false,
-    isAddable: false
+    isAddable: false,
+    isVisible: false
   },
   {
     title: 'นามสกุล',

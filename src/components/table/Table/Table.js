@@ -180,7 +180,7 @@ class Table extends Component {
         <ModalDeleteData
           id={this.MODAL_FILTER_ID}
           onSubmit={() => {}}
-          onCancel={() => { this.props.setModalShow(false, this.MODAL_DELETE_ID) }}
+          onCancel={() => { this.props.setModalShow(false, this.MODAL_FILTER_ID) }}
           />
         <Measure
           onMeasure={(dimensions) => {

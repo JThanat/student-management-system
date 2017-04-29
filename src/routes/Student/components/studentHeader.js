@@ -7,7 +7,8 @@ const studentHeader = [
     title: 'Edit',
     prop: 'edit',
     isEdit: true,
-    onEdit: (resolve, reject, data) => {
+    onEdit: (resolve, reject, data, oldData) => {
+      console.log(data, oldData)
       requestAndResponse(
         '../api/student/update',
         {
@@ -72,12 +73,15 @@ const studentHeader = [
   {
     title: 'คำนำหน้าชื่อ',
     prop: 'title',
-    isNullable: false
+    isNullable: false,
+    isEditable: false
   },
   {
     title: 'ชื่อ',
     prop: 'firstname',
-    isNullable: false
+    isNullable: false,
+    isAddable: false,
+    isVisible: false
   },
   {
     title: 'นามสกุล',
@@ -107,7 +111,12 @@ const studentHeader = [
   {
     title: 'เพศ',
     prop: 'gender',
-    isNullable: false
+    isNullable: false,
+    type: (resolve, reject) => {
+      setTimeout(() => {
+        resolve(['F','M'])
+      }, 5000)
+    }
     // TODO: option F M
   },
   {

@@ -62,10 +62,10 @@ class TableFrame extends Component {
           onClick: () => {
             if (this.props.editRowModalID) {
               const fillData = this.formatBeforeEdit(rowData)
-              this.props.changeModalFillData(fillData, this.props.editRowModalID)
+              this.props.changeModalFillData({ ...fillData }, this.props.editRowModalID)
               this.props.changeModalData(
                 {
-                  fillData,
+                  data: { ...fillData },
                   header
                 },
                 this.props.editRowModalID
@@ -97,11 +97,13 @@ class TableFrame extends Component {
     data = data || []
 
     let thead = header.map((header, i) => {
+      if (header.isVisible === false) return null
       return <th key={i}>{header.title}</th>
     })
 
     let tbody = data.map((rowData, i) => {
       let rowbody = header.map((header, j) => {
+        if (header.isVisible === false) return null
         return this.getRenderTableElement(rowData, header, i, j)
       })
       return <tr key={i}>{rowbody}</tr>

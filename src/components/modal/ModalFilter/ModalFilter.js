@@ -53,11 +53,12 @@ class ModalFilter extends Component {
 
   render () {
     return (
-      <Modal isOpen={this.props.isShow} className='modal-lg'>
+      <Modal isOpen={this.props.isShow} className='modal-md'>
         <ModalHeader>Filter data</ModalHeader>
         <ModalBody>
           <div className='modal-body'>
             <div className='title' style={{ marginTop: 0 }}>Add your filter</div>
+            <hr />
             <div className='form-inline'>
               <div className='mb-2 mr-sm-2 mb-sm-0'>Operator</div>
               <select className='form-control mb-2 mr-sm-2 mb-sm-0' defaultValue='=' onChange={this.onOperatorChange}>
@@ -67,7 +68,7 @@ class ModalFilter extends Component {
                 <option value='LIKE'>LIKE</option>
               </select>
               <select
-                className='filter-rule-select form-control mb-2 mr-sm-2 mb-sm-0' 
+                className='filter-rule-select form-control mb-2 mr-sm-2 mb-sm-0'
                 onChange={this.onFieldListChange}>
                 {this.getSelectFieldList()}
               </select>
@@ -75,6 +76,15 @@ class ModalFilter extends Component {
             </div>
 
             <div className='title'>Filter List</div>
+            <hr />
+            <div>
+              {this.props.filters.map((elm) => (
+                <div className='form-inline'>
+                  <div className='mb-2 mr-sm-2 mb-sm-0'>{elm.field}</div>
+                  <div className='btn btn-primary' onClick={() => this.props.removeFilter(elm.id)}>ลบ</div>
+                </div>
+              ))}
+            </div>
             <div>{this.props.filters ? JSON.stringify(this.props.filters) : 'false'}</div>
             {/*
               this.props.errorOverall &&

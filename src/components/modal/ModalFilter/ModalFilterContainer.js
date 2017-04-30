@@ -14,7 +14,6 @@ const mapDispatchToProps = (dispatch, ownProps) => {
 const mapStateToProps = (state, ownProps) => {
   const filterObj = state.filter.find((x) => x.id === ownProps.id) || filterInit
   const modalObj = state.modal.find((x) => x.id === ownProps.id) || modalInit
-  console.log(filterObj)
   return {
     filters: filterObj.filters,
     isShow: modalObj.isShow

@@ -16,7 +16,8 @@ export const addFilter = (filter, id) => {
 export const removeFilter = (filterID, id) => {
   return {
     type: FILTER_REMOVE,
-    filterID
+    filterID,
+    id
   }
 }
 
@@ -58,7 +59,8 @@ const actionHandler = {
     }
   },
   [FILTER_REMOVE]: (state, action) => {
-    const newFilters = state.filter.filter((f) => f.id !== action.filterID)
+    console.log(state)
+    const newFilters = state.filters.filter((f) => f.id !== action.filterID)
     return {
       ...state,
       filters: newFilters

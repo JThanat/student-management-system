@@ -1,6 +1,6 @@
 import { connect } from 'react-redux'
 import { actions } from './TableModules'
-import { actions as modalActions } from '../ModalChangeData/ModalChangeDataModules'
+import { actions as modalActions } from '../../core/modules/ModalModules'
 
 /*  This is a container component. Notice it does not contain any JSX,
     nor does it import React. This component is **only** responsible for

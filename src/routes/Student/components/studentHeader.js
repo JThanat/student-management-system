@@ -7,7 +7,8 @@ const studentHeader = [
     title: 'Edit',
     prop: 'edit',
     isEdit: true,
-    onEdit: (resolve, reject, data) => {
+    onEdit: (resolve, reject, data, oldData) => {
+      console.log(data, oldData)
       requestAndResponse(
         '../api/student/update',
         {
@@ -57,25 +58,30 @@ const studentHeader = [
   },
   {
     title: 'CurID',
-    prop: 'curid',
+    prop: 'curriculum_id',
+    isEditable: false,
     isNullable: false
   },
   {
     title: 'MemID',
     prop: 'member_id',
-    validate: (resolve, reject, data) => {
-      setTimeout(() => resolve('eiei'), 500)
-    }
+    isEditable: false
+    // validate: (resolve, reject, data) => {
+    //   setTimeout(() => resolve('eiei'), 500)
+    // }
   },
   {
     title: 'คำนำหน้าชื่อ',
     prop: 'title',
-    isNullable: false
+    isNullable: false,
+    isEditable: false
   },
   {
     title: 'ชื่อ',
     prop: 'firstname',
-    isNullable: false
+    isNullable: false,
+    isAddable: false,
+    isVisible: false
   },
   {
     title: 'นามสกุล',
@@ -96,12 +102,21 @@ const studentHeader = [
     formatter: (date) => {
       if (date) return date.slice(0, 10)
       return null
+    },
+    formatBeforeEdit: (date) => {
+      if (date) return date.slice(0, 10)
+      return null
     }
   },
   {
     title: 'เพศ',
     prop: 'gender',
-    isNullable: false
+    isNullable: false,
+    type: (resolve, reject) => {
+      setTimeout(() => {
+        resolve(['F', 'M'])
+      }, 5000)
+    }
     // TODO: option F M
   },
   {

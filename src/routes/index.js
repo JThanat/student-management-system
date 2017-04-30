@@ -6,6 +6,7 @@ import CoreTable from './CoreTable'
 import CounterRoute from './Counter'
 import Student from './Student'
 import TableView from './TableView'
+import Punishment from './Punishment'
 
 /*  Note: Instead of using JSX, we recommend using react-router
     PlainRoute objects to build route definitions.   */
@@ -21,7 +22,8 @@ export const createRoutes = (store) => ({
     Duck,
     CoreTable,
     Student,
-    TableView
+    TableView,
+    Punishment
   ]
 })
 

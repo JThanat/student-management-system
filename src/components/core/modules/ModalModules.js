@@ -1,8 +1,8 @@
-const MODAL_CHANGE_DATA_SHOW = 'MODAL_CHANGE_DATA_SHOW'
-const MODAL_CHANGE_DATA_ADD_DATA = 'MODAL_CHANGE_DATA_ADD_DATA'
-const MODAL_CHANGE_DATA_ERROR = 'MODAL_CHANGE_DATA_ERROR'
-const MODAL_CHANGE_DATA_ERROR_OVERALL = 'MODAL_CHANGE_DATA_OVERALL'
-const MODAL_CHANGE_DATA_FILL = 'MODAL_CHANGE_DATA_FILL'
+const MODAL_SHOW = 'MODAL_SHOW'
+const MODAL_ADD_DATA = 'MODAL_ADD_DATA'
+const MODAL_ERROR = 'MODAL_ERROR'
+const MODAL_ERROR_OVERALL = 'MODAL_CHANGE_DATA_OVERALL'
+const MODAL_FILL = 'MODAL_FILL'
 
 export const initialState = {
   data: {},
@@ -14,7 +14,7 @@ export const initialState = {
 
 export const showModal = (isShow, id) => {
   return {
-    type: MODAL_CHANGE_DATA_SHOW,
+    type: MODAL_SHOW,
     isShow,
     id
   }
@@ -22,7 +22,7 @@ export const showModal = (isShow, id) => {
 
 export const changeData = (data, id) => {
   return {
-    type: MODAL_CHANGE_DATA_ADD_DATA,
+    type: MODAL_ADD_DATA,
     data,
     id
   }
@@ -38,7 +38,7 @@ export const showError = (error, id) => {
     }
   }
   return {
-    type: MODAL_CHANGE_DATA_ERROR,
+    type: MODAL_ERROR,
     error: errorSerialize,
     id
   }
@@ -51,7 +51,7 @@ export const showErrorOverall = (errorOverall, id) => {
     errorOverall = errorOverall.toString()
   }
   return {
-    type: MODAL_CHANGE_DATA_ERROR_OVERALL,
+    type: MODAL_ERROR_OVERALL,
     errorOverall: errorOverall,
     id
   }
@@ -59,7 +59,7 @@ export const showErrorOverall = (errorOverall, id) => {
 
 export const changeFillData = (fill, id) => {
   return {
-    type: MODAL_CHANGE_DATA_FILL,
+    type: MODAL_FILL,
     fill,
     id
   }
@@ -74,31 +74,31 @@ export const actions = {
 }
 
 const actionHandler = {
-  [MODAL_CHANGE_DATA_SHOW]: (state, action) => {
+  [MODAL_SHOW]: (state, action) => {
     return {
       ...state,
       isShow: action.isShow
     }
   },
-  [MODAL_CHANGE_DATA_ADD_DATA]: (state, action) => {
+  [MODAL_ADD_DATA]: (state, action) => {
     return {
       ...state,
       data: action.data
     }
   },
-  [MODAL_CHANGE_DATA_ERROR]: (state, action) => {
+  [MODAL_ERROR]: (state, action) => {
     return {
       ...state,
       error: action.error
     }
   },
-  [MODAL_CHANGE_DATA_ERROR_OVERALL]: (state, action) => {
+  [MODAL_ERROR_OVERALL]: (state, action) => {
     return {
       ...state,
       errorOverall: action.errorOverall
     }
   },
-  [MODAL_CHANGE_DATA_FILL]: (state, action) => {
+  [MODAL_FILL]: (state, action) => {
     return {
       ...state,
       fill: action.fill

@@ -21,7 +21,7 @@ router.get('/filter', (req, res) => {
   })
 })
 
-router.post('/create', (req, res) => {
+router.post('/insert', (req, res) => {
   const data = req.body.data
   queryHelper.queryAndResponse({
     sql: Punishment.insertPunishment(data),
@@ -34,6 +34,15 @@ router.post('/delete', (req, res) => {
   const data = req.body.data
   queryHelper.queryAndResponse({
     sql: Punishment.deletePunishment(data),
+    req: req,
+    res: res
+  })
+})
+
+router.post('/update', (req, res) => {
+  const data = req.body.data
+  queryHelper.queryAndResponse({
+    sql: Punishment.updatePunishment(data),
     req: req,
     res: res
   })

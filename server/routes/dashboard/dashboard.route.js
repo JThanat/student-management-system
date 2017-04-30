@@ -86,11 +86,11 @@ router.get('/number-of-student-history', (req, res) => {
 router.get('/student-competition-by-year', (req, res) => {
   queryHelper.queryAndResponse({
     sql: `select count(*) as student_count,
-	        convert(substr(student_id, 1, 2), unsigned integer)-54 as student_year FROM (                    
-	        select competition_name, T1.team_id, sid FROM competitions as T1
-		      left join teams_students as T2 on T1.team_id = T2.team_id) as T12
-			    left join students as T3 on T12.sid = T3.sid
-	        where convert(substr(student_id, 1, 2), unsigned integer)-54<=4
+          convert(substr(student_id, 1, 2), unsigned integer)-54 as student_year FROM (                    
+          select competition_name, T1.team_id, sid FROM competitions as T1
+          left join teams_students as T2 on T1.team_id = T2.team_id) as T12
+          left join students as T3 on T12.sid = T3.sid
+          where convert(substr(student_id, 1, 2), unsigned integer)-54<=4
           group by convert(substr(student_id, 1, 2), unsigned integer)-54`,
     req: req,
     res: res
@@ -100,7 +100,7 @@ router.get('/student-competition-by-year', (req, res) => {
 router.get('/student-project-by-year', (req, res) => {
   queryHelper.queryAndResponse({
     sql: `select convert(substr(student_id, 1, 2), unsigned integer)-54 as student_year, 
-	        count(*) as student_count from students_projects
+          count(*) as student_count from students_projects
           left join students on students.sid = students_projects.sid
           where convert(substr(student_id, 1, 2), unsigned integer)-54<=4
           group by convert(substr(student_id, 1, 2), unsigned integer)-54`,

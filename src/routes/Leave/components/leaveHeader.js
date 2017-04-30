@@ -17,7 +17,7 @@ const leaveHeader = [
           },
           body: JSON.stringify({
             data: removeNull(data),
-            oldData: oldData
+            oldData: removeNull(oldData)
           })
         },
         resolve,
@@ -41,8 +41,8 @@ const leaveHeader = [
           body: JSON.stringify({
             data: {
               student_id: data.student_id,
-              leave_id: data.leave_id,
-              timestamp: data.timestamp
+              semester: data.semester,
+              year: data.year
             }
           })
         },
@@ -58,36 +58,50 @@ const leaveHeader = [
     isNullable: true
   },
   {
-    title: 'ภาคการศึกษา',
-    prop: 'semester',
+    title: 'ชื่อจริง',
+    prop: 'firstname',
     isEditable: false,
     isNullable: true,
     isAddable: false
+  },
+  {
+    title: 'นามสกุล',
+    prop: 'lastname',
+    isEditable: false,
+    isNullable: true,
+    isAddable: false
+  },
+  {
+    title: 'ภาคการศึกษา',
+    prop: 'semester',
+    isEditable: true,
+    isNullable: true,
+    isAddable: true
   },
   {
     title: 'ปี',
     prop: 'year',
-    isEditable: false,
+    isEditable: true,
     isNullable: true,
-    isAddable: false
+    isAddable: true
   },
   {
     title: 'ประเภทการลา',
     prop: 'leave_type',
-    isEditable: false,
+    isEditable: true,
     isNullable: true,
-    isAddable: false
+    isAddable: true
   },
   {
     title: 'คำอธิบาย',
     prop: 'leave_description',
-    isNullable: false
+    isNullable: true
   }
 ]
 
 export default {
   table: {
-    add: (resolve, reject, newData) => {
+    onAdd: (resolve, reject, newData) => {
       requestAndResponse(
         '../api/leave/insert',
         {

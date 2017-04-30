@@ -21,8 +21,9 @@ router.get('/filter', (req, res) => {
   })
 })
 
-router.post('/create', (req, res) => {
+router.post('/insert', (req, res) => {
   const data = req.body.data
+  console.log(data)
   queryHelper.queryAndResponse({
     sql: Leave.insertLeave(data),
     req: req,
@@ -34,6 +35,16 @@ router.post('/delete', (req, res) => {
   const data = req.body.data
   queryHelper.queryAndResponse({
     sql: Leave.deleteLeave(data),
+    req: req,
+    res: res
+  })
+})
+
+router.post('/update', (req, res) => {
+  const data = req.body.data
+  const oldData = req.body.oldData
+  queryHelper.queryAndResponse({
+    sql: Leave.updateLeave(data, oldData),
     req: req,
     res: res
   })

@@ -94,7 +94,7 @@ const punishmentHeader = [
     title: 'คะแนนที่ถูกหัก',
     prop: 'score_deduction',
     isEditable: true,
-    isNullable: false,
+    isNullable: true,
     isAddable: false
   }
 ]

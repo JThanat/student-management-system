@@ -16,7 +16,7 @@ const competitionHeader = [
             'Content-Type': 'application/json'
           },
           body: JSON.stringify({
-            student_id: data.student_id,
+            competition_id: data.competition_id,
             data: removeNull(data)
           })
         },
@@ -59,7 +59,7 @@ const competitionHeader = [
   {
     title: 'ชื่อทีม',
     prop: 'team_name',
-    isVisible: false,
+    isVisible: true,
     isEditable: false,
     isNullable: false
   },
@@ -83,8 +83,8 @@ const competitionHeader = [
   },
   {
     title: 'อาจารย์ที่ปรึกษา',
-    prop: 'member_id',
-    isEditable: true,
+    prop: 'advisors',
+    isEditable: false,
     isNullable: true
   }
 ]

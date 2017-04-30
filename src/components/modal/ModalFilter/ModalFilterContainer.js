@@ -17,7 +17,8 @@ const mapStateToProps = (state, ownProps) => {
   const modalObj = state.modal.find((x) => x.id === ownProps.id) || modalInit
   return {
     filters: filterObj.filters,
-    isShow: modalObj.isShow
+    isShow: modalObj.isShow,
+    errorOverall: modalObj.errorOverall
   }
 }
 

@@ -27,3 +27,10 @@ export const removeNull = (obj) => {
   }
   return newObj
 }
+
+
+export const convertObjectToQueryParams = (params) => {
+  return Object.keys(params)
+    .map(k => encodeURIComponent(k) + '=' + encodeURIComponent(params[k]))
+    .join('&')
+}

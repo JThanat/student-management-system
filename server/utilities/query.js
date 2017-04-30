@@ -23,6 +23,8 @@ const queryAndResponse = (params) => {
     res
   } = params
 
+  console.log(sql)
+
   if (!sql) throw new Error('sql is not defined')
   if (typeof sql !== 'string') {
     throw new Error('Type of sql is not string')

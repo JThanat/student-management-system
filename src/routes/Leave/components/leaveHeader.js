@@ -1,39 +1,40 @@
 import React from 'react'
 
-import { requestAndResponse, removeNull } from '../../../utils/query'
+import {
+  requestAndResponse,
+  removeNull,
+  convertObjectToQueryParams
+} from '../../../utils/query'
 
-const leaveHeader = [
-  {
-    title: 'Edit',
-    prop: 'edit',
-    isEdit: true,
-    onEdit: (resolve, reject, data, oldData) => {
-      requestAndResponse(
-        '../api/leave/update',
-        {
+const leaveHeader = [{
+  title: 'Edit',
+  prop: 'edit',
+  isEdit: true,
+  onEdit: (resolve, reject, data, oldData) => {
+    requestAndResponse(
+        '../api/leave/update', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json'
           },
           body: JSON.stringify({
             data: removeNull(data),
-            oldData: oldData
+            oldData: removeNull(oldData)
           })
         },
         resolve,
         reject
       )
-    }
-  },
-  {
-    title: 'Delete',
-    prop: 'delete',
-    isDelete: true,
-    formatter: () => <div className='btn btn-danger btn-sm' data-attach-on-delete>Delete</div>,
-    onDelete: (resolve, reject, data) => {
-      requestAndResponse(
-        '../api/leave/delete',
-        {
+  }
+},
+{
+  title: 'Delete',
+  prop: 'delete',
+  isDelete: true,
+  formatter: () => < div className='btn btn-danger btn-sm' data-attach-on-delete>Delete</div>,
+  onDelete: (resolve, reject, data) => {
+    requestAndResponse(
+        '../api/leave/delete', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json'
@@ -41,56 +42,69 @@ const leaveHeader = [
           body: JSON.stringify({
             data: {
               student_id: data.student_id,
-              leave_id: data.leave_id,
-              timestamp: data.timestamp
+              semester: data.semester,
+              year: data.year
             }
           })
         },
         resolve,
         reject
       )
-    }
-  },
-  {
-    title: 'รหัสนิสิต',
-    prop: 'student_id',
-    isEditable: false,
-    isNullable: true
-  },
-  {
-    title: 'ภาคการศึกษา',
-    prop: 'semester',
-    isEditable: false,
-    isNullable: true,
-    isAddable: false
-  },
-  {
-    title: 'ปี',
-    prop: 'year',
-    isEditable: false,
-    isNullable: true,
-    isAddable: false
-  },
-  {
-    title: 'ประเภทการลา',
-    prop: 'leave_type',
-    isEditable: false,
-    isNullable: true,
-    isAddable: false
-  },
-  {
-    title: 'คำอธิบาย',
-    prop: 'leave_description',
-    isNullable: false
   }
+},
+{
+  title: 'รหัสนิสิต',
+  prop: 'student_id',
+  isEditable: false,
+  isNullable: true
+},
+{
+  title: 'ชื่อจริง',
+  prop: 'firstname',
+  isEditable: false,
+  isNullable: true,
+  isAddable: false
+},
+{
+  title: 'นามสกุล',
+  prop: 'lastname',
+  isEditable: false,
+  isNullable: true,
+  isAddable: false
+},
+{
+  title: 'ภาคการศึกษา',
+  prop: 'semester',
+  isEditable: true,
+  isNullable: true,
+  isAddable: true
+},
+{
+  title: 'ปี',
+  prop: 'year',
+  isEditable: true,
+  isNullable: true,
+  isAddable: true
+},
+{
+  title: 'ประเภทการลา',
+  prop: 'leave_type',
+  isEditable: true,
+  isNullable: true,
+  isAddable: true
+},
+{
+  title: 'คำอธิบาย',
+  prop: 'leave_description',
+  isNullable: true
+}
 ]
 
 export default {
   table: {
-    add: (resolve, reject, newData) => {
+    onAdd: (resolve, reject, newData) => {
       requestAndResponse(
-        '../api/leave/insert',
-        {
+        '../api/leave/insert', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json'
@@ -102,6 +116,14 @@ export default {
         resolve,
         reject
       )
+    },
+    filterOptions: (filterStr) => {
+      const url = '../api/leave/all?' + convertObjectToQueryParams({
+        where: filterStr
+      })
+      return {
+        url
+      }
     }
   },
   header: leaveHeader,
@@ -114,4 +136,3 @@ export default {
     parser: (raw) => raw.data
   }
 }
-

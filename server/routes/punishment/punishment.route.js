@@ -6,7 +6,7 @@ const router = express.Router()
 
 router.get('/all', (req, res) => {
   queryHelper.queryAndResponse({
-    sql: Punishment.getAllPunishment(),
+    sql: Punishment.getAllPunishment() + (req.query.where || ''),
     req: req,
     res: res
   })

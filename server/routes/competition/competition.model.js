@@ -25,6 +25,15 @@ const insertCompetition = (dataSet) => {
   return query.transformToSQL.insert(TABLE_NAME, dataSet)
 }
 
+const updateCompetition = (dataSet) => {
+  let setCondition = []
+  for (let key in dataSet) {
+    setCondition.push(`${key} = '${dataSet[key]}'`)
+  }
+  return `UPDATE competitions SET 
+    ${setCondition.join(', ')} WHERE team_id=${dataSet.team_id} AND competition_name='${dataSet.competition_name}';`
+}
+
 const deleteCompetition = (conditionSet) => {
   return query.transformToSQL.delete(TABLE_NAME, conditionSet)
 }
@@ -34,7 +43,8 @@ module.exports = {
   getAllCompetitions,
   filterCompetitions,
   deleteCompetition,
-  insertCompetition
+  insertCompetition,
+  updateCompetition
 }
 
 

@@ -38,6 +38,23 @@ router.post('/delete', (req, res) => {
   })
 })
 
+router.post('/update', (req, res) => {
+  const {
+    data
+  } = req.body
+
+  queryHelper.queryAndResponse({
+    sql: Competition.updateCompetition(data),
+    parse: (data) => {
+      if (!data) {
+        return {}
+      }
+      return data[0]
+    },
+    req: req,
+    res: res
+  })
+})
 
 // TODO - For insert we should move the prize out first
 

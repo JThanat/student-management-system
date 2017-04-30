@@ -16,8 +16,12 @@ const competitionHeader = [
             'Content-Type': 'application/json'
           },
           body: JSON.stringify({
-            competition_id: data.competition_id,
-            data: removeNull(data)
+            data: {
+              team_id: data.team_id,
+              competition_name: data.competition_name,
+              competition_description: data.competition_description,
+              prize: data.prize
+            }
           })
         },
         resolve,
@@ -61,7 +65,8 @@ const competitionHeader = [
     prop: 'team_name',
     isVisible: true,
     isEditable: false,
-    isNullable: false
+    isNullable: true,
+    isAddable: false
   },
   {
     title: 'ชื่อการแข่งขัน',
@@ -85,7 +90,8 @@ const competitionHeader = [
     title: 'อาจารย์ที่ปรึกษา',
     prop: 'advisors',
     isEditable: false,
-    isNullable: true
+    isNullable: true,
+    isAddable: false
   }
 ]
 

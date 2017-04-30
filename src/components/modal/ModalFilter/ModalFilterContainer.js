@@ -7,7 +7,8 @@ import ModalFilter from './ModalFilter'
 const mapDispatchToProps = (dispatch, ownProps) => {
   return {
     addFilter: (filter) => dispatch(filterActions.addFilter(filter, ownProps.id)),
-    removeFilter: (filterID) => dispatch(filterActions.removeFilter(filterID, ownProps.id))
+    removeFilter: (filterID) => dispatch(filterActions.removeFilter(filterID, ownProps.id)),
+    updateFilterAll: (filters) => dispatch(filterActions.updateFilterAll(filters, ownProps.id))
   }
 }
 

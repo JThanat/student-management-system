@@ -39,7 +39,6 @@ const updateLeave = (dataSet, oldDataSet) => {
 }
 
 const deleteLeave = (dataSet) => {
-  console.log(dataSet)
   return `delete from leaves where
   sid = (select sid from students where student_id = "${dataSet.student_id}") 
   and semester = ${dataSet.semester}  

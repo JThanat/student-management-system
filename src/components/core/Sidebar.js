@@ -64,6 +64,11 @@ class Sidebar extends Component {
                 <i className='icon-logout' /> Leave
               </Link>
             </li>
+            <li className='nav-item'>
+              <Link to={'/project'} className='nav-link' activeClassName='active'>
+                <i className='icon-folder-alt' /> Project
+              </Link>
+            </li>
             {/* <li className={this.activeRoute('/icons')}>
               <a className='nav-link nav-dropdown-toggle' href='#' onClick={this.handleClick}>
                 <i className='icon-star' /> Icons

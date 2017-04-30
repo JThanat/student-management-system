@@ -24,10 +24,10 @@ db.connect(config.test ? db.MODE_TEST : db.MODE_PRODUCTION, (err) => {
     // dumpFacultyTable(db.getConnection())
     // dumpFacultyMemberTable(db.getConnection())
     // dumpPunishmentCriteria(connection)
-    dumpActivities(connection)
-    dumpStudentsActivities(connection)
-    dumpCompetitionTeams(connection)
-    dumpTeamsStudents(connection)
+    // dumpActivities(connection)
+    // dumpStudentsActivities(connection)
+    // dumpCompetitionTeams(connection)
+    // dumpTeamsStudents(connection)
   }
 })
 // ---------------------------- Faculty  -------------------------

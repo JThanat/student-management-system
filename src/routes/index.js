@@ -7,6 +7,8 @@ import CounterRoute from './Counter'
 import Student from './Student'
 import TableView from './TableView'
 import Punishment from './Punishment'
+import Leave from './Leave'
+import Competition from './Competition'
 
 /*  Note: Instead of using JSX, we recommend using react-router
     PlainRoute objects to build route definitions.   */
@@ -23,7 +25,9 @@ export const createRoutes = (store) => ({
     CoreTable,
     Student,
     TableView,
-    Punishment
+    Punishment,
+    Leave,
+    Competition
   ]
 })
 

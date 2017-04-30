@@ -2,22 +2,22 @@ import React from 'react'
 
 import { requestAndResponse, removeNull } from '../../../utils/query'
 
-const punishmentHeader = [
+const competitionHeader = [
   {
     title: 'Edit',
     prop: 'edit',
     isEdit: true,
-    onEdit: (resolve, reject, data, oldData) => {
+    onEdit: (resolve, reject, data) => {
       requestAndResponse(
-        '../api/punishment/update',
+        '../api/competition/update',
         {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json'
           },
           body: JSON.stringify({
-            data: removeNull(data),
-            oldData: oldData
+            student_id: data.student_id,
+            data: removeNull(data)
           })
         },
         resolve,
@@ -32,17 +32,15 @@ const punishmentHeader = [
     formatter: () => <div className='btn btn-danger btn-sm' data-attach-on-delete>Delete</div>,
     onDelete: (resolve, reject, data) => {
       requestAndResponse(
-        '../api/punishment/delete',
+        '../api/competition/delete',
         {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json'
           },
           body: JSON.stringify({
-            data: {
-              student_id: data.student_id,
-              punishment_id: data.punishment_id,
-              timestamp: data.timestamp
+            where: {
+              student_id: data.student_id
             }
           })
         },
@@ -52,58 +50,50 @@ const punishmentHeader = [
     }
   },
   {
-    title: 'รหัสนิสิต',
-    prop: 'student_id',
+    title: 'ทีม',
+    prop: 'team_id',
+    isVisible: false,
     isEditable: false,
-    isNullable: true
-  },
-  {
-    title: 'ชื่อจริง',
-    prop: 'firstname',
-    isEditable: false,
-    isNullable: true,
-    isAddable: false
-  },
-  {
-    title: 'นามสกุล',
-    prop: 'lastname',
-    isEditable: false,
-    isNullable: true,
-    isAddable: false
-  },
-  {
-    title: 'การลงโทษ',
-    prop: 'punishment_name',
-    isEditable: false,
-    isNullable: true,
-    isAddable: false
-  },
-  {
-    title: 'รหัสการลงโทษ',
-    prop: 'punishment_id',
     isNullable: false
   },
   {
-    title: 'วัน-เวลา',
-    prop: 'timestamp',
+    title: 'ชื่อทีม',
+    prop: 'team_name',
+    isVisible: false,
     isEditable: false,
-    isNullable: true,
-    isAddable: false
+    isNullable: false
   },
   {
-    title: 'คะแนนที่ถูกหัก',
-    prop: 'score_deduction',
+    title: 'ชื่อการแข่งขัน',
+    prop: 'competition_name',
     isEditable: true,
-    isNullable: false,
-    isAddable: false
+    isNullable: false
+  },
+  {
+    title: 'รายละเอียดการแข่งขัน',
+    prop: 'competition_description',
+    isEditable: true,
+    isNullable: true
+  },
+  {
+    title: 'รางวัลที่ได้รับ',
+    prop: 'prize',
+    isEditable: true,
+    isNullable: false
+  },
+  {
+    title: 'อาจารย์ที่ปรึกษา',
+    prop: 'member_id',
+    isEditable: true,
+    isNullable: true
   }
 ]
 
 export default {
   table: {
-    onAdd: (resolve, reject, newData) => {
+    add: (resolve, reject, newData) => {
       requestAndResponse(
-        '../api/punishment/insert',
+        '../api/competition/insert',
         {
           method: 'POST',
           headers: {
@@ -118,13 +108,13 @@ export default {
       )
     }
   },
-  header: punishmentHeader,
+  header: competitionHeader,
   pagination: {
     pageSize: 25,
     paginationBarSize: 20
   },
   src: {
-    url: '../api/punishment/all',
+    url: '../api/competition/all',
     parser: (raw) => raw.data
   }
 }

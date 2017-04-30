@@ -2,14 +2,14 @@ import React from 'react'
 
 import { requestAndResponse, removeNull } from '../../../utils/query'
 
-const punishmentHeader = [
+const leaveHeader = [
   {
     title: 'Edit',
     prop: 'edit',
     isEdit: true,
     onEdit: (resolve, reject, data, oldData) => {
       requestAndResponse(
-        '../api/punishment/update',
+        '../api/leave/update',
         {
           method: 'POST',
           headers: {
@@ -32,7 +32,7 @@ const punishmentHeader = [
     formatter: () => <div className='btn btn-danger btn-sm' data-attach-on-delete>Delete</div>,
     onDelete: (resolve, reject, data) => {
       requestAndResponse(
-        '../api/punishment/delete',
+        '../api/leave/delete',
         {
           method: 'POST',
           headers: {
@@ -41,7 +41,7 @@ const punishmentHeader = [
           body: JSON.stringify({
             data: {
               student_id: data.student_id,
-              punishment_id: data.punishment_id,
+              leave_id: data.leave_id,
               timestamp: data.timestamp
             }
           })
@@ -58,52 +58,38 @@ const punishmentHeader = [
     isNullable: true
   },
   {
-    title: 'ชื่อจริง',
-    prop: 'firstname',
+    title: 'ภาคการศึกษา',
+    prop: 'semester',
     isEditable: false,
     isNullable: true,
     isAddable: false
   },
   {
-    title: 'นามสกุล',
-    prop: 'lastname',
+    title: 'ปี',
+    prop: 'year',
     isEditable: false,
     isNullable: true,
     isAddable: false
   },
   {
-    title: 'การลงโทษ',
-    prop: 'punishment_name',
+    title: 'ประเภทการลา',
+    prop: 'leave_type',
     isEditable: false,
     isNullable: true,
     isAddable: false
   },
   {
-    title: 'รหัสการลงโทษ',
-    prop: 'punishment_id',
+    title: 'คำอธิบาย',
+    prop: 'leave_description',
     isNullable: false
-  },
-  {
-    title: 'วัน-เวลา',
-    prop: 'timestamp',
-    isEditable: false,
-    isNullable: true,
-    isAddable: false
-  },
-  {
-    title: 'คะแนนที่ถูกหัก',
-    prop: 'score_deduction',
-    isEditable: true,
-    isNullable: false,
-    isAddable: false
   }
 ]
 
 export default {
   table: {
-    onAdd: (resolve, reject, newData) => {
+    add: (resolve, reject, newData) => {
       requestAndResponse(
-        '../api/punishment/insert',
+        '../api/leave/insert',
         {
           method: 'POST',
           headers: {
@@ -118,13 +104,13 @@ export default {
       )
     }
   },
-  header: punishmentHeader,
+  header: leaveHeader,
   pagination: {
     pageSize: 25,
     paginationBarSize: 20
   },
   src: {
-    url: '../api/punishment/all',
+    url: '../api/leave/all',
     parser: (raw) => raw.data
   }
 }

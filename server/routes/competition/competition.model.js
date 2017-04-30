@@ -9,9 +9,13 @@ const CompetitionColumns = [
 
 const TABLE_NAME = 'competitions'
 
-const getAllCompetitions = () => `SELECT * FROM ${TABLE_NAME}`
+const getAllCompetitions = () => `SELECT team_name, competitions.competition_name, 
+  competitions.competition_description, competitions.prize
+  FROM competitions
+  left join competition_teams
+  on competitions.team_id = competition_teams.team_id`
 
-const filterCompetition = (filterList) => {
+const filterCompetitions = (filterList) => {
   return query.transformToSQL.filter(TABLE_NAME, filterList)
 }
 
@@ -22,6 +26,6 @@ const deleteCompetition = (conditionSet) => {
 module.exports = {
   CompetitionColumns,
   getAllCompetitions,
-  filterCompetition,
+  filterCompetitions,
   deleteCompetition
 }

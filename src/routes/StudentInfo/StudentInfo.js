@@ -2,6 +2,7 @@ import React, { Component, PropTypes } from 'react'
 // import Table from '../../../components/table/Table'
 import { staticID } from '../../utils/unique'
 import { studentHeader } from '../../routes/Student/components/studentHeader'
+import TableFrame from '../../components/table/TableFrame/'
 
 class StudentInfo extends Component {
 
@@ -16,12 +17,31 @@ class StudentInfo extends Component {
       data: {}
     }
 
+    this.enrollTableHeader = [
+      { title: 'รหัสวิชา', prop: 'course_no' },
+      { title: 'ชื่อวิชา', prop: 'course_name' },
+      { title: 'รายละเอียด', prop: 'course_description' },
+      { title: 'ประเภท', prop: 'course_type' }
+    ]
+
     this.tableID = staticID('StudentInfo.table')
+
     fetch(`/api/student/id/${props.params.id}`)
       .then((result) => result.json())
       .then((result) => {
         this.setState({
           data: result.data
+        })
+      })
+      .catch((err) => {
+        console.error(err)
+      })
+
+    fetch(`/api/student/enrolls/${props.params.id}`)
+      .then((result) => result.json())
+      .then((result) => {
+        this.setState({
+          enrollTableData: result.data
         })
       })
       .catch((err) => {
@@ -44,7 +64,6 @@ class StudentInfo extends Component {
       return <dl className='row'>{contentResult}</dl>
     }
   }
-
 
   render () {
     // const config = TableConfig
@@ -70,8 +89,18 @@ class StudentInfo extends Component {
                     {this.userInfoContent()}
                   </div>
                 </div>
+                <hr />
                 <div className='chart-wrapper' style={{ height: 300 + 'px', marginTop: 40 + 'px' }}>
+                  นี่คือกราฟ... ที่ยังไม่เสร็จ
                   {/* <Line data={mainChart} options={mainChartOpts} height={300} /> */}
+                </div>
+                <hr />
+                <div>
+                  <h4 className='mb-3'>Enrolled Courses</h4>
+                  <TableFrame
+                    className='table table-responsive table-bordered table-striped table-md'
+                    header={this.enrollTableHeader}
+                    data={this.state.enrollTableData} />
                 </div>
               </div>
             )

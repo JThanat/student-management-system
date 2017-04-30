@@ -83,4 +83,18 @@ router.get('/number-of-student-history', (req, res) => {
   })
 })
 
+router.get('/student-competition-by-year', (req, res) => {
+  queryHelper.queryAndResponse({
+    sql: `SELECT count(*) as student_count,
+	        convert(substr(student_id, 1, 2), unsigned integer)-54 as student_year FROM (                    
+	        SELECT competition_name, T1.team_id, sid FROM competitions as T1
+		      LEFT JOIN teams_students as T2 ON T1.team_id = T2.team_id) as T12
+			    LEFT JOIN students as T3 ON T12.sid = T3.sid
+	        where convert(substr(student_id, 1, 2), unsigned integer)-54<=4
+          group by convert(substr(student_id, 1, 2), unsigned integer)-54`,
+    req: req,
+    res: res
+  })
+})
+
 module.exports = router

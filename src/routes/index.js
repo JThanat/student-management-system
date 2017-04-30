@@ -1,15 +1,17 @@
 // We only need to import the modules necessary for initial render
+import Activity from './Activity'
+import Competition from './Competition'
 import CoreLayout from '../layouts/CoreLayout'
-import Home from './Home'
-import Duck from './Duck'
 import CoreTable from './CoreTable'
 import CounterRoute from './Counter'
+import Duck from './Duck'
+import Home from './Home'
+import StudentInfo from './StudentInfo'
+import Leave from './Leave'
+import Project from './Project'
+import Punishment from './Punishment'
 import Student from './Student'
 import TableView from './TableView'
-import Punishment from './Punishment'
-import Leave from './Leave'
-import Competition from './Competition'
-import Project from './Project'
 
 /*  Note: Instead of using JSX, we recommend using react-router
     PlainRoute objects to build route definitions.   */
@@ -22,14 +24,16 @@ export const createRoutes = (store) => ({
   childRoutes : [
     Home,
     CounterRoute(store),
-    Duck,
-    CoreTable,
-    Student,
-    TableView,
-    Punishment,
-    Leave,
+    Activity,
     Competition,
-    Project
+    CoreTable,
+    Duck,
+    StudentInfo,
+    Leave,
+    Project,
+    Punishment,
+    Student,
+    TableView
   ]
 })
 

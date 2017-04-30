@@ -21,7 +21,16 @@ router.get('/filter', (req, res) => {
   })
 })
 
-router.post('/create', (req, res) => {
+router.post('/delete', (req, res) => {
+  const data = req.body.data
+  queryHelper.queryAndResponse({
+    sql: Activity.deleteActivity(data),
+    req: req,
+    res: res
+  })
+})
+
+router.post('/insert', (req, res) => {
   const data = req.body.data
   queryHelper.queryAndResponse({
     sql: Activity.insertActivity(data),
@@ -30,10 +39,11 @@ router.post('/create', (req, res) => {
   })
 })
 
-router.post('/delete', (req, res) => {
+router.post('/update', (req, res) => {
   const data = req.body.data
+  const oldData = req.body.oldData
   queryHelper.queryAndResponse({
-    sql: Activity.deleteActivity(data),
+    sql: Activity.updateActivity(data, oldData),
     req: req,
     res: res
   })

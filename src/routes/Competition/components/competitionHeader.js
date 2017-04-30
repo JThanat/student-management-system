@@ -1,6 +1,6 @@
 import React from 'react'
 
-import { requestAndResponse, removeNull } from '../../../utils/query'
+import { requestAndResponse, convertObjectToQueryParams } from '../../../utils/query'
 
 const competitionHeader = [
   {
@@ -97,7 +97,7 @@ const competitionHeader = [
 
 export default {
   table: {
-    add: (resolve, reject, newData) => {
+    onAdd: (resolve, reject, newData) => {
       requestAndResponse(
         '../api/competition/insert',
         {
@@ -106,12 +106,25 @@ export default {
             'Content-Type': 'application/json'
           },
           body: JSON.stringify({
-            data: removeNull(newData)
+            data: {
+              team_id: newData.team_id,
+              competition_name: newData.competition_name,
+              competition_description: newData.competition_description,
+              prize: newData.prize
+            }
           })
         },
         resolve,
         reject
       )
+    },
+    filterOptions: (filterStr) => {
+      const url = '../api/competition/all?' + convertObjectToQueryParams({
+        where: filterStr
+      })
+      return {
+        url
+      }
     }
   },
   header: competitionHeader,

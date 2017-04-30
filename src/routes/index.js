@@ -1,5 +1,6 @@
 // We only need to import the modules necessary for initial render
 import Activity from './Activity'
+import Advisor from './Advisor'
 import Competition from './Competition'
 import CoreLayout from '../layouts/CoreLayout'
 import CoreTable from './CoreTable'
@@ -25,6 +26,7 @@ export const createRoutes = (store) => ({
     Home,
     CounterRoute(store),
     Activity,
+    Advisor,
     Competition,
     CoreTable,
     Duck,

@@ -1,6 +1,7 @@
 const router = require('express').Router()
 
 router.use('/activity', require('./activity/activity.route'))
+router.use('/advisor', require('./advisor/advisor.route'))
 router.use('/competition', require('./competition/competition.route'))
 router.use('/dashboard', require('./dashboard/dashboard.route'))
 router.use('/leave', require('./leave/leave.route'))

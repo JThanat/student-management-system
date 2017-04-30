@@ -14,6 +14,10 @@ class TableView extends Component {
   render () {
     const config = {
       table: {
+        name: 'This is table name',
+        showAddButton: false,
+        showRefreshButton: false,
+        showFilterButton: false,
         onAdd: (resolve, reject, newData) => {
           console.log('add', newData)
           resolve()

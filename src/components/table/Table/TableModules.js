@@ -17,6 +17,14 @@ const initialTableState = {
   header: []
 }
 
+const convertErrorToString = (err) => {
+  if (err instanceof Error) {
+    err = err.message
+  } else {
+    err = err.toString()
+  }
+}
+
 export const changePage = (page, config, id) => {
   return {
     type: PAGINATION_CHANGE_PAGE,
@@ -37,7 +45,7 @@ export const changePageTab = (startPage, id) => {
 export const showErrorMsg = (msg, id) => {
   return {
     type: TABLE_ERROR,
-    error: msg ? msg.toString() : null,
+    error: convertErrorToString(msg),
     id
   }
 }
@@ -45,7 +53,7 @@ export const showErrorMsg = (msg, id) => {
 export const showLogMsg = (msg, id) => {
   return {
     type: TABLE_LOG,
-    msg: msg ? msg.toString() : null,
+    msg: convertErrorToString(msg),
     id
   }
 }
@@ -60,7 +68,10 @@ export const loadTable = (config, id) => {
         type: TABLE_LOADING,
         id
       })
-      return fetch(src.url)
+      const options = src.options || {
+        method: 'GET'
+      }
+      return fetch(src.url, options)
         .then((response) => {
           if (response.ok) {
             return response.text()

@@ -100,7 +100,6 @@ const actionHandler = {
     }
   },
   [FILTER_UPDATE_ALL]: (state, action) => {
-    console.log(action)
     return {
       ...state,
       filters: action.filters

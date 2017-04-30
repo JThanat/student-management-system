@@ -16,21 +16,22 @@ class ModalFilter extends Component {
     this.onOperatorChange = this.onOperatorChange.bind(this)
     this.onFieldListChange = this.onFieldListChange.bind(this)
     this.addRule = this.addRule.bind(this)
+    this.onSubmit = this.onSubmit.bind(this)
   }
 
   getSelectFieldList () {
-    let list = [<option value='' />]
+    let list = [<option value='' key={0} />]
     for (let i = 0; i < this.props.header.length; i++) {
       const header = this.props.header[i]
       if (header.isEdit || header.isDelete) continue
-      list.push(<option value={header.prop} key={i}>{header.title} ({header.prop})</option>)
+      list.push(<option value={header.prop} key={i + 1}>{header.title} ({header.prop})</option>)
     }
     return list
   }
 
   getFilterListContent () {
     return this.props.filters.map((elm, i) => (
-      <div className='input-group filter-rule-list'>
+      <div className='input-group filter-rule-list' key={i}>
         <span className='input-group-addon'>{elm.id}</span>
         <span className='input-group-addon'>{elm.field}&nbsp;{elm.operator}</span>
         <input
@@ -62,7 +63,6 @@ class ModalFilter extends Component {
   }
 
   onRuleValueChange (e, id) {
-    console.log(e)
     let curFilters = this.props.filters.slice(0)
     curFilters = curFilters.map((filter) => {
       if (filter.id === id) {
@@ -87,6 +87,24 @@ class ModalFilter extends Component {
     })
   }
 
+  onSubmit () {
+    const filterStr = this.props.filters.map((filter) => {
+      switch (filter.operator) {
+        case '=' :
+          return `${filter.field} = "${filter.value}"`
+        case '>' :
+          return `${filter.field} > ${filter.value}`
+        case '<' :
+          return `${filter.field} < ${filter.value}`
+        case 'LIKE' :
+          return `${filter.field} LIKE ${filter.value}`
+        default :
+          return null
+      }
+    }).filter((val) => val).join(' AND ')
+    this.props.onSubmit(`WHERE ${filterStr}`)
+  }
+
   render () {
     return (
       <Modal isOpen={this.props.isShow} className='modal-md'>
@@ -97,16 +115,16 @@ class ModalFilter extends Component {
             <hr />
             <div className='form-inline'>
               <div className='mb-2 mr-sm-2 mb-sm-0'>Operator</div>
+              <select
+                className='filter-rule-select form-control mb-2 mr-sm-2 mb-sm-0'
+                onChange={this.onFieldListChange}>
+                {this.getSelectFieldList()}
+              </select>
               <select className='form-control mb-2 mr-sm-2 mb-sm-0' defaultValue='=' onChange={this.onOperatorChange}>
                 <option value='='>=</option>
                 <option value='>'>&gt;</option>
                 <option value='<'>&lt;</option>
                 <option value='LIKE'>LIKE</option>
-              </select>
-              <select
-                className='filter-rule-select form-control mb-2 mr-sm-2 mb-sm-0'
-                onChange={this.onFieldListChange}>
-                {this.getSelectFieldList()}
               </select>
               <button className='btn btn-primary' onClick={this.addRule}>Add</button>
             </div>
@@ -117,17 +135,17 @@ class ModalFilter extends Component {
               {this.getFilterListContent()}
             </div>
             <div>{this.props.filters ? JSON.stringify(this.props.filters) : 'false'}</div>
-            {/*
+            {
               this.props.errorOverall &&
               (<div
                 className='alert alert-danger'>
                 {this.props.errorOverall}
               </div>)
-            */}
+            }
           </div>
         </ModalBody>
         <ModalFooter>
-          <div className='btn btn-primary' onClick={this.props.onSubmit}>Filter Data
+          <div className='btn btn-primary' onClick={this.onSubmit}>Filter Data
           </div>
           {' '}
           <div className='btn btn-secondary' onClick={this.props.onCancel}>Cancel</div>
@@ -147,7 +165,7 @@ ModalFilter.propTypes = {
 
   filters: PropTypes.array.isRequired,
   isShow: PropTypes.bool.isRequired,
-  // errorOverall: PropTypes.string.isRequired,
+  errorOverall: PropTypes.string.isRequired,
 
   /**
    * Prop values

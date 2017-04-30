@@ -36,26 +36,33 @@ const queryAndResponse = (params) => {
   }
 
   const connection = db.getConnection()
-  new Promise(
-    (resolve, reject) => {
-      connection.query(sql,
-        (err, results) => {
-          if (err) {
-            utils.log(err)
-            reject(err)
-          } else {
-            resolve(results)
-          }
+  new Promise((resolve, reject) => {
+    connection.query('SET sql_mode = ""', (err, result) => {
+      if (err) {
+        utils.log(err)
+        reject(err)
+      } else {
+        resolve('test')
+      }
+    })
+  }).then(() => {
+    return new Promise((resolve, reject) => {
+      connection.query(sql, (err, results) => {
+        if (err) {
+          utils.log(err)
+          reject(err)
+        } else {
+          console.log(results)
+          resolve(results)
         }
-      )
-    }
-  ).then(
-    (result) => res.status(200).json({
+      })
+    })
+  }).then((result) => {
+    res.status(200).json({
       success: true,
       data: parse ? parse(result) : result
-    }),
-    (err) => responseWithError(res, err)
-  ).catch(
+    })
+  }).catch(
     (err) => responseWithError(res, err)
   )
 }

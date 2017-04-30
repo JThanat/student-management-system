@@ -219,7 +219,7 @@ class Table extends Component {
         <div className='nav-table' style={{ marginBottom: 15 }}>
           {
           tableConfig && tableConfig.name &&
-          <h4 style={{ fontWeight: 400 }}>{tableConfig.name}</h4>
+          <h4 style={{ fontWeight: 400, margin: '1em 0' }}>{tableConfig.name}</h4>
           }
           {
           tableConfig && tableConfig.showAddButton !== false &&

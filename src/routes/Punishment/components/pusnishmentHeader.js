@@ -16,7 +16,6 @@ const punishmentHeader = [
             'Content-Type': 'application/json'
           },
           body: JSON.stringify({
-            student_id: data.student_id,
             data: removeNull(data),
             oldData: oldData
           })
@@ -33,15 +32,17 @@ const punishmentHeader = [
     formatter: () => <div className='btn btn-danger btn-sm' data-attach-on-delete>Delete</div>,
     onDelete: (resolve, reject, data) => {
       requestAndResponse(
-        '../api/student/delete',
+        '../api/punishment/delete',
         {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json'
           },
           body: JSON.stringify({
-            where: {
-              student_id: data.student_id
+            data: {
+              student_id: data.student_id,
+              punishment_id: data.punishment_id,
+              timestamp: data.timestamp
             }
           })
         },
@@ -60,19 +61,22 @@ const punishmentHeader = [
     title: 'ชื่อจริง',
     prop: 'firstname',
     isEditable: false,
-    isNullable: true
+    isNullable: true,
+    isAddable: false
   },
   {
     title: 'นามสกุล',
     prop: 'lastname',
     isEditable: false,
-    isNullable: true
+    isNullable: true,
+    isAddable: false
   },
   {
     title: 'การลงโทษ',
     prop: 'punishment_name',
     isEditable: false,
-    isNullable: true
+    isNullable: true,
+    isAddable: false
   },
   {
     title: 'รหัสการลงโทษ',
@@ -83,13 +87,15 @@ const punishmentHeader = [
     title: 'วัน-เวลา',
     prop: 'timestamp',
     isEditable: false,
-    isNullable: false
+    isNullable: true,
+    isAddable: false
   },
   {
     title: 'คะแนนที่ถูกหัก',
     prop: 'score_deduction',
-    isEditable: false,
-    isNullable: false
+    isEditable: true,
+    isNullable: true,
+    isAddable: false
   }
 ]
 

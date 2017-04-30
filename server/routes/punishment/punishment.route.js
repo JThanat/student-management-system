@@ -32,6 +32,7 @@ router.post('/insert', (req, res) => {
 
 router.post('/delete', (req, res) => {
   const data = req.body.data
+  console.log(data)
   queryHelper.queryAndResponse({
     sql: Punishment.deletePunishment(data),
     req: req,

@@ -1,4 +1,5 @@
 import React from 'react'
+import { Link } from 'react-router'
 
 import { requestAndResponse, removeNull, convertObjectToQueryParams } from '../../../utils/query'
 
@@ -49,6 +50,15 @@ export const studentHeader = [
         reject
       )
     }
+  },
+  {
+    title: 'Info',
+    prop: 'student_id',
+    isAddable: false,
+    isEditable: false,
+    formatter: (data) => (
+      <Link to={'/student-info/' + data}className='btn btn-info btn-sm' data-attach-on-delete>Info</Link>
+    )
   },
   {
     title: 'รหัสนิสิต',

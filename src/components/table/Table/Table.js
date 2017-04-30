@@ -31,13 +31,11 @@ class Table extends Component {
   }
 
   reloadTable = (src = this.props.config.src) => {
-    console.log(src)
     const { config } = this.props
     config.src = {
       ...config.src,
       ...src
     }
-    console.log(config.src)
     this.props.loadTable(config)
   }
 
@@ -324,7 +322,7 @@ Table.propTypes = {
   tableErrorMsg: PropTypes.string.isRequired,
   tableView: PropTypes.object.isRequired,
   tableLogMsg: PropTypes.string.isRequired,
-  filterList: PropTypes.array.isRequired,
+  filterList: PropTypes.func.isRequired,
 
   /**
    * Props values

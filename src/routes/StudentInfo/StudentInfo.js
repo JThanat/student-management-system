@@ -59,20 +59,27 @@ class StudentInfo extends Component {
                 <div className='small text-muted'>Summarize information of student</div>
               </div>
             </div>
-            <div className='row mt-4'>
-              <div className='col-sm-3'>
-                <img src='/img/placeholder/profile.png' className='img-fluid' />
-              </div>
-              <div className='col-sm-9'>
-                {this.userInfoContent()}
-              </div>
-            </div>
-            <div className='chart-wrapper' style={{ height: 300 + 'px', marginTop: 40 + 'px' }}>
-              {/* <Line data={mainChart} options={mainChartOpts} height={300} /> */}
-            </div>
+            {
+              (this.state.data && this.state.data.hasOwnProperty('student_id')
+              ? (
+                <div>
+                  <div className='row mt-4'>
+                    <div className='col-sm-3'>
+                      <img src='/img/placeholder/profile.png' className='img-fluid' />
+                    </div>
+                    <div className='col-sm-9'>
+                      {this.userInfoContent()}
+                    </div>
+                  </div>
+                  <div className='chart-wrapper' style={{ height: 300 + 'px', marginTop: 40 + 'px' }}>
+                    {/* <Line data={mainChart} options={mainChartOpts} height={300} /> */}
+                  </div>
+                </div>
+              )
+              : (<div style={{ margin: '1em 0' }}><i>Student is not available.</i></div>))
+            }
           </div>
         </div>
-        test
       </div>
     </div>
   }

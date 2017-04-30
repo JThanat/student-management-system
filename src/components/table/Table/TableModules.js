@@ -10,11 +10,13 @@ const PAGINATION_CHANGE_PAGE_TAB = 'PAGINATION_CHANGE_PAGE_TAB'
 
 const UPDATE_ROW = 'TABLE_UPDATE_ROW'
 
-const initialTableState = {
+export const initialTableState = {
   isLoading: false,
   error: '',
   data: [],
-  header: []
+  header: [],
+  tableView: {},
+  logMsg: ''
 }
 
 const convertErrorToString = (err) => {
@@ -45,7 +47,7 @@ export const changePageTab = (startPage, id) => {
 export const showErrorMsg = (msg, id) => {
   return {
     type: TABLE_ERROR,
-    error: convertErrorToString(msg),
+    error: convertErrorToString(msg) || '',
     id
   }
 }

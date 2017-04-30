@@ -55,29 +55,28 @@ class StudentInfo extends Component {
           <div className='card-block'>
             <div className='row'>
               <div className='col-sm-5'>
-                <h4 className='card-title mb-0'>Student Infomation</h4>
-                <div className='small text-muted'>Summarize information of student</div>
+                <h4 className='card-title mb-0'>Student Information</h4>
+                <div className='small text-muted'>Summary information of student</div>
               </div>
             </div>
-            {
-              (this.state.data && this.state.data.hasOwnProperty('student_id')
-              ? (
-                <div>
-                  <div className='row mt-4'>
-                    <div className='col-sm-3'>
-                      <img src='/img/placeholder/profile.png' className='img-fluid' />
-                    </div>
-                    <div className='col-sm-9'>
-                      {this.userInfoContent()}
-                    </div>
+            {(this.state.data && this.state.data.hasOwnProperty('student_id')
+            ? (
+              <div>
+                <div className='row mt-4'>
+                  <div className='col-sm-3'>
+                    <img src='/img/placeholder/profile.png' className='img-fluid' />
                   </div>
-                  <div className='chart-wrapper' style={{ height: 300 + 'px', marginTop: 40 + 'px' }}>
-                    {/* <Line data={mainChart} options={mainChartOpts} height={300} /> */}
+                  <div className='col-sm-9'>
+                    {this.userInfoContent()}
                   </div>
                 </div>
-              )
-              : (<div style={{ margin: '1em 0' }}><i>Student is not available.</i></div>))
-            }
+                <div className='chart-wrapper' style={{ height: 300 + 'px', marginTop: 40 + 'px' }}>
+                  {/* <Line data={mainChart} options={mainChartOpts} height={300} /> */}
+                </div>
+              </div>
+            )
+            : (<div style={{ margin: '1em 0' }}><i>Student is not available.</i></div>)
+            )}
           </div>
         </div>
       </div>

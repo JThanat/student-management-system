@@ -27,6 +27,14 @@ router.get('/id/:id', (req, res) => {
   })
 })
 
+router.get('/enrolls/:id', (req, res) => {
+  queryHelper.queryAndResponse({
+    sql: Student.getEnrollsCourseSQL(req.params.id),
+    req: req,
+    res: res
+  })
+})
+
 router.post('/insert', (req, res) => {
   queryHelper.queryAndResponse({
     sql: Student.insertStudentSQL(req.body.data),

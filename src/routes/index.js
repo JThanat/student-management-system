@@ -6,6 +6,7 @@ import CoreTable from './CoreTable'
 import CounterRoute from './Counter'
 import Duck from './Duck'
 import Home from './Home'
+import StudentInfo from './StudentInfo'
 import Leave from './Leave'
 import Project from './Project'
 import Punishment from './Punishment'
@@ -27,6 +28,7 @@ export const createRoutes = (store) => ({
     Competition,
     CoreTable,
     Duck,
+    StudentInfo,
     Leave,
     Project,
     Punishment,

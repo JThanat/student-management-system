@@ -2,7 +2,7 @@ import React from 'react'
 
 import { requestAndResponse, removeNull, convertObjectToQueryParams } from '../../../utils/query'
 
-const studentHeader = [
+export const studentHeader = [
   {
     title: 'Edit',
     prop: 'edit',
@@ -57,13 +57,13 @@ const studentHeader = [
     isNullable: false
   },
   {
-    title: 'CurID',
+    title: 'Curriculum ID',
     prop: 'curriculum_id',
     isEditable: false,
     isNullable: false
   },
   {
-    title: 'MemID',
+    title: 'Member ID',
     prop: 'member_id',
     isEditable: false
     // validate: (resolve, reject, data) => {

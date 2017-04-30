@@ -21,7 +21,8 @@ class StudentInfo extends Component {
       { title: 'รหัสวิชา', prop: 'course_no' },
       { title: 'ชื่อวิชา', prop: 'course_name' },
       { title: 'รายละเอียด', prop: 'course_description' },
-      { title: 'ประเภท', prop: 'course_type' }
+      { title: 'ประเภท', prop: 'course_type' },
+      { title: 'เกรด', prop: 'grade' }
     ]
 
     this.tableID = staticID('StudentInfo.table')

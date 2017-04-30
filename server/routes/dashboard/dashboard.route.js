@@ -14,9 +14,8 @@ router.get('/number-of-student', (req, res) => {
 
 router.get('/average-gpax', (req, res) => {
   queryHelper.queryAndResponse({
-    sql: `SELECT SUBSTRING(student_id, 1, 2) as academic_year,
-	        count(*) as student_count FROM students 
-          group by SUBSTRING(student_id, 1, 2)`,
+    sql: `select substr(student_id, 1, 2) as academic_year, avg(gpax) as avg_gpax
+	        from students group by SUBSTRING(student_id, 1, 2);`,
     req: req,
     res: res
   })

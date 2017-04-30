@@ -197,7 +197,7 @@ CREATE TABLE IF NOT EXISTS Projects(
     PRIMARY KEY (project_id)
 ) DEFAULT CHARACTER SET = utf8;
 
-CREATE TABLE IF NOT EXISTS Does_Projects(
+CREATE TABLE IF NOT EXISTS Students_Projects(
     project_id INT(10) NOT NULL,
     sid INT(10) NOT NULL,
     PRIMARY KEY (project_id, sid),
@@ -209,7 +209,7 @@ CREATE TABLE IF NOT EXISTS Does_Projects(
         ON UPDATE CASCADE
 ) DEFAULT CHARACTER SET = utf8;
 
-CREATE TABLE IF NOT EXISTS Advises_Senior(
+CREATE TABLE IF NOT EXISTS Projects_Advisors(
     project_id INT(10) NOT NULL,
     member_id INT(10) NOT NULL,
     sid INT(10) NOT NULL,
@@ -274,7 +274,7 @@ CREATE TABLE IF NOT EXISTS Activities(
     PRIMARY KEY (activity_id)
 ) DEFAULT CHARACTER SET = utf8;
 
-CREATE TABLE IF NOT EXISTS Does(
+CREATE TABLE IF NOT EXISTS Students_Acitivities(
     activity_id INT(10) NOT NULL,
     sid INT(10) NOT NULL,
     received_score INT(3) NOT NULL,

@@ -10,6 +10,7 @@ import StudentInfo from './StudentInfo'
 import Punishment from './Punishment'
 import Leave from './Leave'
 import Competition from './Competition'
+import Project from './Project'
 
 /*  Note: Instead of using JSX, we recommend using react-router
     PlainRoute objects to build route definitions.   */
@@ -29,7 +30,8 @@ export const createRoutes = (store) => ({
     TableView,
     Punishment,
     Leave,
-    Competition
+    Competition,
+    Project
   ]
 })
 

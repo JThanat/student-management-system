@@ -50,6 +50,11 @@ class Sidebar extends Component {
               </Link>
             </li>
             <li className='nav-item'>
+              <Link to={'/competition'} className='nav-link' activeClassName='active'>
+                <i className='icon-layers' /> Competition
+              </Link>
+            </li>
+            <li className='nav-item'>
               <Link to={'/punishment'} className='nav-link' activeClassName='active'>
                 <i className='icon-notebook' /> Punishment
               </Link>

@@ -6,7 +6,7 @@ const router = express.Router()
 
 router.get('/all', (req, res) => {
   queryHelper.queryAndResponse({
-    sql: Competition.getAllCompetition(),
+    sql: Competition.getAllCompetitions(),
     req: req,
     res: res
   })
@@ -15,7 +15,7 @@ router.get('/all', (req, res) => {
 router.get('/filter', (req, res) => {
   const filterList = req.query
   queryHelper.queryAndResponse({
-    sql: Competition.filterCompetition(filterList),
+    sql: Competition.filterCompetitions(filterList),
     req: req,
     res: res
   })

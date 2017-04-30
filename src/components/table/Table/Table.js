@@ -177,6 +177,7 @@ class Table extends Component {
   render () {
     let { tableView } = this.props
     const config = this.props.config
+    const tableConfig = config.table
 
     tableView = tableView || {}
 
@@ -216,21 +217,34 @@ class Table extends Component {
           <div />
         </Measure>
         <div className='nav-table' style={{ marginBottom: 15 }}>
+          {
+          tableConfig && tableConfig.name &&
+          <h4 style={{ fontWeight: 400 }}>{tableConfig.name}</h4>
+          }
+          {
+          tableConfig && tableConfig.showAddButton !== false &&
           <div
             className='btn btn-primary'
             onClick={() => this.props.setModalShow(true, this.MODAL_ADD_ID)}>
             <i className='fa fa-plus' /> Add Data
           </div>
+          }
+          {
+          tableConfig && tableConfig.showRefreshButton !== false &&
           <div
             className='btn btn-primary'
             onClick={this.reloadTable}>
             <i className='fa fa-refresh' /> Refresh
           </div>
+          }
+          {
+          tableConfig && tableConfig.showFilterButton !== false &&
           <div
             className='btn btn-primary'
             onClick={() => this.props.setModalShow(true, this.MODAL_FILTER_ID)}>
             <i className='fa fa-search' /> Filter
           </div>
+          }
           {this.getFilterBadge()}
         </div>
         {

@@ -80,7 +80,6 @@ export const studentHeader = [
     title: 'ชื่อ',
     prop: 'firstname',
     isNullable: false,
-    isAddable: false,
     isVisible: false
   },
   {

@@ -30,11 +30,15 @@ class ModalFilter extends Component {
   }
 
   getFilterListContent () {
+    if (this.props.filters.length === 0) {
+      return <i style={{ color: '#666' }}>No filter list</i>
+    }
     return this.props.filters.map((elm, i) => (
       <div className='input-group filter-rule-list' key={i}>
         <span className='input-group-addon'>{elm.id}</span>
         <span className='input-group-addon'>{elm.field}&nbsp;{elm.operator}</span>
         <input
+          value={elm.value}
           type='text' className='form-control' placeholder='value'
           onChange={(e) => this.onRuleValueChange(e, elm.id)} />
         <span className='input-group-btn'>
@@ -88,6 +92,9 @@ class ModalFilter extends Component {
   }
 
   onSubmit () {
+    if (this.props.filters.length === 0) {
+      return this.props.onSubmit('')
+    }
     const filterStr = this.props.filters.map((filter) => {
       switch (filter.operator) {
         case '=' :
@@ -97,7 +104,7 @@ class ModalFilter extends Component {
         case '<' :
           return `${filter.field} < ${filter.value}`
         case 'LIKE' :
-          return `${filter.field} LIKE ${filter.value}`
+          return `${filter.field} LIKE "${filter.value}"`
         default :
           return null
       }
@@ -134,7 +141,6 @@ class ModalFilter extends Component {
             <div>
               {this.getFilterListContent()}
             </div>
-            <div>{this.props.filters ? JSON.stringify(this.props.filters) : 'false'}</div>
             {
               this.props.errorOverall &&
               (<div

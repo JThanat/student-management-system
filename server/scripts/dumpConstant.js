@@ -99,53 +99,53 @@ const competition_teams_column = [
   'team_name'
 ]
 
-const projects = [
-  {
-    project_name: '',
-    project_description: ''
-  },
-  {
-    project_name: '',
-    project_description: ''
-  },
-  {
-    project_name: '',
-    project_description: ''
-  },
-  {
-    project_name: '',
-    project_description: ''
-  },
-  {
-    project_name: '',
-    project_description: ''
-  },
-  {
-    project_name: '',
-    project_description: ''
-  },
-  {
-    project_name: '',
-    project_description: ''
-  },
-  {
-    project_name: '',
-    project_description: ''
-  },
-  {
-    project_name: '',
-    project_description: ''
-  },
-  {
-    project_name: '',
-    project_description: ''
-  }
-]
+// const projects = [
+//   {
+//     project_name: '',
+//     project_description: ''
+//   },
+//   {
+//     project_name: '',
+//     project_description: ''
+//   },
+//   {
+//     project_name: '',
+//     project_description: ''
+//   },
+//   {
+//     project_name: '',
+//     project_description: ''
+//   },
+//   {
+//     project_name: '',
+//     project_description: ''
+//   },
+//   {
+//     project_name: '',
+//     project_description: ''
+//   },
+//   {
+//     project_name: '',
+//     project_description: ''
+//   },
+//   {
+//     project_name: '',
+//     project_description: ''
+//   },
+//   {
+//     project_name: '',
+//     project_description: ''
+//   },
+//   {
+//     project_name: '',
+//     project_description: ''
+//   }
+// ]
 
-const projects_column = [
-  'project_name',
-  'project_description'
-]
+// const projects_column = [
+//   'project_name',
+//   'project_description'
+// ]
 
 module.exports = {
   faculties,
@@ -153,6 +153,8 @@ module.exports = {
   punishment_criteria_column,
   competition_teams,
   competition_teams_column,
-  projects,
-  projects_column
+  activities,
+  activities_column
+  // projects,
+  // projects_column
 }

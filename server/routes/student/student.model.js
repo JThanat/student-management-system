@@ -57,7 +57,7 @@ const filterStudentSQL = (filterList) => {
 }
 
 const getEnrollsCourseSQL = (id) => {
-  return `SELECT students.student_id, courses.* FROM courses 
+  return `SELECT students.student_id, enrollment_records.grade, courses.* FROM courses 
   INNER JOIN sections ON courses.course_id = sections.course_id
   INNER JOIN enrollment_records ON enrollment_records.course_id = sections.course_id
   INNER JOIN students ON students.sid = enrollment_records.sid

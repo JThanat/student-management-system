@@ -28,15 +28,22 @@ const advisorHeader = [{
   isAddable: false
 },
 {
-  title: 'เกรดเฉลี่ย',
-  prop: 'gpax',
+  title: 'ชื่อทีม',
+  prop: 'team_name',
   isEditable: false,
   isNullable: true,
   isAddable: false
 },
 {
-  title: 'นามสกุล',
-  prop: 'status',
+  title: 'รายการแข่งขัน',
+  prop: 'competition_name',
+  isEditable: false,
+  isNullable: true,
+  isAddable: false
+},
+{
+  title: 'รางวัลที่ได้รับ',
+  prop: 'prize',
   isEditable: false,
   isNullable: true,
   isAddable: false
@@ -45,6 +52,10 @@ const advisorHeader = [{
 
 export default {
   table: {
+    name: 'Competition Advisees',
+    showAddButton: false,
+    showRefreshButton: false,
+    showFilterButton: true,
     filterOptions: (filterStr) => {
       const url = '../api/advisor/advisees?' + convertObjectToQueryParams({
         where: filterStr

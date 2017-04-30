@@ -35,7 +35,7 @@ const advisorHeader = [{
   isAddable: false
 },
 {
-  title: 'นามสกุล',
+  title: 'สถานภาพ',
   prop: 'status',
   isEditable: false,
   isNullable: true,
@@ -45,6 +45,10 @@ const advisorHeader = [{
 
 export default {
   table: {
+    name: 'Advisees',
+    showAddButton: false,
+    showRefreshButton: false,
+    showFilterButton: true,
     filterOptions: (filterStr) => {
       const url = '../api/advisor/advisees?' + convertObjectToQueryParams({
         where: filterStr

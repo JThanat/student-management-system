@@ -28,15 +28,15 @@ const advisorHeader = [{
   isAddable: false
 },
 {
-  title: 'เกรดเฉลี่ย',
-  prop: 'gpax',
+  title: 'ชื่อโครงการ',
+  prop: 'project_name',
   isEditable: false,
   isNullable: true,
   isAddable: false
 },
 {
-  title: 'นามสกุล',
-  prop: 'status',
+  title: 'คำอธิบายโครงการ',
+  prop: 'project_description',
   isEditable: false,
   isNullable: true,
   isAddable: false
@@ -45,6 +45,10 @@ const advisorHeader = [{
 
 export default {
   table: {
+    name: 'Project Advisees',
+    showAddButton: false,
+    showRefreshButton: false,
+    showFilterButton: true,
     filterOptions: (filterStr) => {
       const url = '../api/advisor/advisees?' + convertObjectToQueryParams({
         where: filterStr

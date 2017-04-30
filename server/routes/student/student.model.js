@@ -65,6 +65,14 @@ const getEnrollsCourseSQL = (id) => {
   GROUP BY students.sid, courses.course_id;`
 }
 
+const getGpaAndGpax = (id) => {
+  return `select g.gpa, g.gpax, g.year, g.semester from grades as g
+          inner join students as s
+          on s.sid = g.sid
+          where s.student_id = "${id}"
+          order by g.year, g.semester;`
+}
+
 module.exports = {
   StudentColumns,
   getAllStudentSQL,
@@ -73,5 +81,6 @@ module.exports = {
   updateStudentSQL,
   insertStudentSQL,
   filterStudentSQL,
-  getEnrollsCourseSQL
+  getEnrollsCourseSQL,
+  getGpaAndGpax
 }

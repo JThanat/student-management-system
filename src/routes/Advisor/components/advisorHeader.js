@@ -35,7 +35,7 @@ const advisorHeader = [{
   isAddable: false
 },
 {
-  title: 'นามสกุล',
+  title: 'สถานภาพ',
   prop: 'status',
   isEditable: false,
   isNullable: true,

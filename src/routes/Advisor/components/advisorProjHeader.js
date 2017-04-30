@@ -28,15 +28,15 @@ const advisorHeader = [{
   isAddable: false
 },
 {
-  title: 'เกรดเฉลี่ย',
-  prop: 'gpax',
+  title: 'ชื่อโครงการ',
+  prop: 'project_name',
   isEditable: false,
   isNullable: true,
   isAddable: false
 },
 {
-  title: 'นามสกุล',
-  prop: 'status',
+  title: 'คำอธิบายโครงการ',
+  prop: 'project_description',
   isEditable: false,
   isNullable: true,
   isAddable: false

@@ -27,10 +27,18 @@ class Table extends Component {
     this.submitDelete = this.submitDelete.bind(this)
     this.submitEdit = this.submitEdit.bind(this)
     this.submitAdd = this.submitAdd.bind(this)
+    this.submitFilter = this.submitFilter.bind(this)
   }
 
-  reloadTable = () => {
-    this.props.loadTable(this.props.config)
+  reloadTable = (src = this.props.config.src) => {
+    console.log(src)
+    const { config } = this.props
+    config.src = {
+      ...config.src,
+      ...src
+    }
+    console.log(config.src)
+    this.props.loadTable(config)
   }
 
   sliceTableView = () => {
@@ -134,6 +142,17 @@ class Table extends Component {
       )
   }
 
+  submitFilter = (filtersStr) => {
+    this.reloadTable(
+      this.props.config.table.filterOptions
+      ? this.props.config.table.filterOptions(filtersStr)
+      : null
+    )
+    this.props.setModalShow(false, this.MODAL_FILTER_ID)
+    this.props.showTableLog('Loading...')
+    this.props.showTableError('')
+  }
+
   /**
    * Mount function
    */
@@ -181,7 +200,7 @@ class Table extends Component {
         <ModalFilter
           id={this.MODAL_FILTER_ID}
           header={this.props.config.header}
-          onSubmit={() => {}}
+          onSubmit={this.submitFilter}
           onCancel={() => { this.props.setModalShow(false, this.MODAL_FILTER_ID) }}
           />
         <Measure
@@ -253,7 +272,8 @@ class Table extends Component {
 
 const tableConfigTypes = {
   table: PropTypes.shape({
-    onAdd: PropTypes.func
+    onAdd: PropTypes.func,
+    filterOptions: PropTypes.func
   }),
   header: PropTypes.arrayOf(PropTypes.shape({
     title: PropTypes.string.isRequired,

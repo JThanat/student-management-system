@@ -138,6 +138,7 @@ class ModalChangeData extends Component {
     for (let i = 0; i < header.length; i++) {
       const prop = header[i].prop
       if (prop === '_rid' || header[i].isDelete || header[i].isEdit) continue
+      if (header[i].isAddable === false) continue
       content.push(
         <div className='col-6 input-box' key={i}>
           <label key={i}><strong>{header[i].title}</strong> ({ header[i].prop })</label>

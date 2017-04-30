@@ -6,7 +6,7 @@ const Student = require('./student.model')
 
 router.get('/all', (req, res) => {
   queryHelper.queryAndResponse({
-    sql: Student.getAllStudentSQL(),
+    sql: Student.getAllStudentSQL() + (req.query.where || ''),
     req: req,
     res: res
   })

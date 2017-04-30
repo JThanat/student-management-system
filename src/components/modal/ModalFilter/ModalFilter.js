@@ -93,7 +93,7 @@ class ModalFilter extends Component {
         case '=' :
           return `${filter.field} = "${filter.value}"`
         case '>' :
-          return `${filter.field} > ${filter.value}`
+          return `${filter.field}> ${filter.value}`
         case '<' :
           return `${filter.field} < ${filter.value}`
         case 'LIKE' :
@@ -102,7 +102,7 @@ class ModalFilter extends Component {
           return null
       }
     }).filter((val) => val).join(' AND ')
-    this.props.onSubmit(`WHERE ${filterStr}`)
+    this.props.onSubmit(` WHERE ${filterStr}`)
   }
 
   render () {

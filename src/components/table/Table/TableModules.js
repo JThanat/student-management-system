@@ -19,9 +19,9 @@ const initialTableState = {
 
 const convertErrorToString = (err) => {
   if (err instanceof Error) {
-    err = err.message
+    return err.message
   } else {
-    err = err.toString()
+    return err.toString()
   }
 }
 
@@ -74,36 +74,33 @@ export const loadTable = (config, id) => {
       return fetch(src.url, options)
         .then((response) => {
           if (response.ok) {
-            return response.text()
+            return response.json()
           } else {
-            return Promise.reject(new Error(`Can't load table`))
+            return response.json().then((msg) => Promise.reject(new Error(msg.err)))
           }
         })
         .then((body) => {
-          try {
-            let rawBody = JSON.parse(body)
-            if (typeof src.parser === 'function') {
-              rawBody = src.parser(rawBody)
-            }
-            body = []
-            for (let i = 0; i < rawBody.length; i++) {
-              body.push({
-                _rid: i + 1,
-                ...rawBody[i % rawBody.length]
-              })
-            }
-            dispatch({
-              type: TABLE_LOAD_COMPLETE,
-              data: body,
-              id
-            })
-            dispatch(changePage(1, config, id))
-          } catch (e) {
-            console.error(e)
-            dispatch(showErrorMsg(`File formatting at ${src.url} is incorrect (only JSON format)`, id))
+          let rawBody = { ...body }
+          if (typeof src.parser === 'function') {
+            rawBody = src.parser(rawBody)
           }
+          body = []
+          for (let i = 0; i < rawBody.length; i++) {
+            body.push({
+              _rid: i + 1,
+              ...rawBody[i % rawBody.length]
+            })
+          }
+          dispatch({
+            type: TABLE_LOAD_COMPLETE,
+            data: body,
+            id
+          })
+          dispatch(changePage(1, config, id))
+          dispatch(showLogMsg('', id))
         })
         .catch((err) => {
+          dispatch(showLogMsg('', id))
           if (err instanceof Response) {
             dispatch(showErrorMsg(`${err.status} ${err.statusText}`, id))
           } else {

@@ -129,3 +129,21 @@ function dumpTeamsStudents () {
   }
 }
 
+// ----------------------------- Leaves ----------------------------
+function dumpLeaves () {
+  for (var i = 0; i < competition_teams.length; i++) {
+    for (var j = 0; j < 6; j++) {
+      const sql = `INSERT INTO teams_students 
+        (team_id, sid) VALUES 
+        (${i},${Math.floor(Math.random() * 1000)})`
+      createQueryPromise(sql).then((result) => {
+        console.log(result)
+        return result
+      }).catch((err) => {
+        console.error(err)
+        return err
+      })
+    }
+  }
+}
+

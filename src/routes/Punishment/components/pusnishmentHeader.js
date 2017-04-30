@@ -1,6 +1,6 @@
 import React from 'react'
 
-import { requestAndResponse, removeNull } from '../../../utils/query'
+import { requestAndResponse, removeNull, convertObjectToQueryParams } from '../../../utils/query'
 
 const punishmentHeader = [
   {
@@ -94,7 +94,7 @@ const punishmentHeader = [
     title: 'คะแนนที่ถูกหัก',
     prop: 'score_deduction',
     isEditable: true,
-    isNullable: false,
+    isNullable: true,
     isAddable: false
   }
 ]
@@ -116,6 +116,14 @@ export default {
         resolve,
         reject
       )
+    },
+    filterOptions: (filterStr) => {
+      const url = '../api/punishment/all?' + convertObjectToQueryParams({
+        where: filterStr
+      })
+      return {
+        url
+      }
     }
   },
   header: punishmentHeader,

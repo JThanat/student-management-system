@@ -114,7 +114,7 @@ const studentHeader = [
     isNullable: false,
     type: (resolve, reject) => {
       setTimeout(() => {
-        resolve(['F','M'])
+        resolve(['F', 'M'])
       }, 5000)
     }
     // TODO: option F M

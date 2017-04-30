@@ -1,14 +1,23 @@
 import { connect } from 'react-redux'
-import { initialState } from '../../core/modules/ModalModules'
+import { initialState as filterInit, actions as filterActions } from '../../core/modules/FilterModules'
+import { initialState as modalInit } from '../../core/modules/ModalModules'
 
 import ModalFilter from './ModalFilter'
 
-const mapStateToProps = (state, ownProps) => {
-  const modal = state.modal.find((x) => x.id === ownProps.id) || initialState
+const mapDispatchToProps = (dispatch, ownProps) => {
   return {
-    isShow: ownProps.isShow ? ownProps.isShow : modal.isShow,
-    errorOverall: ownProps.errorOverall ? ownProps.errorOverall : modal.errorOverall
+    addFilter: (filter) => dispatch(filterActions.addFilter(filter, ownProps.id)),
+    removeFilter: (filterID) => dispatch(filterActions.removeFilter(filterID, ownProps.id))
   }
 }
 
-export default connect(mapStateToProps)(ModalFilter)
+const mapStateToProps = (state, ownProps) => {
+  const filterObj = state.filter.find((x) => x.id === ownProps.id) || filterInit
+  const modalObj = state.modal.find((x) => x.id === ownProps.id) || modalInit
+  return {
+    filters: filterObj.filters,
+    isShow: modalObj.isShow
+  }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(ModalFilter)

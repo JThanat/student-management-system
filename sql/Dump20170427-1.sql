@@ -41,32 +41,32 @@ LOCK TABLES `activities` WRITE;
 UNLOCK TABLES;
 
 --
--- Table structure for table `advises_senior`
+-- Table structure for table `projects_advisors`
 --
 
-DROP TABLE IF EXISTS `advises_senior`;
+DROP TABLE IF EXISTS `projects_advisors`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `advises_senior` (
+CREATE TABLE `projects_advisors` (
   `project_id` int(10) NOT NULL,
   `member_id` int(10) NOT NULL,
   `sid` int(10) NOT NULL,
   PRIMARY KEY (`project_id`,`member_id`,`sid`),
   KEY `member_id` (`member_id`),
   KEY `sid` (`sid`),
-  CONSTRAINT `advises_senior_ibfk_1` FOREIGN KEY (`project_id`) REFERENCES `projects` (`project_id`) ON DELETE CASCADE ON UPDATE CASCADE,
-  CONSTRAINT `advises_senior_ibfk_2` FOREIGN KEY (`member_id`) REFERENCES `advisors` (`member_id`) ON DELETE CASCADE ON UPDATE CASCADE,
-  CONSTRAINT `advises_senior_ibfk_3` FOREIGN KEY (`sid`) REFERENCES `students` (`sid`) ON DELETE NO ACTION ON UPDATE CASCADE
+  CONSTRAINT `projects_advisors_ibfk_1` FOREIGN KEY (`project_id`) REFERENCES `projects` (`project_id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `projects_advisors_ibfk_2` FOREIGN KEY (`member_id`) REFERENCES `advisors` (`member_id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `projects_advisors_ibfk_3` FOREIGN KEY (`sid`) REFERENCES `students` (`sid`) ON DELETE NO ACTION ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `advises_senior`
+-- Dumping data for table `projects_advisors`
 --
 
-LOCK TABLES `advises_senior` WRITE;
-/*!40000 ALTER TABLE `advises_senior` DISABLE KEYS */;
-/*!40000 ALTER TABLE `advises_senior` ENABLE KEYS */;
+LOCK TABLES `projects_advisors` WRITE;
+/*!40000 ALTER TABLE `projects_advisors` DISABLE KEYS */;
+/*!40000 ALTER TABLE `projects_advisors` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
@@ -251,56 +251,56 @@ INSERT INTO `departments` VALUES (1,'Chemical Engineering'),(1,'Civil Engineerin
 UNLOCK TABLES;
 
 --
--- Table structure for table `does`
+-- Table structure for table `students_activities`
 --
 
-DROP TABLE IF EXISTS `does`;
+DROP TABLE IF EXISTS `students_activities`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `does` (
+CREATE TABLE `students_activities` (
   `activity_id` int(10) NOT NULL,
   `sid` int(10) NOT NULL,
   `received_score` int(3) NOT NULL,
   PRIMARY KEY (`activity_id`,`sid`),
   KEY `sid` (`sid`),
-  CONSTRAINT `does_ibfk_1` FOREIGN KEY (`activity_id`) REFERENCES `activities` (`activity_id`) ON DELETE CASCADE ON UPDATE CASCADE,
-  CONSTRAINT `does_ibfk_2` FOREIGN KEY (`sid`) REFERENCES `students` (`sid`) ON DELETE NO ACTION ON UPDATE CASCADE
+  CONSTRAINT `students_activities_ibfk_1` FOREIGN KEY (`activity_id`) REFERENCES `activities` (`activity_id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `students_activities_ibfk_2` FOREIGN KEY (`sid`) REFERENCES `students` (`sid`) ON DELETE NO ACTION ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `does`
+-- Dumping data for table `students_activities`
 --
 
-LOCK TABLES `does` WRITE;
-/*!40000 ALTER TABLE `does` DISABLE KEYS */;
-/*!40000 ALTER TABLE `does` ENABLE KEYS */;
+LOCK TABLES `students_activities` WRITE;
+/*!40000 ALTER TABLE `students_activities` DISABLE KEYS */;
+/*!40000 ALTER TABLE `students_activities` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
--- Table structure for table `does_projects`
+-- Table structure for table `students_projects`
 --
 
-DROP TABLE IF EXISTS `does_projects`;
+DROP TABLE IF EXISTS `students_projects`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `does_projects` (
+CREATE TABLE `students_projects` (
   `project_id` int(10) NOT NULL,
   `sid` int(10) NOT NULL,
   PRIMARY KEY (`project_id`,`sid`),
   KEY `sid` (`sid`),
-  CONSTRAINT `does_projects_ibfk_1` FOREIGN KEY (`project_id`) REFERENCES `projects` (`project_id`) ON DELETE CASCADE ON UPDATE CASCADE,
-  CONSTRAINT `does_projects_ibfk_2` FOREIGN KEY (`sid`) REFERENCES `students` (`sid`) ON DELETE NO ACTION ON UPDATE CASCADE
+  CONSTRAINT `students_projects_ibfk_1` FOREIGN KEY (`project_id`) REFERENCES `projects` (`project_id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `students_projects_ibfk_2` FOREIGN KEY (`sid`) REFERENCES `students` (`sid`) ON DELETE NO ACTION ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `does_projects`
+-- Dumping data for table `students_projects`
 --
 
-LOCK TABLES `does_projects` WRITE;
-/*!40000 ALTER TABLE `does_projects` DISABLE KEYS */;
-/*!40000 ALTER TABLE `does_projects` ENABLE KEYS */;
+LOCK TABLES `students_projects` WRITE;
+/*!40000 ALTER TABLE `students_projects` DISABLE KEYS */;
+/*!40000 ALTER TABLE `students_projects` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --

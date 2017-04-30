@@ -54,8 +54,105 @@ const punishment_criteria_column = [
   'punishment_description'
 ]
 
+const activities = [
+  {
+    activity_name: 'CU 100',
+    activity_description: 'The celebrations to commemorate 100 years of CU pride.',
+    max_score: 10
+  },
+  {
+    activity_name: 'Larngear Camp #16',
+    activity_description: 'A Camp for high school student to explore faculty of engineering.',
+    max_score: 20
+  },
+  {
+    activity_name: 'Fe Camp #16',
+    activity_description: 'PAT3 tutorial camp for Mathayom 6 students.',
+    max_score: 20
+  },
+  {
+    activity_name: 'Chula Expo 2017',
+    activity_description: 'An exhibition opened for outsiders to explore chula students innovation.',
+    max_score: 20
+  }
+]
+
+const activities_column = [
+  'activity_name',
+  'activity_description',
+  'max_score'
+]
+
+const competition_teams = [
+  { team_name: 'CPCUCPU' },
+  { team_name: 'Thinc. Warrior' },
+  { team_name: 'Good food is not bad food' },
+  { team_name: 'PyMonster' },
+  { team_name: 'MaMiMuMeMoMeMiMoMa' },
+  { team_name: 'PH21' },
+  { team_name: 'Piazza' },
+  { team_name: 'Wongwan' },
+  { team_name: 'Setwang' }
+]
+
+const competition_teams_column = [
+  'team_name'
+]
+
+const projects = [
+  {
+    project_name: '',
+    project_description: ''
+  },
+  {
+    project_name: '',
+    project_description: ''
+  },
+  {
+    project_name: '',
+    project_description: ''
+  },
+  {
+    project_name: '',
+    project_description: ''
+  },
+  {
+    project_name: '',
+    project_description: ''
+  },
+  {
+    project_name: '',
+    project_description: ''
+  },
+  {
+    project_name: '',
+    project_description: ''
+  },
+  {
+    project_name: '',
+    project_description: ''
+  },
+  {
+    project_name: '',
+    project_description: ''
+  },
+  {
+    project_name: '',
+    project_description: ''
+  }
+]
+
+const projects_column = [
+  'project_name',
+  'project_description'
+]
+
 module.exports = {
   faculties,
   punishment_criteria,
-  punishment_criteria_column
+  punishment_criteria_column,
+  competition_teams,
+  competition_teams_column,
+  projects,
+  projects_column
 }

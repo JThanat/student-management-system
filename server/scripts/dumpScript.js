@@ -32,7 +32,7 @@ db.connect(config.test ? db.MODE_TEST : db.MODE_PRODUCTION, (err) => {
 })
 // ---------------------------- Faculty  -------------------------
 const faculties = constant.faculties
-function dumpFacultyTable () {
+function dumpFacultyTable() {
   Object.keys(faculties).map((key, index) => {
     const sql = `INSERT INTO ${SCHEMA} (faculty_id,faculty_name) VALUES (${key},"${faculties[key]}")`
     console.log(sql)

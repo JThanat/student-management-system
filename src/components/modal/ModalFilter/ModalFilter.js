@@ -28,6 +28,25 @@ class ModalFilter extends Component {
     return list
   }
 
+  getFilterListContent () {
+    return this.props.filters.map((elm, i) => (
+      <div className='input-group filter-rule-list'>
+        <span className='input-group-addon'>{elm.id}</span>
+        <span className='input-group-addon'>{elm.field}&nbsp;{elm.operator}</span>
+        <input
+          type='text' className='form-control' placeholder='value'
+          onChange={(e) => this.onRuleValueChange(e, elm.id)} />
+        <span className='input-group-btn'>
+          <button
+            className='btn btn-danger' type='button'
+            onClick={() => this.props.removeFilter(elm.id)}>
+            Remove
+          </button>
+        </span>
+      </div>
+    ))
+  }
+
   onOperatorChange (e) {
     this.setState({
       ...this.state,
@@ -40,6 +59,23 @@ class ModalFilter extends Component {
       ...this.state,
       selectedField: e.target.value
     })
+  }
+
+  onRuleValueChange (e, id) {
+    console.log(e)
+    let curFilters = this.props.filters.slice(0)
+    curFilters = curFilters.map((filter) => {
+      if (filter.id === id) {
+        return {
+          ...filter,
+          value: e.target.value
+        }
+      } else {
+        return filter
+      }
+    })
+
+    this.props.updateFilterAll(curFilters)
   }
 
   addRule () {
@@ -72,18 +108,13 @@ class ModalFilter extends Component {
                 onChange={this.onFieldListChange}>
                 {this.getSelectFieldList()}
               </select>
-              <button className='btn btn-primary' onClick={this.addRule}>เพิ่ม</button>
+              <button className='btn btn-primary' onClick={this.addRule}>Add</button>
             </div>
 
             <div className='title'>Filter List</div>
             <hr />
             <div>
-              {this.props.filters.map((elm) => (
-                <div className='form-inline'>
-                  <div className='mb-2 mr-sm-2 mb-sm-0'>{elm.field}</div>
-                  <div className='btn btn-primary' onClick={() => this.props.removeFilter(elm.id)}>ลบ</div>
-                </div>
-              ))}
+              {this.getFilterListContent()}
             </div>
             <div>{this.props.filters ? JSON.stringify(this.props.filters) : 'false'}</div>
             {/*
@@ -112,6 +143,7 @@ ModalFilter.propTypes = {
    */
   addFilter: PropTypes.func.isRequired,
   removeFilter: PropTypes.func.isRequired,
+  updateFilterAll: PropTypes.func.isRequired,
 
   filters: PropTypes.array.isRequired,
   isShow: PropTypes.bool.isRequired,

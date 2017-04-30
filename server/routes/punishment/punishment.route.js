@@ -32,6 +32,7 @@ router.post('/insert', (req, res) => {
 
 router.post('/delete', (req, res) => {
   const data = req.body.data
+  console.log(data)
   queryHelper.queryAndResponse({
     sql: Punishment.deletePunishment(data),
     req: req,
@@ -41,8 +42,9 @@ router.post('/delete', (req, res) => {
 
 router.post('/update', (req, res) => {
   const data = req.body.data
+  const oldData = req.body.oldData
   queryHelper.queryAndResponse({
-    sql: Punishment.updatePunishment(data),
+    sql: Punishment.updatePunishment(data, oldData),
     req: req,
     res: res
   })

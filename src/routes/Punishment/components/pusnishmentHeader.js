@@ -7,7 +7,7 @@ const punishmentHeader = [
     title: 'Edit',
     prop: 'edit',
     isEdit: true,
-    onEdit: (resolve, reject, data) => {
+    onEdit: (resolve, reject, data, oldData) => {
       requestAndResponse(
         '../api/punishment/update',
         {
@@ -16,8 +16,8 @@ const punishmentHeader = [
             'Content-Type': 'application/json'
           },
           body: JSON.stringify({
-            student_id: data.student_id,
-            data: removeNull(data)
+            data: removeNull(data),
+            oldData: oldData
           })
         },
         resolve,
@@ -32,15 +32,17 @@ const punishmentHeader = [
     formatter: () => <div className='btn btn-danger btn-sm' data-attach-on-delete>Delete</div>,
     onDelete: (resolve, reject, data) => {
       requestAndResponse(
-        '../api/student/delete',
+        '../api/punishment/delete',
         {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json'
           },
           body: JSON.stringify({
-            where: {
-              student_id: data.student_id
+            data: {
+              student_id: data.student_id,
+              punishment_id: data.punishment_id,
+              timestamp: data.timestamp
             }
           })
         },
@@ -58,18 +60,23 @@ const punishmentHeader = [
   {
     title: 'ชื่อจริง',
     prop: 'firstname',
-    isNullable: true
+    isEditable: false,
+    isNullable: true,
+    isAddable: false
   },
   {
     title: 'นามสกุล',
     prop: 'lastname',
     isEditable: false,
-    isNullable: true
+    isNullable: true,
+    isAddable: false
   },
   {
     title: 'การลงโทษ',
     prop: 'punishment_name',
-    isNullable: true
+    isEditable: false,
+    isNullable: true,
+    isAddable: false
   },
   {
     title: 'รหัสการลงโทษ',
@@ -77,17 +84,24 @@ const punishmentHeader = [
     isNullable: false
   },
   {
+    title: 'วัน-เวลา',
+    prop: 'timestamp',
+    isEditable: false,
+    isNullable: true,
+    isAddable: false
+  },
+  {
     title: 'คะแนนที่ถูกหัก',
     prop: 'score_deduction',
-    validate: (resolve, reject, data) => {
-      setTimeout(() => resolve('eiei'), 500)
-    }
+    isEditable: true,
+    isNullable: true,
+    isAddable: false
   }
 ]
 
 export default {
   table: {
-    add: (resolve, reject, newData) => {
+    onAdd: (resolve, reject, newData) => {
       requestAndResponse(
         '../api/punishment/insert',
         {

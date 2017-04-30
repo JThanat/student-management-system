@@ -1,4 +1,5 @@
 const query = require('../../utilities/query')
+const moment = require('moment')
 
 const PunishmentRecordColumns = [
   'sid',
@@ -8,8 +9,9 @@ const PunishmentRecordColumns = [
 
 const TABLE_NAME = 'punishment_records'
 
-const getAllPunishment = () => `SELECT  student_id, firstname, lastname, punishment_records.punishment_id, punishment_name, score_deduction 
-FROM punishment_records 
+
+const getAllPunishment = () => `select  student_id, firstname, lastname, punishment_records.punishment_id, punishment_name, score_deduction, timestamp 
+from punishment_records 
 left join students 
 on punishment_records.sid = students.sid 
 left join punishment_criteria
@@ -26,14 +28,18 @@ const insertPunishment = (dataSet) => {
   (select NOW()) As timestamp`
 }
 
-const updatePunishment = (dataSet) => {
+const updatePunishment = (dataSet, oldDataSet) => {
   return `update punishment_records 
-  set sid = (select sid from students where student_id = ${dataSet.student_id}) As student_sid, 
-  punishment_id = (select punishment_id from punishment_criteria where punishment_id = ${dataSet.punishment_id}) 
-  where timestamp = ${dataSet.timestamp} and punishment_records.punishment_id = ${dataSet.old_punishment_id} and sid = (select sid from students where student_id = ${dataSet.student_id} ) `
+  set punishment_records.sid = (select sid from students where student_id = "${dataSet.student_id}"), 
+  punishment_records.punishment_id = (select punishment_id from punishment_criteria where punishment_id = ${dataSet.punishment_id}) 
+  where timestamp = "${moment.utc(dataSet.timestamp).local().format('YYYY-MM-DD HH:mm:ss')}" and punishment_records.punishment_id = ${oldDataSet.punishment_id} and sid = (select sid from students where student_id = "${dataSet.student_id}")`
 }
 const deletePunishment = (dataSet) => {
-  return query.transformToSQL.delete(TABLE_NAME, dataSet)
+  console.log(dataSet)
+  return `delete from punishment_records where 
+  sid = (select sid from students where student_id = "${dataSet.student_id}") 
+  and timestamp = "${moment.utc(dataSet.timestamp).local().format('YYYY-MM-DD HH:mm:ss')}"  
+  and punishment_id = ${dataSet.punishment_id};`
 }
 
 module.exports = {

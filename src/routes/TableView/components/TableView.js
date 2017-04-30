@@ -14,8 +14,8 @@ class TableView extends Component {
   render () {
     const config = {
       table: {
-        add: (resolve, reject, newData) => {
-          console.log(newData)
+        onAdd: (resolve, reject, newData) => {
+          console.log('add', newData)
           resolve()
         }
       },

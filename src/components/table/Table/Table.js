@@ -110,7 +110,7 @@ class Table extends Component {
   submitAdd = () => {
     const newData = this.props.getModalFillData(this.MODAL_ADD_ID)
     const addFunc =
-      (this.props.config.table ? this.props.config.table.add : null) ||
+      (this.props.config.table ? this.props.config.table.onAdd : null) ||
       ((resolve) => resolve())
 
     this.props.showTableLog('Adding data...')
@@ -253,7 +253,7 @@ class Table extends Component {
 
 const tableConfigTypes = {
   table: PropTypes.shape({
-    add: PropTypes.func
+    onAdd: PropTypes.func
   }),
   header: PropTypes.arrayOf(PropTypes.shape({
     title: PropTypes.string.isRequired,

@@ -101,7 +101,7 @@ const punishmentHeader = [
 
 export default {
   table: {
-    add: (resolve, reject, newData) => {
+    onAdd: (resolve, reject, newData) => {
       requestAndResponse(
         '../api/punishment/insert',
         {

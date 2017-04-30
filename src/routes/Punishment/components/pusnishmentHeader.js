@@ -7,7 +7,7 @@ const punishmentHeader = [
     title: 'Edit',
     prop: 'edit',
     isEdit: true,
-    onEdit: (resolve, reject, data) => {
+    onEdit: (resolve, reject, data, oldData) => {
       requestAndResponse(
         '../api/punishment/update',
         {
@@ -17,7 +17,8 @@ const punishmentHeader = [
           },
           body: JSON.stringify({
             student_id: data.student_id,
-            data: removeNull(data)
+            data: removeNull(data),
+            oldData: oldData
           })
         },
         resolve,
@@ -58,6 +59,7 @@ const punishmentHeader = [
   {
     title: 'ชื่อจริง',
     prop: 'firstname',
+    isEditable: false,
     isNullable: true
   },
   {
@@ -69,6 +71,7 @@ const punishmentHeader = [
   {
     title: 'การลงโทษ',
     prop: 'punishment_name',
+    isEditable: false,
     isNullable: true
   },
   {
@@ -77,11 +80,16 @@ const punishmentHeader = [
     isNullable: false
   },
   {
+    title: 'วัน-เวลา',
+    prop: 'timestamp',
+    isEditable: false,
+    isNullable: false
+  },
+  {
     title: 'คะแนนที่ถูกหัก',
     prop: 'score_deduction',
-    validate: (resolve, reject, data) => {
-      setTimeout(() => resolve('eiei'), 500)
-    }
+    isEditable: false,
+    isNullable: false
   }
 ]
 

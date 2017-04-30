@@ -41,8 +41,9 @@ router.post('/delete', (req, res) => {
 
 router.post('/update', (req, res) => {
   const data = req.body.data
+  const oldData = req.body.oldData
   queryHelper.queryAndResponse({
-    sql: Punishment.updatePunishment(data),
+    sql: Punishment.updatePunishment(data, oldData),
     req: req,
     res: res
   })

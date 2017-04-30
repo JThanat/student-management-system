@@ -56,6 +56,15 @@ const filterStudentSQL = (filterList) => {
   return query.transformToSQL.filter(TABLE_NAME, filterList)
 }
 
+const getEnrollsCourseSQL = (id) => {
+  return `SELECT students.student_id, courses.* FROM courses 
+  INNER JOIN sections ON courses.course_id = sections.course_id
+  INNER JOIN enrollment_records ON enrollment_records.course_id = sections.course_id
+  INNER JOIN students ON students.sid = enrollment_records.sid
+  WHERE student_id = "${id}"
+  GROUP BY students.sid, courses.course_id;`
+}
+
 module.exports = {
   StudentColumns,
   getAllStudentSQL,
@@ -63,5 +72,6 @@ module.exports = {
   deleteStudentSQL,
   updateStudentSQL,
   insertStudentSQL,
-  filterStudentSQL
+  filterStudentSQL,
+  getEnrollsCourseSQL
 }

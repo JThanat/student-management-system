@@ -1,5 +1,5 @@
 import { connect } from 'react-redux'
-import { actions } from './TableModules'
+import { actions, initialTableState } from './TableModules'
 import { actions as modalActions } from '../../core/modules/ModalModules'
 
 /*  This is a container component. Notice it does not contain any JSX,
@@ -30,11 +30,14 @@ const mapDispatchToProps = (dispatch, ownProps) => ({
 })
 
 const mapStateToProps = (state, ownProps) => {
-  const table = state.table.find((x) => x.id === ownProps.id) || []
+  const table = {
+    ...initialTableState,
+    ...state.table.find((x) => x.id === ownProps.id)
+  }
   return {
     data: table.data || [],
     tableIsLoading: table.isLoading,
-    tableErrorMsg: table.error,
+    tableErrorMsg: table.error || '',
     tableView: table.tableView,
     tableLogMsg: table.logMsg,
     getModalData: (modalID) => {

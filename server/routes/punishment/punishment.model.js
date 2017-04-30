@@ -8,7 +8,7 @@ const PunishmentRecordColumns = [
 
 const TABLE_NAME = 'punishment_records'
 
-const getAllPunishment = () => `SELECT  student_id, firstname, lastname, punishment_records. punishment_id, punishment_name, score_deduction 
+const getAllPunishment = () => `SELECT  student_id, firstname, lastname, punishment_records.punishment_id, punishment_name, score_deduction 
 FROM punishment_records 
 left join students 
 on punishment_records.sid = students.sid 

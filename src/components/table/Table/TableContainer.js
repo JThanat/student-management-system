@@ -44,6 +44,10 @@ const mapStateToProps = (state, ownProps) => {
     getModalFillData: (modalID) => {
       const modal = state.modal.find((x) => x.id === modalID)
       return modal ? modal.fill : null
+    },
+    filterList: (filterID) => {
+      const filterObj = state.filter.find((x) => x.id === filterID)
+      return filterObj ? filterObj.filters : []
     }
   }
 }

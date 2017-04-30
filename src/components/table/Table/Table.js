@@ -153,6 +153,12 @@ class Table extends Component {
     this.props.showTableError('')
   }
 
+  getFilterBadge () {
+    const filters = this.props.filterList(this.MODAL_FILTER_ID)
+    if (filters.length === 0) return ''
+    return <span className='badge badge-info'>Filter : {filters.map(x => x.field).join(' , ')}</span>
+  }
+
   /**
    * Mount function
    */
@@ -227,6 +233,7 @@ class Table extends Component {
             onClick={() => this.props.setModalShow(true, this.MODAL_FILTER_ID)}>
             <i className='fa fa-search' /> Filter
           </div>
+          {this.getFilterBadge()}
         </div>
         {
           this.props.tableLogMsg &&
@@ -312,11 +319,12 @@ Table.propTypes = {
   getModalData: PropTypes.func.isRequired,
   getModalFillData: PropTypes.func.isRequired,
 
-  data: PropTypes.array,
-  tableIsLoading: PropTypes.bool,
-  tableErrorMsg: PropTypes.string,
-  tableView: PropTypes.object,
-  tableLogMsg: PropTypes.string,
+  data: PropTypes.array.isRequired,
+  tableIsLoading: PropTypes.bool.isRequired,
+  tableErrorMsg: PropTypes.string.isRequired,
+  tableView: PropTypes.object.isRequired,
+  tableLogMsg: PropTypes.string.isRequired,
+  filterList: PropTypes.array.isRequired,
 
   /**
    * Props values

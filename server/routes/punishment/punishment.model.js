@@ -35,7 +35,6 @@ const updatePunishment = (dataSet, oldDataSet) => {
   where timestamp = "${moment.utc(dataSet.timestamp).local().format('YYYY-MM-DD HH:mm:ss')}" and punishment_records.punishment_id = ${oldDataSet.punishment_id} and sid = (select sid from students where student_id = "${dataSet.student_id}")`
 }
 const deletePunishment = (dataSet) => {
-  console.log(dataSet)
   return `delete from punishment_records where 
   sid = (select sid from students where student_id = "${dataSet.student_id}") 
   and timestamp = "${moment.utc(dataSet.timestamp).local().format('YYYY-MM-DD HH:mm:ss')}"  

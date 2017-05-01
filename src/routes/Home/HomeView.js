@@ -3,6 +3,8 @@ import React, { Component } from 'react'
 import { Bar, Line } from 'react-chartjs-2'
 import { Dropdown, DropdownMenu, DropdownItem, Progress } from 'reactstrap'
 
+import './HomeView.scss'
+
 const brandPrimary = '#20a8d8'
 const brandSuccess = '#4dbd74'
 const brandInfo = '#63c2de'
@@ -208,7 +210,6 @@ function random (min, max) {
 
 var elements = 10
 var data1 = []
-var data2 = []
 var data3 = []
 var labelsMain = []
 
@@ -224,7 +225,7 @@ const mainChart = {
   datasets: [
     {
       label: 'My First dataset',
-      backgroundColor: convertHex(brandInfo, 10),
+      backgroundColor: convertHex(brandInfo, 0.1),
       borderColor: brandInfo,
       pointHoverBackgroundColor: '#fff',
       borderWidth: 2,
@@ -344,6 +345,35 @@ class Home extends Component {
     }
   }
 
+  studentHistoryChartData (rawData) {
+    let barData = []
+    let labelData = []
+    let startYear = 49
+
+    for (let i = startYear; i <= startYear + 10; i++) {
+      labelData.push(i)
+      barData.push(0)
+    }
+
+    for (const data of rawData) {
+      barData[Number.parseInt(data['academic_year']) - 49] = data['student_count']
+    }
+
+    return {
+      labels: labelData,
+      datasets: [
+        {
+          label: 'Number of Student',
+          data: barData,
+          borderColor: brandInfo,
+          backgroundColor: convertHex(brandInfo, 0.1),
+          pointBackgroundColor: '#fff',
+          borderWidth: 1
+        }
+      ]
+    }
+  }
+
   render () {
     const { data } = this.state
 
@@ -424,6 +454,10 @@ class Home extends Component {
 
     const overtimeStudents = data.overtimeStudent.reduce((acc, val) => val.student_count, 0)
 
+    // Student History
+
+    const studentHistoryGraphData = this.studentHistoryChartData(data.numberOfStudentHistory)
+
     return (
       <div>
         <pre>
@@ -490,14 +524,14 @@ class Home extends Component {
                 </div>
                 <div className='card-block'>
                   <div className='row'>
-                    <div className='col-2' />
-                    <div className='col-4'>
+                    <div className='col-1' />
+                    <div className='col-5'>
                       <div>Number of Students</div>
                       <div className='chart-wrapper'>
                         <Bar data={numberStudentFullGraphData} options={chartBarFull} height={320} />
                       </div>
                     </div>
-                    <div className='col-4'>
+                    <div className='col-5'>
                       <div>Overall GPAX</div>
                       <div className='chart-wrapper'>
                         <Line data={gpaxByYearFullGraphData} options={chartGpaxLineFull} height={320} />
@@ -844,59 +878,11 @@ class Home extends Component {
             <div className='row'>
               <div className='col-sm-5'>
                 <h4 className='card-title mb-0'>Number of Students History</h4>
-                <div className='small text-muted'>November 2015</div>
-              </div>
-              <div className='col-sm-7 hidden-sm-down'>
-                <button type='button' className='btn btn-primary float-right'>
-                  <i className='icon-cloud-download' />
-                </button>
-                <div className='btn-toolbar float-right' role='toolbar' aria-label='Toolbar with button groups'>
-                  <div className='btn-group mr-3' data-toggle='buttons' aria-label='First group'>
-                    <label className='btn btn-outline-secondary'>
-                      <input type='radio' name='options' id='option1' /> Day
-                    </label>
-                    <label className='btn btn-outline-secondary active'>
-                      <input type='radio' name='options' id='option2' defaultChecked /> Month
-                    </label>
-                    <label className='btn btn-outline-secondary'>
-                      <input type='radio' name='options' id='option3' /> Year
-                    </label>
-                  </div>
-                </div>
+                <div className='small text-muted'>May 2017</div>
               </div>
             </div>
             <div className='chart-wrapper' style={{ height: 300 + 'px', marginTop: 40 + 'px' }}>
-              <Line data={mainChart} options={mainChartOpts} height={300} />
-            </div>
-          </div>
-        </div>
-
-        <div className='card-deck'>
-          <div className='card'>
-            <div className='card-header'>
-              Number of Students
-              <div className='card-actions'>
-                <a href='http://www.chartjs.org'><small className='text-muted'>docs</small></a>
-              </div>
-            </div>
-            <div className='card-block'>
-              <div className='chart-wrapper'>
-                <Bar data={barChartStudent1} options={barChartStudentOpt1} height={320} />
-              </div>
-            </div>
-          </div>
-
-          <div className='card'>
-            <div className='card-header'>
-              Grade
-              <div className='card-actions'>
-                <a href='http://www.chartjs.org'><small className='text-muted'>docs</small></a>
-              </div>
-            </div>
-            <div className='card-block'>
-              <div className='chart-wrapper'>
-                <Bar data={barChartStudent2} options={barChartStudentOpt2} height={320} />
-              </div>
+              <Line data={studentHistoryGraphData} options={chartGpaxLineFull} height={300} />
             </div>
           </div>
         </div>

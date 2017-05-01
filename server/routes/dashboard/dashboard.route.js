@@ -49,7 +49,7 @@ router.get('/overtime-student', (req, res) => {
   queryHelper.queryAndResponse({
     sql: `select convert(substr(student_id, 1, 2), unsigned integer)-${sidBase} as student_year,
           count(*) as student_count from students 
-          where convert(substr(student_id, 1, 2), unsigned integer)<${sidBase + 2}
+          where convert(substr(student_id, 1, 2), unsigned integer)<${sidBase - 2}
           and status!='G' GROUP BY student_year;`,
     req: req,
     res: res

@@ -3,7 +3,7 @@ const queryHelper = require('../../utilities/query')
 const router = express.Router()
 
 const year = 2016
-const sidBase = 54
+const sidBase = 55
 
 router.get('/number-of-student-by-year', (req, res) => {
   queryHelper.queryAndResponse({

@@ -398,43 +398,21 @@ class Home extends Component {
     )
     const overallGpax = data.averageGpaxAll.length ? data.averageGpaxAll[0].avg_gpax : 0
 
-    // Card Chart 3
-
-    const leaveStudentGraphData = this.cardChartData(
+    const blankLinkGraphData = this.cardChartData(
       [], '', '',
       {
         backgroundColor: 'rgba(255,255,255,.2)',
         borderColor: 'rgba(255,255,255,.55)'
       }
     )
+
+    // Card Chart 3
+
     const leaveStudents = data.leaveStudent.length ? data.leaveStudent[0].leave_count : 0
 
     // Card Chart 4
 
-    const overtimeStudentsGraphData = this.cardChartData(
-      data.overtimeStudent,
-      'student_year',
-      'student_count',
-      {
-        borderColor: 'rgba(255,255,255,.55)',
-        backgroundColor: brandInfo
-      }
-    )
-    const overtimeStudentsFullGraphData = this.cardChartData(
-      data.overtimeStudent,
-      'student_year',
-      'student_count',
-      {
-        label: 'Overtime Students',
-        borderWidth: 1,
-        borderColor: brandInfo,
-        backgroundColor: convertHex(brandInfo, 0.15),
-        pointBackgroundColor: '#fff'
-      }
-    )
-    const overtimeStudents = data.overtimeStudent.reduce(
-      (acc, val) => acc + val.student_count, 0
-    )
+    const overtimeStudents = data.overtimeStudent.length ? data.overtimeStudent.student_count : 0
 
     return (
       <div>
@@ -475,7 +453,7 @@ class Home extends Component {
                 <p>Leaves Students</p>
               </div>
               <div className='chart-wrapper'>
-                <Line data={leaveStudentGraphData} options={cardChartSimpleLine} height={70} />
+                <Line data={blankLinkGraphData} options={cardChartSimpleLine} height={70} />
               </div>
             </div>
           </div>
@@ -486,8 +464,8 @@ class Home extends Component {
                 <h4 className='mb-0'>{overtimeStudents}</h4>
                 <p>Overtime Students</p>
               </div>
-              <div className='chart-wrapper px-3'>
-                <Line data={overtimeStudentsGraphData} options={cardChartLine} height={70} />
+              <div className='chart-wrapper'>
+                <Line data={blankLinkGraphData} options={cardChartSimpleLine} height={70} />
               </div>
             </div>
           </div>
@@ -502,6 +480,7 @@ class Home extends Component {
                 </div>
                 <div className='card-block'>
                   <div className='row'>
+                    <div className='col-2'></div>
                     <div className='col-4'>
                       <div>Number of Students</div>
                       <div className='chart-wrapper'>
@@ -512,12 +491,6 @@ class Home extends Component {
                       <div>Overall GPAX</div>
                       <div className='chart-wrapper'>
                         <Line data={gpaxByYearFullGraphData} options={chartLineFull} height={320} />
-                      </div>
-                    </div>
-                    <div className='col-4'>
-                      <div>Overtime Students</div>
-                      <div className='chart-wrapper'>
-                        <Line data={overtimeStudentsFullGraphData} options={chartLineFull} height={320} />
                       </div>
                     </div>
                   </div>

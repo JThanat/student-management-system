@@ -67,6 +67,31 @@ const cardChartBar = {
   }
 }
 
+const cardChartSimpleLine = {
+  maintainAspectRatio: false,
+  legend: {
+    display: false
+  },
+  scales: {
+    xAxes: [{
+      display: false
+    }],
+    yAxes: [{
+      display: false
+    }]
+  },
+  elements: {
+    line: {
+      borderWidth: 2
+    },
+    point: {
+      radius: 0,
+      hitRadius: 10,
+      hoverRadius: 4
+    }
+  }
+}
+
 // Card Chart 1
 const cardChartData1 = {
   labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July'],
@@ -182,31 +207,6 @@ const cardChartData3 = {
       data: [78, 81, 80, 45, 34, 12, 40]
     }
   ]
-}
-
-const cardChartOpts3 = {
-  maintainAspectRatio: false,
-  legend: {
-    display: false
-  },
-  scales: {
-    xAxes: [{
-      display: false
-    }],
-    yAxes: [{
-      display: false
-    }]
-  },
-  elements: {
-    line: {
-      borderWidth: 2
-    },
-    point: {
-      radius: 0,
-      hitRadius: 10,
-      hoverRadius: 4
-    }
-  }
 }
 
 // Card Chart 4
@@ -469,6 +469,8 @@ class Home extends Component {
   render () {
     const { data } = this.state
 
+    // Card Chart 1
+
     const numberStudentGraphData = this.cardChartData(
       data.numberOfStudentByYear,
       null,
@@ -480,11 +482,13 @@ class Home extends Component {
       (acc, val) => acc + val.student_count, 0
     )
 
+    // Card Chart 2
+
     const gpaxByYearGraphData = this.cardChartData(
       data.averageGpaxByYear,
       null,
       {
-        border: 'rgba(255,255,255,.5)',
+        border: 'rgba(255,255,255,.55)',
         background: brandDanger
       },
       'academic_year',
@@ -492,9 +496,33 @@ class Home extends Component {
     )
     const overallGpax = data.averageGpaxAll.length ? data.averageGpaxAll[0].avg_gpax : 0
 
-    console.log(gpaxByYearGraphData)
+    // Card Chart 3
 
-    console.log(data.averageGpaxAll)
+    const leaveStudentGraphData = this.cardChartData(
+      [],
+      null,
+      {
+        background: 'rgba(255,255,255,.2)',
+        border: 'rgba(255,255,255,.55)'
+      }
+    )
+    const leaveStudents = data.leaveStudent.length ? data.leaveStudent[0].leave_count : 0
+
+    // Card Chart 4
+
+    const overtimeStudentsGraphData = this.cardChartData(
+      data.overtimeStudent,
+      null,
+      {
+        border: 'rgba(255,255,255,.55)',
+        background: brandInfo
+      },
+      'student_year',
+      'student_count'
+    )
+    const overtimeStudents = data.overtimeStudent.reduce(
+      (acc, val) => acc + val.student_count, 0
+    )
 
     return (
       <div>
@@ -531,23 +559,11 @@ class Home extends Component {
           <div className='col-sm-6 col-lg-3'>
             <div className='card card-inverse card-warning'>
               <div className='card-block pb-0'>
-                <div className='btn-group float-right'>
-                  <button
-                    type='button' className='btn btn-transparent active dropdown-toggle p-0'
-                    data-toggle='dropdown' aria-haspopup='true' aria-expanded='false'>
-                    <i className='icon-settings' />
-                  </button>
-                  <div className='dropdown-menu dropdown-menu-right'>
-                    <a className='dropdown-item' href='#'>Action</a>
-                    <a className='dropdown-item' href='#'>Another action</a>
-                    <a className='dropdown-item' href='#'>Something else here</a>
-                  </div>
-                </div>
-                <h4 className='mb-0'>20</h4>
+                <h4 className='mb-0'>{leaveStudents}</h4>
                 <p>Leaves Students</p>
               </div>
               <div className='chart-wrapper'>
-                <Line data={cardChartData3} options={cardChartOpts3} height={70} />
+                <Line data={leaveStudentGraphData} options={cardChartSimpleLine} height={70} />
               </div>
             </div>
           </div>
@@ -555,14 +571,11 @@ class Home extends Component {
           <div className='col-sm-6 col-lg-3'>
             <div className='card card-inverse card-info'>
               <div className='card-block pb-0'>
-                <button type='button' className='btn btn-transparent active p-0 float-right'>
-                  <i className='icon-location-pin' />
-                </button>
-                <h4 className='mb-0'>32</h4>
+                <h4 className='mb-0'>{overtimeStudents}</h4>
                 <p>Overtime Students</p>
               </div>
               <div className='chart-wrapper px-3'>
-                <Line data={cardChartData2} options={cardChartOpts2} height={70} />
+                <Line data={overtimeStudentsGraphData} options={cardChartLine} height={70} />
               </div>
             </div>
           </div>

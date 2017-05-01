@@ -92,97 +92,22 @@ const cardChartSimpleLine = {
   }
 }
 
-// Card Chart 1
-const cardChartData1 = {
-  labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July'],
-  datasets: [
-    {
-      label: 'My First dataset',
-      backgroundColor: '#4dbd74',
-      borderColor: 'rgba(255,255,255,.55)',
-      data: [65, 59, 84, 84, 51, 55, 40]
-    }
-  ]
-}
-
-const cardChartOpts1 = {
+const chartBarFull = {
   maintainAspectRatio: false,
-  tooltips: {
-    enabled: false
-  },
-  legend: {
-    display: false
-  },
   scales: {
     xAxes: [{
-      gridLines: {
-        color: 'transparent',
-        zeroLineColor: 'transparent'
-      },
-      ticks: {
-        fontSize: 2,
-        fontColor: 'transparent'
-      }
-
+      barPercentage: 0.6
     }],
     yAxes: [{
-      display: false,
       ticks: {
-        display: false,
-        min: Math.min.apply(Math, cardChartData1.datasets[0].data) - 5,
-        max: Math.max.apply(Math, cardChartData1.datasets[0].data) + 5
+        beginAtZero: true
       }
     }]
-  },
-  elements: {
-    line: {
-      borderWidth: 1
-    },
-    point: {
-      radius: 4,
-      hitRadius: 10,
-      hoverRadius: 4
-    }
   }
 }
 
-// Card Chart 2
-const cardChartData2 = {
-  labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July'],
-  datasets: [
-    {
-      label: 'My First dataset',
-      backgroundColor: brandInfo,
-      borderColor: 'rgba(255,255,255,.55)',
-      data: [1, 18, 9, 17, 34, 22, 11]
-    }
-  ]
-}
-
-const cardChartOpts2 = {
+const chartLineFull = {
   maintainAspectRatio: false,
-  legend: {
-    display: false
-  },
-  scales: {
-    xAxes: [{
-      gridLines: {
-        color: 'transparent',
-        zeroLineColor: 'transparent'
-      },
-      ticks: {
-        fontSize: 2,
-        fontColor: 'transparent'
-      }
-
-    }],
-    yAxes: [{
-      display: false,
-      ticks: {
-        display: false
-      }
-    }]
-  },
   elements: {
     line: {
       tension: 0.00001,
@@ -191,50 +116,9 @@ const cardChartOpts2 = {
     point: {
       radius: 4,
       hitRadius: 10,
-      hoverRadius: 4
+      hoverRadius: 4,
+      backgroundColor: '#FFF'
     }
-  }
-}
-
-// Card Chart 3
-const cardChartData3 = {
-  labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July'],
-  datasets: [
-    {
-      label: 'My First dataset',
-      backgroundColor: 'rgba(255,255,255,.2)',
-      borderColor: 'rgba(255,255,255,.55)',
-      data: [78, 81, 80, 45, 34, 12, 40]
-    }
-  ]
-}
-
-// Card Chart 4
-const cardChartData4 = {
-  labels: ['', '', '', '', '', '', '', '', '', '', '', '', '', '', '', ''],
-  datasets: [
-    {
-      label: 'My First dataset',
-      backgroundColor: 'rgba(255,255,255,.3)',
-      borderColor: 'transparent',
-      data: [78, 81, 80, 45, 34, 12, 40, 75, 34, 89, 32, 68, 54, 72, 18, 98]
-    }
-  ]
-}
-
-const cardChartOpts4 = {
-  maintainAspectRatio: false,
-  legend: {
-    display: false
-  },
-  scales: {
-    xAxes: [{
-      display: false,
-      barPercentage: 0.6
-    }],
-    yAxes: [{
-      display: false
-    }]
   }
 }
 
@@ -292,6 +176,10 @@ const barChartStudent2 = {
 const barChartStudentOpt2 = {
   maintainAspectRatio: false,
   scales: {
+    xAxes: [{
+      categorySpacing: 100,
+      barPercentage: 0.5
+    }],
     yAxes: [{
       ticks: {
         beginAtZero: true
@@ -309,7 +197,7 @@ function convertHex (hex, opacity) {
   var g = parseInt(hex.substring(2, 4), 16)
   var b = parseInt(hex.substring(4, 6), 16)
 
-  var result = 'rgba(' + r + ',' + g + ',' + b + ',' + opacity / 100 + ')'
+  var result = 'rgba(' + r + ',' + g + ',' + b + ',' + opacity + ')'
   return result
 }
 
@@ -342,14 +230,6 @@ const mainChart = {
       borderWidth: 2,
       data: data1
     },
-    // {
-    //   label: 'My Second dataset',
-    //   backgroundColor: 'transparent',
-    //   borderColor: brandSuccess,
-    //   pointHoverBackgroundColor: '#fff',
-    //   borderWidth: 2,
-    //   data: data2
-    // },
     {
       label: 'My Third dataset',
       backgroundColor: 'transparent',
@@ -446,20 +326,18 @@ class Home extends Component {
   }
 
 
-  cardChartData (rawData, title, color, propField, valueField) {
+  cardChartData (rawData, propField, valueField, dataSetOptions) {
     let barData = [0, 0, 0, 0]
 
     for (const data of rawData) {
-      barData[data[propField] - 1] = data[valueField]
+      barData[data[propField] - 1] = this.roundNumber(data[valueField])
     }
 
     return {
       labels: [1, 2, 3, 4],
       datasets: [
         {
-          label: title,
-          backgroundColor: color.background || 'rgb(255, 255, 255, 0)',
-          borderColor: color.border || 'rgb(255, 255, 255, 0)',
+          ...dataSetOptions,
           data: barData
         }
       ]
@@ -473,10 +351,23 @@ class Home extends Component {
 
     const numberStudentGraphData = this.cardChartData(
       data.numberOfStudentByYear,
-      null,
-      { background: 'rgba(255,255,255,.3)' },
       'student_year',
-      'student_count'
+      'student_count',
+      {
+        backgroundColor: 'rgba(255,255,255,.3)',
+        borderColor: 'transparent'
+      }
+    )
+    const numberStudentFullGraphData = this.cardChartData(
+      data.numberOfStudentByYear,
+      'student_year',
+      'student_count',
+      {
+        label: 'Number of Students',
+        backgroundColor: convertHex(brandSuccess, 0.4),
+        borderColor: convertHex(brandSuccess, 1),
+        borderWidth: 1
+      }
     )
     const allStudentNumber = data.numberOfStudentByYear.reduce(
       (acc, val) => acc + val.student_count, 0
@@ -486,24 +377,34 @@ class Home extends Component {
 
     const gpaxByYearGraphData = this.cardChartData(
       data.averageGpaxByYear,
-      null,
-      {
-        border: 'rgba(255,255,255,.55)',
-        background: brandDanger
-      },
       'academic_year',
-      'avg_gpax'
+      'avg_gpax',
+      {
+        borderColor: 'rgba(255,255,255,.55)',
+        backgroundColor: brandDanger
+      }
+    )
+    const gpaxByYearFullGraphData = this.cardChartData(
+      data.averageGpaxByYear,
+      'academic_year',
+      'avg_gpax',
+      {
+        label: 'Average GPAX',
+        borderColor: brandDanger,
+        backgroundColor: convertHex(brandDanger, 0.15),
+        pointBackgroundColor: '#fff',
+        borderWidth: 1
+      }
     )
     const overallGpax = data.averageGpaxAll.length ? data.averageGpaxAll[0].avg_gpax : 0
 
     // Card Chart 3
 
     const leaveStudentGraphData = this.cardChartData(
-      [],
-      null,
+      [], '', '',
       {
-        background: 'rgba(255,255,255,.2)',
-        border: 'rgba(255,255,255,.55)'
+        backgroundColor: 'rgba(255,255,255,.2)',
+        borderColor: 'rgba(255,255,255,.55)'
       }
     )
     const leaveStudents = data.leaveStudent.length ? data.leaveStudent[0].leave_count : 0
@@ -512,13 +413,24 @@ class Home extends Component {
 
     const overtimeStudentsGraphData = this.cardChartData(
       data.overtimeStudent,
-      null,
-      {
-        border: 'rgba(255,255,255,.55)',
-        background: brandInfo
-      },
       'student_year',
-      'student_count'
+      'student_count',
+      {
+        borderColor: 'rgba(255,255,255,.55)',
+        backgroundColor: brandInfo
+      }
+    )
+    const overtimeStudentsFullGraphData = this.cardChartData(
+      data.overtimeStudent,
+      'student_year',
+      'student_count',
+      {
+        label: 'Overtime Students',
+        borderWidth: 1,
+        borderColor: brandInfo,
+        backgroundColor: convertHex(brandInfo, 0.15),
+        pointBackgroundColor: '#fff'
+      }
     )
     const overtimeStudents = data.overtimeStudent.reduce(
       (acc, val) => acc + val.student_count, 0
@@ -576,6 +488,38 @@ class Home extends Component {
               </div>
               <div className='chart-wrapper px-3'>
                 <Line data={overtimeStudentsGraphData} options={cardChartLine} height={70} />
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div className='row'>
+          <div className='card-deck'>
+            <div className='card'>
+              <div className='card-header'>
+                Student Information Graph
+              </div>
+              <div className='card-block'>
+                <div className='row'>
+                  <div className='col-4'>
+                    <div>Number of Students</div>
+                    <div className='chart-wrapper'>
+                      <Bar data={numberStudentFullGraphData} options={chartBarFull} height={320} />
+                    </div>
+                  </div>
+                  <div className='col-4'>
+                    <div>Overall GPAX</div>
+                    <div className='chart-wrapper'>
+                      <Line data={gpaxByYearFullGraphData} options={chartLineFull} height={320} />
+                    </div>
+                  </div>
+                  <div className='col-4'>
+                    <div>Overtime Students</div>
+                    <div className='chart-wrapper'>
+                      <Line data={overtimeStudentsFullGraphData} options={chartLineFull} height={320} />
+                    </div>
+                  </div>
+                </div>
               </div>
             </div>
           </div>

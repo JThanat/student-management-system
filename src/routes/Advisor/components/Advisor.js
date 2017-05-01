@@ -18,7 +18,9 @@ class Advisor extends Component {
     const config = TableConfig
     return (<div>
       <Table id={this.tableID} config={config} />
+      <hr />
       <Table id={this.tableIDProj} config={TableConfigProj} />
+      <hr />
       <Table id={this.tableIDComp} config={TableConfigComp} />
     </div>
     )

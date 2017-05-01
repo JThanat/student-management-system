@@ -3,6 +3,7 @@ import locationReducer from './location'
 import TableReducer from '../components/table/Table/TableModules'
 import modalReducer from '../components/core/modules/ModalModules'
 import filterReducer from '../components/core/modules/FilterModules'
+import { LoginReducer as loginReducer } from '../routes/Login/LoginContainer'
 
 export const makeRootReducer = (asyncReducers) => {
   return combineReducers({
@@ -10,6 +11,7 @@ export const makeRootReducer = (asyncReducers) => {
     table: TableReducer,
     modal: modalReducer,
     filter: filterReducer,
+    login: loginReducer,
     ...asyncReducers
   })
 }

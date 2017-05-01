@@ -1,4 +1,5 @@
-import React, { Component } from 'react'
+import React, { Component, PropTypes } from 'react'
+import { connect } from 'react-redux'
 import { Link } from 'react-router'
 
 class Sidebar extends Component {
@@ -24,13 +25,13 @@ class Sidebar extends Component {
   // }
 
   render () {
-    const role = 'debug'
+    const role = this.props.role
 
     return (
       <div className='sidebar'>
         <nav className='sidebar-nav'>
           <ul className='nav'>
-            { (role !== '') &&
+            { (role === '') &&
             <li className='nav-item'>
               <Link to={'/'} className='nav-link'>
                 <i className='icon-home' /> Login
@@ -106,7 +107,8 @@ class Sidebar extends Component {
 }
 
 Sidebar.propTypes = {
-  location: React.PropTypes.object
+  location: PropTypes.object,
+  role: PropTypes.string.isRequired
 }
 
-export default Sidebar
+export default connect(state => ({ role : state.login.role || '' }))(Sidebar)

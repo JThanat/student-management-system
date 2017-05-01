@@ -1,4 +1,4 @@
-import Login from './Login'
+import Login from './LoginContainer'
 
 export default {
   name : 'Login',

@@ -2,7 +2,43 @@ import React, { Component, PropTypes } from 'react'
 // import Table from '../../../components/table/Table'
 import { staticID } from '../../utils/unique'
 import { studentHeader } from '../../routes/Student/components/studentHeader'
+import { Line } from 'react-chartjs-2'
 import TableFrame from '../../components/table/TableFrame/'
+
+const gpaGraphOption = {
+  maintainAspectRatio: false,
+  elements: {
+    line: {
+      tension: 0.00001,
+      borderWidth: 1
+    },
+    point: {
+      radius: 4,
+      hitRadius: 10,
+      hoverRadius: 4,
+      backgroundColor: '#FFF'
+    }
+  },
+  scales: {
+    yAxes: [{
+      display: true,
+      ticks: {
+        beginAtZero: true,
+        max: 4
+      }
+    }]
+  }
+}
+
+function convertHex (hex, opacity) {
+  hex = hex.replace('#', '')
+  var r = parseInt(hex.substring(0, 2), 16)
+  var g = parseInt(hex.substring(2, 4), 16)
+  var b = parseInt(hex.substring(4, 6), 16)
+
+  var result = 'rgba(' + r + ',' + g + ',' + b + ',' + opacity + ')'
+  return result
+}
 
 class StudentInfo extends Component {
 
@@ -14,7 +50,9 @@ class StudentInfo extends Component {
     super(props)
 
     this.state = {
-      data: {}
+      data: {},
+      enrollTableData: [],
+      gradeData: []
     }
 
     this.enrollTableHeader = [
@@ -48,6 +86,52 @@ class StudentInfo extends Component {
       .catch((err) => {
         console.error(err)
       })
+
+    fetch(`/api/student/grade/${props.params.id}`)
+      .then((result) => result.json())
+      .then((result) => {
+        console.log(result.data)
+        this.setState({
+          gradeData: result.data
+        })
+      })
+      .catch((err) => {
+        console.error(err)
+      })
+  }
+
+  getChartData () {
+    let gpaBar = []
+    let gpaxBar = []
+    let dataLabel = []
+
+    for (const grade of this.state.gradeData) {
+      gpaBar.push(grade.gpa)
+      gpaxBar.push(grade.gpax)
+      dataLabel.push(`${grade.year}-${grade.semester}`)
+    }
+
+    return {
+      labels: dataLabel,
+      datasets: [
+        {
+          data: gpaBar,
+          label: 'GPA',
+          borderColor: '#63c2de',
+          backgroundColor: convertHex('#63c2de', 0.15),
+          pointBackgroundColor: '#fff',
+          borderWidth: 1
+        },
+        {
+          data: gpaxBar,
+          label: 'GPAX',
+          borderColor: '#ad42f4',
+          backgroundColor: convertHex('#ad42f4', 0.15),
+          pointBackgroundColor: '#fff',
+          borderWidth: 1
+        }
+      ]
+    }
   }
 
   userInfoContent () {
@@ -60,7 +144,7 @@ class StudentInfo extends Component {
         if (!thaiProp) continue
         thaiProp = thaiProp.title ? thaiProp.title : ''
         contentResult.push(<dt className='col-sm-4' key={prop}>{thaiProp}</dt>)
-        contentResult.push(<dd className='col-sm-8'>{this.state.data[prop] || ''}</dd>)
+        contentResult.push(<dd className='col-sm-8' key={prop + 'dd'}>{this.state.data[prop] || ''}</dd>)
       }
       return <dl className='row'>{contentResult}</dl>
     }
@@ -91,9 +175,11 @@ class StudentInfo extends Component {
                   </div>
                 </div>
                 <hr />
-                <div className='chart-wrapper' style={{ height: 300 + 'px', marginTop: 40 + 'px' }}>
-                  นี่คือกราฟ... ที่ยังไม่เสร็จ
-                  {/* <Line data={mainChart} options={mainChartOpts} height={300} /> */}
+                <div className='chart-wrapper' style={{ margin: '1em 0' }}>
+                  <h3 className='mb-3'>Student GPA &amp; GPAX</h3>
+                  <div>
+                    <Line data={this.getChartData()} options={gpaGraphOption} height={300} />
+                  </div>
                 </div>
                 <hr />
                 <div>

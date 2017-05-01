@@ -106,7 +106,7 @@ const chartBarFull = {
   }
 }
 
-const chartLineFull = {
+const chartGpaxLineFull = {
   maintainAspectRatio: false,
   elements: {
     line: {
@@ -364,8 +364,18 @@ class Home extends Component {
       'student_count',
       {
         label: 'Number of Students',
-        backgroundColor: convertHex(brandSuccess, 0.4),
-        borderColor: convertHex(brandSuccess, 1),
+        backgroundColor: [
+          'rgba(255, 99, 132, 0.2)',
+          'rgba(54, 162, 235, 0.2)',
+          'rgba(255, 206, 86, 0.2)',
+          'rgba(75, 192, 192, 0.2)'
+        ],
+        borderColor: [
+          'rgba(255,99,132,1)',
+          'rgba(54, 162, 235, 1)',
+          'rgba(255, 206, 86, 1)',
+          'rgba(75, 192, 192, 1)'
+        ],
         borderWidth: 1
       }
     )
@@ -412,7 +422,7 @@ class Home extends Component {
 
     // Card Chart 4
 
-    const overtimeStudents = data.overtimeStudent.length ? data.overtimeStudent.student_count : 0
+    const overtimeStudents = data.overtimeStudent.reduce((acc, val) => val.student_count, 0)
 
     return (
       <div>
@@ -480,7 +490,7 @@ class Home extends Component {
                 </div>
                 <div className='card-block'>
                   <div className='row'>
-                    <div className='col-2'></div>
+                    <div className='col-2' />
                     <div className='col-4'>
                       <div>Number of Students</div>
                       <div className='chart-wrapper'>
@@ -490,7 +500,7 @@ class Home extends Component {
                     <div className='col-4'>
                       <div>Overall GPAX</div>
                       <div className='chart-wrapper'>
-                        <Line data={gpaxByYearFullGraphData} options={chartLineFull} height={320} />
+                        <Line data={gpaxByYearFullGraphData} options={chartGpaxLineFull} height={320} />
                       </div>
                     </div>
                   </div>

@@ -131,6 +131,38 @@ class ModalChangeData extends Component {
       })
   }
 
+  inputFormat (header) {
+    const { prop } = header
+    const defaultValue = this.props.fillData ? (this.props.fillData[prop] || '') : ''
+
+    if (header.type instanceof Array) {
+      let optionList = []
+      if (!defaultValue) optionList.push(<option />)
+      for (const eachType of header.type) {
+        if (typeof eachType === 'object') {
+          optionList.push(<option value={eachType.val}>{eachType.title} ({eachType.val})</option>)
+        } else {
+          optionList.push(<option value={eachType}>{eachType}</option>)
+        }
+      }
+
+      return <select
+        className='form-control'
+        defaultValue={defaultValue}
+        onChange={(e) => this.handleChangeForm(e, prop)}>
+        {optionList}
+      </select>
+    } else {
+      return <input
+        className='form-control'
+        name={prop}
+        value={defaultValue}
+        onChange={(e) => this.handleChangeForm(e, prop)}
+        disabled={this.shouldInputDisable(header)}
+        />
+    }
+  }
+
   bodyContent () {
     const { header } = this.props
 
@@ -143,13 +175,9 @@ class ModalChangeData extends Component {
         <div className='col-6 input-box' key={i}>
           <label key={i}><strong>{header[i].title}</strong> ({ header[i].prop })</label>
           <div>
-            <input
-              className='form-control'
-              name={prop}
-              value={this.props.fillData ? (this.props.fillData[prop] || '') : ''}
-              onChange={(e) => this.handleChangeForm(e, prop)}
-              disabled={this.shouldInputDisable(header[i])}
-              />
+            {
+              this.inputFormat(header[i])
+            }
           </div>
           {
             this.props.error[prop] &&

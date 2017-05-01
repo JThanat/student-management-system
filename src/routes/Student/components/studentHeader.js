@@ -121,11 +121,10 @@ export const studentHeader = [
     title: 'เพศ',
     prop: 'gender',
     isNullable: false,
-    type: (resolve, reject) => {
-      setTimeout(() => {
-        resolve(['F', 'M'])
-      }, 5000)
-    }
+    type: [
+      { title: 'ชาย', val: 'M' },
+      { title: 'หญิง', val: 'F' }
+    ]
     // TODO: option F M
   },
   {

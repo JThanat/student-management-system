@@ -213,6 +213,7 @@ export const studentHeader = [
 
 export default {
   table: {
+    name: 'Student Information',
     onAdd: (resolve, reject, newData) => {
       requestAndResponse(
         '../api/student/insert',

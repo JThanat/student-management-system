@@ -494,29 +494,31 @@ class Home extends Component {
         </div>
 
         <div className='row'>
-          <div className='card-deck'>
-            <div className='card'>
-              <div className='card-header'>
-                Student Information Graph
-              </div>
-              <div className='card-block'>
-                <div className='row'>
-                  <div className='col-4'>
-                    <div>Number of Students</div>
-                    <div className='chart-wrapper'>
-                      <Bar data={numberStudentFullGraphData} options={chartBarFull} height={320} />
+          <div className='col'>
+            <div className='card-deck'>
+              <div className='card'>
+                <div className='card-header'>
+                  Student Information Graph
+                </div>
+                <div className='card-block'>
+                  <div className='row'>
+                    <div className='col-4'>
+                      <div>Number of Students</div>
+                      <div className='chart-wrapper'>
+                        <Bar data={numberStudentFullGraphData} options={chartBarFull} height={320} />
+                      </div>
                     </div>
-                  </div>
-                  <div className='col-4'>
-                    <div>Overall GPAX</div>
-                    <div className='chart-wrapper'>
-                      <Line data={gpaxByYearFullGraphData} options={chartLineFull} height={320} />
+                    <div className='col-4'>
+                      <div>Overall GPAX</div>
+                      <div className='chart-wrapper'>
+                        <Line data={gpaxByYearFullGraphData} options={chartLineFull} height={320} />
+                      </div>
                     </div>
-                  </div>
-                  <div className='col-4'>
-                    <div>Overtime Students</div>
-                    <div className='chart-wrapper'>
-                      <Line data={overtimeStudentsFullGraphData} options={chartLineFull} height={320} />
+                    <div className='col-4'>
+                      <div>Overtime Students</div>
+                      <div className='chart-wrapper'>
+                        <Line data={overtimeStudentsFullGraphData} options={chartLineFull} height={320} />
+                      </div>
                     </div>
                   </div>
                 </div>

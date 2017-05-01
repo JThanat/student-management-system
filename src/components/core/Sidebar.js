@@ -40,7 +40,7 @@ class Sidebar extends Component {
               </Link>
             </li> */}
             <li className='nav-item'>
-              <Link to={'/home'} className='nav-link' activeClassName='active'>
+              <Link to={'/'} className='nav-link'>
                 <i className='icon-home' /> Home
               </Link>
             </li>

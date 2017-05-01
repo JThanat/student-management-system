@@ -3,7 +3,7 @@ const queryHelper = require('../../utilities/query')
 const router = express.Router()
 
 router.get('/advisees', (req, res) => {
-  const data = req.query.data
+  let where = req.query.where ? req.query.where.replace('WHERE', 'AND') : ''
   // const member_id = req.user.member_id
   const memberId = 1
   queryHelper.queryAndResponse({
@@ -12,14 +12,14 @@ router.get('/advisees', (req, res) => {
           on s.member_id = a.member_id 
           inner join faculty_members as f 
           on s.member_id = f.member_id 
-          where f.member_id = ${memberId}`,
+          where f.member_id = ${memberId} ${where}`,
     req: req,
     res: res
   })
 })
 
 router.get('/project/advisees', (req, res) => {
-  const data = req.query.data
+  let where = req.query.where ? req.query.where.replace('WHERE', 'AND') : ''
   // const member_id = req.user.member_id
   const memberId = 1
   queryHelper.queryAndResponse({
@@ -30,7 +30,7 @@ router.get('/project/advisees', (req, res) => {
           on pa.project_id = p.project_id
           inner join students as s
           on pa.sid = s.sid
-          where a.member_id = ${memberId}
+          where a.member_id = ${memberId} ${where}
           order by p.project_name`,
     req: req,
     res: res
@@ -38,7 +38,7 @@ router.get('/project/advisees', (req, res) => {
 })
 
 router.get('/competition/advisees', (req, res) => {
-  const data = req.query.data
+  let where = req.query.where ? req.query.where.replace('WHERE', 'AND') : ''
   // const member_id = req.user.member_id
   const memberId = 1
   queryHelper.queryAndResponse({
@@ -53,7 +53,7 @@ router.get('/competition/advisees', (req, res) => {
           on t4.sid = t5.sid
           inner join competitions as c
           on t3.team_id = c.team_id
-          where t2.member_id = ${memberId}
+          where t2.member_id = ${memberId} ${where}
           order by  competition_name, team_name`,
     req: req,
     res: res

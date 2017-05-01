@@ -1,8 +1,7 @@
-import HomeView from './components/HomeView'
+import HomeView from './HomeView'
 
 // Sync route definition
 export default {
   name : 'Home',
-  path: '/home',
   component : HomeView
 }

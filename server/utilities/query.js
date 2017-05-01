@@ -52,7 +52,6 @@ const queryAndResponse = (params) => {
           utils.log(err)
           reject(err)
         } else {
-          console.log(results)
           resolve(results)
         }
       })

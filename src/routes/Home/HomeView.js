@@ -1,3 +1,4 @@
+import 'whatwg-fetch'
 import React, { Component } from 'react'
 import { Bar, Line } from 'react-chartjs-2'
 import { Dropdown, DropdownMenu, DropdownItem, Progress } from 'reactstrap'
@@ -6,6 +7,65 @@ const brandPrimary = '#20a8d8'
 const brandSuccess = '#4dbd74'
 const brandInfo = '#63c2de'
 const brandDanger = '#f86c6b'
+
+const cardChartLine = {
+  maintainAspectRatio: false,
+  legend: {
+    display: false
+  },
+  tooltips: {
+    enabled: false
+  },
+  scales: {
+    xAxes: [{
+      gridLines: {
+        color: 'transparent',
+        zeroLineColor: 'transparent'
+      },
+      ticks: {
+        fontSize: 2,
+        fontColor: 'transparent'
+      }
+
+    }],
+    yAxes: [{
+      display: false,
+      ticks: {
+        display: false
+      }
+    }]
+  },
+  elements: {
+    line: {
+      tension: 0.00001,
+      borderWidth: 1
+    },
+    point: {
+      radius: 4,
+      hitRadius: 10,
+      hoverRadius: 4
+    }
+  }
+}
+
+const cardChartBar = {
+  maintainAspectRatio: false,
+  legend: {
+    display: false
+  },
+  tooltips: {
+    enabled: false
+  },
+  scales: {
+    xAxes: [{
+      display: false,
+      barPercentage: 0.6
+    }],
+    yAxes: [{
+      display: false
+    }]
+  }
+}
 
 // Card Chart 1
 const cardChartData1 = {
@@ -22,6 +82,9 @@ const cardChartData1 = {
 
 const cardChartOpts1 = {
   maintainAspectRatio: false,
+  tooltips: {
+    enabled: false
+  },
   legend: {
     display: false
   },
@@ -91,9 +154,7 @@ const cardChartOpts2 = {
     yAxes: [{
       display: false,
       ticks: {
-        display: false,
-        min: Math.min.apply(Math, cardChartData2.datasets[0].data) - 5,
-        max: Math.max.apply(Math, cardChartData2.datasets[0].data) + 5
+        display: false
       }
     }]
   },
@@ -336,49 +397,121 @@ class Home extends Component {
   constructor (props) {
     super(props)
 
-    this.toggle = this.toggle.bind(this)
     this.state = {
-      dropdownOpen: false
+      data: {
+        numberOfStudentByYear: [],
+        averageGpaxByYear: [],
+        averageGpaxAll: [],
+        leaveStudent: [],
+        overtimeStudent: [],
+        studentActivityByName: [],
+        studentActivityByYear: [],
+        numberOfStudentHistory: [],
+        studentCompetitionByYear: [],
+        studentProjectByYear: []
+      }
+    }
+
+    this.fetchAndUpdate('/api/dashboard/number-of-student-by-year', 'numberOfStudentByYear')
+    this.fetchAndUpdate('/api/dashboard/average-gpax-by-year', 'averageGpaxByYear')
+    this.fetchAndUpdate('/api/dashboard/average-gpax-all', 'averageGpaxAll')
+    this.fetchAndUpdate('/api/dashboard/leave-student', 'leaveStudent')
+    this.fetchAndUpdate('/api/dashboard/overtime-student', 'overtimeStudent')
+    this.fetchAndUpdate('/api/dashboard/student-activity-by-name', 'studentActivityByName')
+    this.fetchAndUpdate('/api/dashboard/student-activity-by-year', 'studentActivityByYear')
+    this.fetchAndUpdate('/api/dashboard/number-of-student-history', 'numberOfStudentHistory')
+    this.fetchAndUpdate('/api/dashboard/student-competition-by-year', 'studentCompetitionByYear')
+    this.fetchAndUpdate('/api/dashboard/student-project-by-year', 'studentProjectByYear')
+
+    this.fetchAndUpdate = this.fetchAndUpdate.bind(this)
+  }
+
+  fetchAndUpdate (url, prop) {
+    fetch(url)
+      .then(result => result.json())
+      .then((result) => {
+        this.setState({
+          ...this.state,
+          data: {
+            ...this.state.data,
+            [prop]: result.data
+          }
+        })
+      })
+      .catch(err => console.log(err))
+  }
+
+  roundNumber (num) {
+    return Math.floor(num * 100) / 100
+  }
+
+
+  cardChartData (rawData, title, color, propField, valueField) {
+    let barData = [0, 0, 0, 0]
+
+    for (const data of rawData) {
+      barData[data[propField] - 1] = data[valueField]
+    }
+
+    return {
+      labels: [1, 2, 3, 4],
+      datasets: [
+        {
+          label: title,
+          backgroundColor: color.background || 'rgb(255, 255, 255, 0)',
+          borderColor: color.border || 'rgb(255, 255, 255, 0)',
+          data: barData
+        }
+      ]
     }
   }
 
-  toggle () {
-    this.setState({
-      dropdownOpen: !this.state.dropdownOpen
-    })
-  }
-
   render () {
+    const { data } = this.state
+
+    const numberStudentGraphData = this.cardChartData(
+      data.numberOfStudentByYear,
+      null,
+      { background: 'rgba(255,255,255,.3)' },
+      'student_year',
+      'student_count'
+    )
+    const allStudentNumber = data.numberOfStudentByYear.reduce(
+      (acc, val) => acc + val.student_count, 0
+    )
+
+    const gpaxByYearGraphData = this.cardChartData(
+      data.averageGpaxByYear,
+      null,
+      {
+        border: 'rgba(255,255,255,.5)',
+        background: brandDanger
+      },
+      'academic_year',
+      'avg_gpax'
+    )
+    const overallGpax = data.averageGpaxAll.length ? data.averageGpaxAll[0].avg_gpax : 0
+
+    console.log(gpaxByYearGraphData)
+
+    console.log(data.averageGpaxAll)
+
     return (
       <div>
+        <pre>
+          {JSON.stringify(this.state.data, null, 2)}
+        </pre>
         <div className='row'>
           <div className='col-sm-6 col-lg-3'>
             <div
               className='card card-inverse card-primary'
               style={{ backgroundColor: '#4dbd74', borderColor: '#4dbd74' }}>
               <div className='card-block pb-0'>
-                <div className='btn-group float-right'>
-                  <Dropdown isOpen={this.state.dropdownOpen} toggle={this.toggle}>
-                    <button
-                      onClick={this.toggle} className='btn btn-transparent active dropdown-toggle p-0'
-                      data-toggle='dropdown' aria-haspopup='true' aria-expanded={this.state.dropdownOpen}>
-                      <i className='icon-settings' />
-                    </button>
-
-                    <DropdownMenu>
-
-                      <DropdownItem>Action</DropdownItem>
-                      <DropdownItem>Another action</DropdownItem>
-                      <DropdownItem>Something else here</DropdownItem>
-
-                    </DropdownMenu>
-                  </Dropdown>
-                </div>
-                <h4 className='mb-0'>3846</h4>
-                <p>Average GPAX of Students</p>
+                <h4 className='mb-0'>{allStudentNumber}</h4>
+                <p>Number of Student</p>
               </div>
               <div className='chart-wrapper px-3'>
-                <Line data={cardChartData1} options={cardChartOpts1} height={70} />
+                <Bar data={numberStudentGraphData} options={cardChartBar} height={70} />
               </div>
             </div>
           </div>
@@ -386,23 +519,11 @@ class Home extends Component {
           <div className='col-sm-6 col-lg-3'>
             <div className='card card-inverse card-danger'>
               <div className='card-block pb-0'>
-                <div className='btn-group float-right'>
-                  <button
-                    type='button' className='btn btn-transparent active dropdown-toggle p-0'
-                    data-toggle='dropdown' aria-haspopup='true' aria-expanded='false'>
-                    <i className='icon-settings' />
-                  </button>
-                  <div className='dropdown-menu dropdown-menu-right'>
-                    <a className='dropdown-item' href='#'>Action</a>
-                    <a className='dropdown-item' href='#'>Another action</a>
-                    <a className='dropdown-item' href='#'>Something else here</a>
-                  </div>
-                </div>
-                <h4 className='mb-0'>23</h4>
-                <p>Non-graduated Students</p>
+                <h4 className='mb-0'>{this.roundNumber(overallGpax)}</h4>
+                <p>Overall GPAX</p>
               </div>
               <div className='chart-wrapper px-3'>
-                <Bar data={cardChartData4} options={cardChartOpts4} height={70} />
+                <Line data={gpaxByYearGraphData} options={cardChartLine} height={70} />
               </div>
             </div>
           </div>

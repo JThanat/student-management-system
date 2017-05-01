@@ -9,13 +9,12 @@ const CompetitionColumns = [
 
 const TABLE_NAME = 'competitions'
 
-const getAllCompetitions = () => `SELECT competition_name, competition_description, prize, T1.team_id, team_name,
-	group_concat( member_name SEPARATOR ', ') as advisors
-	FROM teams_advisors as T1
-		LEFT JOIN competitions as T2 ON T1.team_id = T2.team_id
-		LEFT JOIN faculty_members as T3 ON T1.member_id = T3.member_id
-		LEFT JOIN competition_teams as T4 ON T1.team_id = T4.team_id
-group by competition_name, competition_description, prize, team_id, team_name;`
+const getAllCompetitions = () => `SELECT competition_name, competition_description, prize, T12.team_id, T12.team_name, group_concat( member_name SEPARATOR ', ') as advisors FROM (                    
+	SELECT competition_name, competition_description, prize, T1.team_id, T5.team_name, T2.member_id FROM competitions as T1
+		LEFT JOIN teams_advisors as T2 ON T1.team_id = T2.team_id
+		LEFT JOIN competition_teams as T5 ON T1.team_id = T5.team_id) as T12
+			LEFT JOIN faculty_members as T3 ON T12.member_id = T3.member_id
+group by competition_name, competition_description, prize, T12.team_id, T12.team_name;`
 
 const filterCompetitions = (filterList) => {
   return query.transformToSQL.filter(TABLE_NAME, filterList)

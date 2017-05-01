@@ -44,9 +44,9 @@ router.get('/leave-student', (req, res) => {
 
 router.get('/overtime-student', (req, res) => {
   queryHelper.queryAndResponse({
-    sql: `select substr(student_id, 1, 2) as academic_year,
+    sql: `select convert(substr(student_id, 1, 2), unsigned integer)-54 as student_year,
           count(*) as student_count from students 
-          where convert(substr(student_id, 1, 2), unsigned integer)<56 and status!='G';`,
+          where convert(substr(student_id, 1, 2), unsigned integer)<56 and status!='G' GROUP BY student_year;`,
     req: req,
     res: res
   })

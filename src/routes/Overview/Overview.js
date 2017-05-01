@@ -3,7 +3,7 @@ import React, { Component } from 'react'
 import { Bar, Line } from 'react-chartjs-2'
 import { Dropdown, DropdownMenu, DropdownItem, Progress } from 'reactstrap'
 
-import './HomeView.scss'
+import './Overview.scss'
 
 const brandPrimary = '#20a8d8'
 const brandSuccess = '#4dbd74'
@@ -273,7 +273,7 @@ const mainChartOpts = {
   }
 }
 
-class Home extends Component {
+class OverviewView extends Component {
 
   constructor (props) {
     super(props)
@@ -891,4 +891,4 @@ class Home extends Component {
   }
 }
 
-export default Home
+export default OverviewView

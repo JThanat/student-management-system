@@ -1,5 +1,5 @@
 import React, { Component, PropTypes } from 'react'
-// import Table from '../../../components/table/Table'
+import { browserHistory } from 'react-router'
 import { staticID } from '../../utils/unique'
 import { studentHeader } from '../../routes/Student/components/studentHeader'
 import { Line } from 'react-chartjs-2'
@@ -52,9 +52,20 @@ class StudentInfo extends Component {
     this.state = {
       data: {},
       enrollTableData: [],
-      gradeData: []
+      gradeData: [],
+      findUser: '',
+      currentID: ''
     }
 
+    this.tableID = staticID('StudentInfo.table')
+
+    this.updateFindUser = this.updateFindUser.bind(this)
+    this.submitFindUser = this.submitFindUser.bind(this)
+
+    this.updateStudentData(this.props.params.id)
+  }
+
+  updateStudentData (id) {
     this.enrollTableHeader = [
       { title: 'รหัสวิชา', prop: 'course_no' },
       { title: 'ชื่อวิชา', prop: 'course_name' },
@@ -63,9 +74,7 @@ class StudentInfo extends Component {
       { title: 'เกรด', prop: 'grade' }
     ]
 
-    this.tableID = staticID('StudentInfo.table')
-
-    fetch(`/api/student/id/${props.params.id}`)
+    fetch(`/api/student/id/${id}`)
       .then((result) => result.json())
       .then((result) => {
         this.setState({
@@ -76,7 +85,7 @@ class StudentInfo extends Component {
         console.error(err)
       })
 
-    fetch(`/api/student/enrolls/${props.params.id}`)
+    fetch(`/api/student/enrolls/${id}`)
       .then((result) => result.json())
       .then((result) => {
         this.setState({
@@ -87,10 +96,9 @@ class StudentInfo extends Component {
         console.error(err)
       })
 
-    fetch(`/api/student/grade/${props.params.id}`)
+    fetch(`/api/student/grade/${id}`)
       .then((result) => result.json())
       .then((result) => {
-        console.log(result.data)
         this.setState({
           gradeData: result.data
         })
@@ -150,11 +158,32 @@ class StudentInfo extends Component {
     }
   }
 
+  updateFindUser (e) {
+    this.setState({
+      ...this.state,
+      findUser: e.target.value
+    })
+  }
+
+  submitFindUser () {
+    browserHistory.replace('/student-info/' + this.state.findUser)
+  }
+
+  componentWillReceiveProps (nextProps) {
+    if (nextProps.params.id !== this.state.currentID) {
+      this.setState({
+        ...this.state,
+        currentID: nextProps.params.id
+      })
+      this.updateStudentData(nextProps.params.id)
+    }
+  }
+
   render () {
     // const config = TableConfig
     // return (<Table id={this.tableID} config={config} />)
     return <div className='row'>
-      <div className='col-md-8 offset-md-2'>
+      <div className='col-md-8'>
         <div className='card'>
           <div className='card-block'>
             <div className='row'>
@@ -193,6 +222,20 @@ class StudentInfo extends Component {
             )
             : (<div style={{ margin: '1em 0' }}><i>Student is not available.</i></div>)
             )}
+          </div>
+        </div>
+      </div>
+      <div className='col-md-4'>
+        <div className='card'>
+          <div className='card-block'>
+            <h4>Find Student ID</h4>
+            <div className='form-group my-3'>
+              <label className='form-control-label'>Student ID</label>
+              <input type='text' className='form-control form-control-success' onChange={this.updateFindUser} />
+            </div>
+            <div className='btn btn-primary' onClick={this.submitFindUser}>
+              Find
+            </div>
           </div>
         </div>
       </div>

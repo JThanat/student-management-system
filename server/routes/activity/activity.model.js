@@ -9,11 +9,12 @@ const ActivityColumns = [
 
 const TABLE_NAME = 'activities'
 
-const getAllActivities = () => `select student_id,firstname, lastname, t1.activity_id, activity_name, activity_description , received_score, max_score from students_activities as t1
+const getAllActivities = (where) => `select student_id,firstname, lastname, t1.activity_id, activity_name, activity_description , received_score, max_score from students_activities as t1
 inner join activities as t2
 on t1.activity_id = t2.activity_id
 inner join students as t3
 on t1.sid = t3.sid
+${where}
 order by student_id, activity_id`
 
 const filterActivities = (filterList) => {

@@ -5,8 +5,10 @@ const Project = require('./project.model')
 const router = express.Router()
 
 router.get('/all', (req, res) => {
+  let where = req.query.where || ''
+  where = where.replace('project_id', 't3.project_id')
   queryHelper.queryAndResponse({
-    sql: Project.getAllProjects() + (req.query.where || ''),
+    sql: Project.getAllProjects() + where,
     req: req,
     res: res
   })

@@ -154,7 +154,7 @@ class StudentInfo extends Component {
     // const config = TableConfig
     // return (<Table id={this.tableID} config={config} />)
     return <div className='row'>
-      <div className='col-md-8'>
+      <div className='col-md-8 offset-md-2'>
         <div className='card'>
           <div className='card-block'>
             <div className='row'>

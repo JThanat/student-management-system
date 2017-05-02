@@ -154,7 +154,7 @@ class StudentInfo extends Component {
     // const config = TableConfig
     // return (<Table id={this.tableID} config={config} />)
     return <div className='row'>
-      <div className='offset-md-2 col-md-8'>
+      <div className='col-md-8'>
         <div className='card'>
           <div className='card-block'>
             <div className='row'>
@@ -168,7 +168,7 @@ class StudentInfo extends Component {
               <div>
                 <div className='row mt-4'>
                   <div className='col-sm-3'>
-                    <img src='/img/placeholder/profile.png' className='img-fluid' />
+                    <img src={`/img/placeholder/profile-${this.state.data.gender}.png`} className='img-fluid' />
                   </div>
                   <div className='col-sm-9'>
                     {this.userInfoContent()}

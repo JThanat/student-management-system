@@ -29,7 +29,7 @@ class Header extends Component {
           className='navbar-toggler mobile-sidebar-toggler d-lg-none'
           onClick={this.mobileSidebarToggle} type='button'>&#9776;</button>
         <a className='navbar-brand' href='#' />
-        <div><strong>Student Management System</strong></div>
+        <div className='hidden-sm-down'><strong>Student Management System</strong></div>
         <ul className='nav navbar-nav d-md-down-none'>
           <li className='nav-item'>
             <a className='nav-link navbar-toggler sidebar-toggler' onClick={this.sidebarToggle} href='#'>&#9776;</a>

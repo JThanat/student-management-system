@@ -305,6 +305,7 @@ class OverviewView extends Component {
     this.fetchAndUpdate('/api/dashboard/student-project-by-year', 'studentProjectByYear')
 
     this.fetchAndUpdate = this.fetchAndUpdate.bind(this)
+    this.activityPanel = this.activityPanel.bind(this)
   }
 
   fetchAndUpdate (url, prop) {
@@ -372,6 +373,112 @@ class OverviewView extends Component {
         }
       ]
     }
+  }
+
+  activityPanel () {
+    let stdByName = this.state.data.studentActivityByName || []
+    stdByName = stdByName.sort((a, b) => {
+      return a.student_count < b.student_count
+    })
+    const maxActByName = stdByName.reduce((acc, val) => Math.max(acc, val.student_count), 0)
+    const actByName = stdByName.map((x) => {
+      return (<li>
+        <i className='icon-fire' />
+        <span className='title'>{x.activity_name}</span>
+        <span className='value'>{x.student_count}</span>
+        <div className='bars'>
+          <Progress className='progress-xs' color='warning'
+            value={this.roundNumber(x.student_count / maxActByName * 100)} />
+        </div>
+      </li>)
+    })
+
+    let stdByYear = this.state.data.studentActivityByYear || []
+    stdByYear = stdByYear.sort((a, b) => {
+      return a.student_count < b.student_count
+    })
+    const sumActByYear = stdByYear.reduce((acc, val) => acc + val.student_count, 0)
+    const actByYear = stdByYear.map((x) => {
+      const percent = this.roundNumber(x.student_count / sumActByYear * 100)
+      return (<li>
+        <span className='title'>{x.academic_year}</span>
+        <span className='value'>{x.student_count} <span className='text-muted small'>({percent}%)</span></span>
+        <div className='bars'>
+          <Progress className='progress-xs' color='success' value={percent} />
+        </div>
+      </li>)
+    })
+
+    return (<div>
+      <ul className='horizontal-bars type-2'>
+        <div className='mb-2'>Most Activity by Name</div>
+        {actByName}
+        <li className='divider' />
+        <div className='mb-2'>Most Activity by Year</div>
+        {actByYear}
+        <li className='divider text-center'>
+          <button
+            type='button' className='btn btn-sm btn-link text-muted'
+            data-toggle='tooltip' data-placement='top' title=''
+            data-original-title='show more'>
+            <i className='icon-options' />
+          </button>
+        </li>
+      </ul>
+    </div>)
+  }
+
+  competitionAndProjectPanel () {
+    let stdCompByYear = this.state.data.studentCompetitionByYear || []
+    stdCompByYear = stdCompByYear.sort((a, b) => {
+      return a.student_count < b.student_count
+    })
+    const maxActByName = stdCompByYear.reduce((acc, val) => Math.max(acc, val.student_count), 0)
+    const competitionByYear = stdCompByYear.map((x) => {
+      return (<li>
+        <i className='icon-fire' />
+        <span className='title'>{x.student_year}</span>
+        <span className='value'>{x.student_count}</span>
+        <div className='bars'>
+          <Progress className='progress-xs' color='danger'
+            value={this.roundNumber(x.student_count / maxActByName * 100)} />
+        </div>
+      </li>)
+    })
+
+    let stdByProject = this.state.data.studentProjectByYear || []
+    stdByProject = stdByProject.sort((a, b) => {
+      return a.student_count < b.student_count
+    })
+    const sumProjectByYear = stdByProject.reduce((acc, val) => acc + val.student_count, 0)
+    const projectByYear = stdByProject.map((x) => {
+      const percent = this.roundNumber(x.student_count / sumProjectByYear * 100)
+      return (<li>
+        <span className='title'>{x.academic_year}</span>
+        <span className='value'>{x.student_count} <span className='text-muted small'>({percent}%)</span></span>
+        <div className='bars'>
+          <Progress className='progress-xs' color='info' value={percent} />
+        </div>
+      </li>)
+    })
+
+    return (<div>
+      <ul className='horizontal-bars type-2'>
+        <div className='mb-2'>Student Competition by Year</div>
+        {competitionByYear.length > 0 ? competitionByYear : <i style={{ color: '#999' }}>ไม่มีข้อมูลในขณะนี้</i>}
+        <li className='divider' />
+        <div className='mb-2'>Student Project by Year</div>
+        {projectByYear}
+        <li className='divider text-center'>
+          <button
+            type='button' className='btn btn-sm btn-link text-muted'
+            data-toggle='tooltip' data-placement='top' title=''
+            data-original-title='show more'>
+            <i className='icon-options' />
+          </button>
+        </li>
+      </ul>
+    </div>)
   }
 
   render () {
@@ -460,9 +567,6 @@ class OverviewView extends Component {
 
     return (
       <div>
-        <pre>
-          {JSON.stringify(this.state.data, null, 2)}
-        </pre>
         <div className='row'>
           <div className='col-sm-6 col-lg-3'>
             <div
@@ -516,7 +620,7 @@ class OverviewView extends Component {
         </div>
 
         <div className='row'>
-          <div className='col'>
+          <div className='col-md-10 offset-md-1'>
             <div className='card-deck'>
               <div className='card'>
                 <div className='card-header'>
@@ -524,14 +628,13 @@ class OverviewView extends Component {
                 </div>
                 <div className='card-block'>
                   <div className='row'>
-                    <div className='col-1' />
-                    <div className='col-5'>
+                    <div className='col-6'>
                       <div>Number of Students</div>
                       <div className='chart-wrapper'>
                         <Bar data={numberStudentFullGraphData} options={chartBarFull} height={320} />
                       </div>
                     </div>
-                    <div className='col-5'>
+                    <div className='col-6'>
                       <div>Overall GPAX</div>
                       <div className='chart-wrapper'>
                         <Line data={gpaxByYearFullGraphData} options={chartGpaxLineFull} height={320} />
@@ -545,344 +648,35 @@ class OverviewView extends Component {
         </div>
 
         <div className='row'>
-          <div className='col-md-12'>
+          <div className='col-md-10 offset-md-1'>
             <div className='card'>
               <div className='card-header'>
-                Activities &amp; Awards
+                Summarize
               </div>
               <div className='card-block'>
                 <div className='row'>
-                  <div className='col-sm-12 col-lg-4'>
-                    <div className='row'>
-                      <div className='col-sm-6'>
-                        <div className='callout callout-info'>
-                          <small className='text-muted'>International</small><br />
-                          <strong className='h4'>9</strong>
-                          <div className='chart-wrapper'>
-                            <canvas id='sparkline-chart-1' width='100' height='30' />
-                          </div>
-                        </div>
-                      </div>
-                      <div className='col-sm-6'>
-                        <div className='callout callout-danger'>
-                          <small className='text-muted'>National</small><br />
-                          <strong className='h4'>22</strong>
-                          <div className='chart-wrapper'>
-                            <canvas id='sparkline-chart-2' width='100' height='30' />
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                    <hr className='mt-0' />
-                    <ul className='horizontal-bars'>
-                      <li>
-                        <div className='title'>
-                          Year 1
-                        </div>
-                        <div className='bars'>
-                          <Progress className='progress-xs' color='info' value='34' />
-                          <Progress className='progress-xs' color='danger' value='78' />
-                        </div>
-                      </li>
-                      <li>
-                        <div className='title'>
-                          Year 2
-                        </div>
-                        <div className='bars'>
-                          <Progress className='progress-xs' color='info' value='56' />
-                          <Progress className='progress-xs' color='danger' value='94' />
-                        </div>
-                      </li>
-                      <li>
-                        <div className='title'>
-                          Year 3
-                        </div>
-                        <div className='bars'>
-                          <Progress className='progress-xs' color='info' value='12' />
-                          <Progress className='progress-xs' color='danger' value='67' />
-                        </div>
-                      </li>
-                      <li>
-                        <div className='title'>
-                          Year 4
-                        </div>
-                        <div className='bars'>
-                          <Progress className='progress-xs' color='info' value='43' />
-                          <Progress className='progress-xs' color='danger' value='91' />
-                        </div>
-                      </li>
-                      <li>
-                        <div className='title'>
-                          Master
-                        </div>
-                        <div className='bars'>
-                          <Progress className='progress-xs' color='info' value='22' />
-                          <Progress className='progress-xs' color='danger' value='73' />
-                        </div>
-                      </li>
-                      <li>
-                        <div className='title'>
-                          Doctoral
-                        </div>
-                        <div className='bars'>
-                          <Progress className='progress-xs' color='info' value='53' />
-                          <Progress className='progress-xs' color='danger' value='82' />
-                        </div>
-                      </li>
-                      <li>
-                        <div className='title'>
-                          Alumni
-                        </div>
-                        <div className='bars'>
-                          <Progress className='progress-xs' color='info' value='9' />
-                          <Progress className='progress-xs' color='danger' value='69' />
-                        </div>
-                      </li>
-                      <li className='legend'>
-                        <span className='badge badge-pill badge-info' />
-                        <small> New clients</small> &nbsp; <span className='badge badge-pill badge-danger' />
-                        <small> Recurring clients</small>
-                      </li>
-                    </ul>
-                  </div>
-                  <div className='col-sm-6 col-lg-4'>
-                    <div className='row'>
-                      <div className='col-sm-6'>
-                        <div className='callout callout-warning'>
-                          <small className='text-muted'>Regional</small><br />
-                          <strong className='h4'>78</strong>
-                          <div className='chart-wrapper'>
-                            <canvas id='sparkline-chart-3' width='100' height='30' />
-                          </div>
-                        </div>
-                      </div>
-                      <div className='col-sm-6'>
-                        <div className='callout callout-success'>
-                          <small className='text-muted'>Academic</small><br />
-                          <strong className='h4'>72</strong>
-                          <div className='chart-wrapper'>
-                            <canvas id='sparkline-chart-4' width='100' height='30' />
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                    <hr className='mt-0' />
-                    <ul className='horizontal-bars type-2'>
-                      <li>
-                        <i className='icon-user' />
-                        <span className='title'>Male</span>
-                        <span className='value'>56%</span>
-                        <div className='bars'>
-                          <Progress className='progress-xs' color='warning' value='43' />
-                        </div>
-                      </li>
-                      <li>
-                        <i className='icon-user-female' />
-                        <span className='title'>Female</span>
-                        <span className='value'>44%</span>
-                        <div className='bars'>
-                          <Progress className='progress-xs' color='warning' value='37' />
-                        </div>
-                      </li>
-                      <li className='divider' />
-                      <li>
-                        <span className='title'>Winner</span>
-                        <span className='value'>60 <span className='text-muted small'>(56%)</span></span>
-                        <div className='bars'>
-                          <Progress className='progress-xs' color='success' value='56' />
-                        </div>
-                      </li>
-                      <li>
-                        <span className='title'>1st Runner Up</span>
-                        <span className='value'>23 <span className='text-muted small'>(15%)</span></span>
-                        <div className='bars'>
-                          <Progress className='progress-xs' color='success' value='15' />
-                        </div>
-                      </li>
-                      <li>
-                        <span className='title'>2nd Runner Up</span>
-                        <span className='value'>16 <span className='text-muted small'>(11%)</span></span>
-                        <div className='bars'>
-                          <Progress className='progress-xs' color='success' value='11' />
-                        </div>
-                      </li>
-                      <li>
-                        <span className='title'>Other</span>
-                        <span className='value'>10 <span className='text-muted small'>(8%)</span></span>
-                        <div className='bars'>
-                          <Progress className='progress-xs' color='success' value='8' />
-                        </div>
-                      </li>
-                      <li className='divider text-center'>
-                        <button
-                          type='button' className='btn btn-sm btn-link text-muted'
-                          data-toggle='tooltip' data-placement='top' title=''
-                          data-original-title='show more'>
-                          <i className='icon-options' />
-                        </button>
-                      </li>
-                    </ul>
-                  </div>
-                  <div className='col-sm-6 col-lg-4'>
-                    <div className='row'>
-                      <div className='col-sm-6'>
-                        <div className='callout'>
-                          <small className='text-muted'>Sports</small><br />
-                          <strong className='h4'>23%</strong>
-                          <div className='chart-wrapper'>
-                            <canvas id='sparkline-chart-5' width='100' height='30' />
-                          </div>
-                        </div>
-                      </div>
-                      <div className='col-sm-6'>
-                        <div className='callout callout-primary'>
-                          <small className='text-muted'>Other</small><br />
-                          <strong className='h4'>5%</strong>
-                          <div className='chart-wrapper'>
-                            <canvas id='sparkline-chart-6' width='100' height='30' />
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                    <hr className='mt-0' />
-                    <ul className='icons-list'>
-                      <li>
-                        <i className='icon-screen-desktop bg-primary' />
-                        <div className='desc'>
-                          <div className='title'>Nitad 17th</div>
-                          <small>Lorem ipsum dolor sit amet</small>
-                        </div>
-                        <div className='value'>
-                          <div className='small text-muted'>Student join</div>
-                          <strong>1.924</strong>
-                        </div>
-                        <div className='actions'>
-                          <button type='button' className='btn btn-link text-muted'>
-                            <i className='icon-settings' />
-                          </button>
-                        </div>
-                      </li>
-                      <li>
-                        <i className='icon-screen-smartphone bg-info' />
-                        <div className='desc'>
-                          <div className='title'>FE Camp</div>
-                          <small>Lorem ipsum dolor sit amet</small>
-                        </div>
-                        <div className='value'>
-                          <div className='small text-muted'>Student join</div>
-                          <strong>1.224</strong>
-                        </div>
-                        <div className='actions'>
-                          <button type='button' className='btn btn-link text-muted'>
-                            <i className='icon-settings' />
-                          </button>
-                        </div>
-                      </li>
-                      <li>
-                        <i className='icon-screen-smartphone bg-warning' />
-                        <div className='desc'>
-                          <div className='title'>Larngear Camp</div>
-                          <small>Lorem ipsum dolor sit amet</small>
-                        </div>
-                        <div className='value'>
-                          <div className='small text-muted'>Student join</div>
-                          <strong>1.163</strong>
-                        </div>
-                        <div className='actions'>
-                          <button type='button' className='btn btn-link text-muted'>
-                            <i className='icon-settings' />
-                          </button>
-                        </div>
-                      </li>
-                      <li>
-                        <i className='icon-user bg-danger' />
-                        <div className='desc'>
-                          <div className='title'>Vishnu</div>
-                          <small>Lorem ipsum dolor sit amet</small>
-                        </div>
-                        <div className='value'>
-                          <div className='small text-muted'>Student join</div>
-                          <strong>928</strong>
-                        </div>
-                        <div className='actions'>
-                          <button type='button' className='btn btn-link text-muted'>
-                            <i className='icon-settings' />
-                          </button>
-                        </div>
-                      </li>
-                      <li>
-                        <i className='icon-social-spotify bg-success' />
-                        <div className='desc'>
-                          <div className='title'>Bridge Building 43th</div>
-                          <small>Lorem ipsum dolor sit amet</small>
-                        </div>
-                        <div className='value'>
-                          <div className='small text-muted'>Student join</div>
-                          <strong>893</strong>
-                        </div>
-                        <div className='actions'>
-                          <button type='button' className='btn btn-link text-muted'>
-                            <i className='icon-settings' />
-                          </button>
-                        </div>
-                      </li>
-                      <li>
-                        <i className='icon-cloud-download bg-danger' />
-                        <div className='desc'>
-                          <div className='title'>CU Open House</div>
-                          <small>Lorem ipsum dolor sit amet</small>
-                        </div>
-                        <div className='value'>
-                          <div className='small text-muted'>Downloads</div>
-                          <strong>121.924</strong>
-                        </div>
-                        <div className='actions'>
-                          <button type='button' className='btn btn-link text-muted'>
-                            <i className='icon-settings' />
-                          </button>
-                        </div>
-                      </li>
-                      <li>
-                        <i className='icon-camera bg-warning' />
-                        <div className='desc'>
-                          <div className='title'>Forest Plantation</div>
-                          <small>Lorem ipsum dolor sit amet</small>
-                        </div>
-                        <div className='value'>
-                          <div className='small text-muted'>Uploaded</div>
-                          <strong>12.125</strong>
-                        </div>
-                        <div className='actions'>
-                          <button type='button' className='btn btn-link text-muted'>
-                            <i className='icon-settings' />
-                          </button>
-                        </div>
-                      </li>
-                      <li className='divider text-center'>
-                        <button
-                          type='button' className='btn btn-sm btn-link text-muted'
-                          data-toggle='tooltip' data-placement='top' title='show more'>
-                          <i className='icon-options' />
-                        </button>
-                      </li>
-                    </ul>
-                  </div>
+                  <div className='col-md-6'>{this.activityPanel()}</div>
+                  <div className='col-md-6'>{this.competitionAndProjectPanel()}</div>
                 </div>
               </div>
             </div>
           </div>
         </div>
 
-        <div className='card'>
-          <div className='card-block'>
-            <div className='row'>
-              <div className='col-sm-5'>
-                <h4 className='card-title mb-0'>Number of Students History</h4>
-                <div className='small text-muted'>May 2017</div>
+        <div className='row'>
+          <div className='col-sm-10 offset-sm-1'>
+            <div className='card'>
+              <div className='card-block'>
+                <div className='row'>
+                  <div className='col-sm-5'>
+                    <h4 className='card-title mb-0'>Number of Students History</h4>
+                    <div className='small text-muted'>May 2017</div>
+                  </div>
+                </div>
+                <div className='chart-wrapper' style={{ height: 300 + 'px', marginTop: 40 + 'px' }}>
+                  <Line data={studentHistoryGraphData} options={chartGpaxLineFull} height={300} />
+                </div>
               </div>
-            </div>
-            <div className='chart-wrapper' style={{ height: 300 + 'px', marginTop: 40 + 'px' }}>
-              <Line data={studentHistoryGraphData} options={chartGpaxLineFull} height={300} />
             </div>
           </div>
         </div>

@@ -1,4 +1,5 @@
 import React from 'react'
+import { Link } from 'react-router'
 
 import {
   requestAndResponse,
@@ -7,11 +8,11 @@ import {
 } from '../../../utils/query'
 
 const activityHeader = [{
-  title: 'Edit',
-  prop: 'edit',
-  isEdit: true,
-  onEdit: (resolve, reject, data, oldData) => {
-    requestAndResponse(
+    title: 'Edit',
+    prop: 'edit',
+    isEdit: true,
+    onEdit: (resolve, reject, data, oldData) => {
+      requestAndResponse(
         '../api/activity/update', {
           method: 'POST',
           headers: {
@@ -25,15 +26,15 @@ const activityHeader = [{
         resolve,
         reject
       )
-  }
-},
-{
-  title: 'Delete',
-  prop: 'delete',
-  isDelete: true,
-  formatter: () => < div className='btn btn-danger btn-sm' data-attach-on-delete>Delete</div>,
-  onDelete: (resolve, reject, data) => {
-    requestAndResponse(
+    }
+  },
+  {
+    title: 'Delete',
+    prop: 'delete',
+    isDelete: true,
+    formatter: () => <div className = 'btn btn-danger btn-sm' data-attach-on-delete> Delete </div>,
+    onDelete: (resolve, reject, data) => {
+      requestAndResponse(
         '../api/activity/delete', {
           method: 'POST',
           headers: {
@@ -49,64 +50,73 @@ const activityHeader = [{
         resolve,
         reject
       )
+    }
+  },
+  {
+    title: 'Info',
+    prop: 'student_id',
+    isEditable: false,
+    isAddable: false,
+    formatter: (data) => (
+      <Link to={'/student-info/' + data}className='btn btn-info btn-sm'>Info</Link>
+    )
+  },
+  {
+    title: 'รหัสนิสิต',
+    prop: 'student_id',
+    isEditable: false,
+    isNullable: false,
+    isAddable: true
+  },
+  {
+    title: 'ชื่อจริง',
+    prop: 'firstname',
+    isEditable: false,
+    isNullable: true,
+    isAddable: false
+  },
+  {
+    title: 'นามสกุล',
+    prop: 'lastname',
+    isEditable: false,
+    isNullable: true,
+    isAddable: false
+  },
+  {
+    title: 'รหัสกิจกรรม',
+    prop: 'activity_id',
+    isEditable: true,
+    isNullable: false,
+    isAddable: true
+  },
+  {
+    title: 'ชื่อกิจกรรม',
+    prop: 'activity_name',
+    isEditable: false,
+    isNullable: true,
+    isAddable: false
+  },
+  {
+    title: 'คำอธิบายกิจกรรม',
+    prop: 'activity_description',
+    isEditable: false,
+    isNullable: true,
+    isAddable: false
+  },
+  {
+    title: 'คะแนนที่ได้รับ',
+    prop: 'received_score',
+    isEditable: true,
+    isNullable: false,
+    isAddable: true
+  },
+  {
+    title: 'คะแนนเต็ม',
+    prop: 'max_score',
+    isEditable: false,
+    isNullable: true,
+    isAddable: false
   }
-},
-{
-  title: 'รหัสนิสิต',
-  prop: 'student_id',
-  isEditable: false,
-  isNullable: false,
-  isAddable: true
-},
-{
-  title: 'ชื่อจริง',
-  prop: 'firstname',
-  isEditable: false,
-  isNullable: true,
-  isAddable: false
-},
-{
-  title: 'นามสกุล',
-  prop: 'lastname',
-  isEditable: false,
-  isNullable: true,
-  isAddable: false
-},
-{
-  title: 'รหัสกิจกรรม',
-  prop: 'activity_id',
-  isEditable: true,
-  isNullable: false,
-  isAddable: true
-},
-{
-  title: 'ชื่อกิจกรรม',
-  prop: 'activity_name',
-  isEditable: false,
-  isNullable: true,
-  isAddable: false
-},
-{
-  title: 'คำอธิบายกิจกรรม',
-  prop: 'activity_description',
-  isEditable: false,
-  isNullable: true,
-  isAddable: false
-},
-{
-  title: 'คะแนนที่ได้รับ',
-  prop: 'received_score',
-  isEditable: true,
-  isNullable: false,
-  isAddable: true
-},
-{
-  title: 'คะแนนเต็ม',
-  prop: 'max_score',
-  isEditable: false,
-  isNullable: true,
-  isAddable: false
-}
 ]
 
 export default {

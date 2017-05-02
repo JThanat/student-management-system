@@ -1,4 +1,5 @@
 import React from 'react'
+import { Link } from 'react-router'
 
 import {
   requestAndResponse,
@@ -6,98 +7,108 @@ import {
   convertObjectToQueryParams
 } from '../../../utils/query'
 
-const leaveHeader = [{
-  title: 'Edit',
-  prop: 'edit',
-  isEdit: true,
-  onEdit: (resolve, reject, data, oldData) => {
-    requestAndResponse(
-        '../api/leave/update', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json'
+const leaveHeader = [
+  {
+    title: 'Edit',
+    prop: 'edit',
+    isEdit: true,
+    onEdit: (resolve, reject, data, oldData) => {
+      requestAndResponse(
+          '../api/leave/update', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+              data: removeNull(data),
+              oldData: removeNull(oldData)
+            })
           },
-          body: JSON.stringify({
-            data: removeNull(data),
-            oldData: removeNull(oldData)
-          })
-        },
-        resolve,
-        reject
+          resolve,
+          reject
       )
-  }
-},
-{
-  title: 'Delete',
-  prop: 'delete',
-  isDelete: true,
-  formatter: () => < div className='btn btn-danger btn-sm' data-attach-on-delete>Delete</div>,
-  onDelete: (resolve, reject, data) => {
-    requestAndResponse(
-        '../api/leave/delete', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json'
+    }
+  },
+  {
+    title: 'Delete',
+    prop: 'delete',
+    isDelete: true,
+    formatter: () => < div className='btn btn-danger btn-sm' data-attach-on-delete>Delete</div>,
+    onDelete: (resolve, reject, data) => {
+      requestAndResponse(
+          '../api/leave/delete', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+              data: {
+                student_id: data.student_id,
+                semester: data.semester,
+                year: data.year
+              }
+            })
           },
-          body: JSON.stringify({
-            data: {
-              student_id: data.student_id,
-              semester: data.semester,
-              year: data.year
-            }
-          })
-        },
-        resolve,
-        reject
-      )
+          resolve,
+          reject
+        )
+    }
+  },
+  {
+    title: 'Info',
+    prop: 'student_id',
+    isEditable: false,
+    isAddable: false,
+    formatter: (data) => (
+      <Link to={'/student-info/' + data}className='btn btn-info btn-sm'>Info</Link>
+    )
+  },
+  {
+    title: 'รหัสนิสิต',
+    prop: 'student_id',
+    isEditable: false,
+    isNullable: true
+  },
+  {
+    title: 'ชื่อจริง',
+    prop: 'firstname',
+    isEditable: false,
+    isNullable: true,
+    isAddable: false
+  },
+  {
+    title: 'นามสกุล',
+    prop: 'lastname',
+    isEditable: false,
+    isNullable: true,
+    isAddable: false
+  },
+  {
+    title: 'ภาคการศึกษา',
+    prop: 'semester',
+    isEditable: true,
+    isNullable: true,
+    isAddable: true
+  },
+  {
+    title: 'ปี',
+    prop: 'year',
+    isEditable: true,
+    isNullable: true,
+    isAddable: true
+  },
+  {
+    title: 'ประเภทการลา',
+    prop: 'leave_type',
+    isEditable: true,
+    isNullable: true,
+    isAddable: true
+  },
+  {
+    title: 'คำอธิบาย',
+    prop: 'leave_description',
+    isNullable: true
   }
-},
-{
-  title: 'รหัสนิสิต',
-  prop: 'student_id',
-  isEditable: false,
-  isNullable: true
-},
-{
-  title: 'ชื่อจริง',
-  prop: 'firstname',
-  isEditable: false,
-  isNullable: true,
-  isAddable: false
-},
-{
-  title: 'นามสกุล',
-  prop: 'lastname',
-  isEditable: false,
-  isNullable: true,
-  isAddable: false
-},
-{
-  title: 'ภาคการศึกษา',
-  prop: 'semester',
-  isEditable: true,
-  isNullable: true,
-  isAddable: true
-},
-{
-  title: 'ปี',
-  prop: 'year',
-  isEditable: true,
-  isNullable: true,
-  isAddable: true
-},
-{
-  title: 'ประเภทการลา',
-  prop: 'leave_type',
-  isEditable: true,
-  isNullable: true,
-  isAddable: true
-},
-{
-  title: 'คำอธิบาย',
-  prop: 'leave_description',
-  isNullable: true
-}
 ]
 
 export default {

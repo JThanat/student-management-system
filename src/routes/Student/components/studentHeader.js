@@ -57,7 +57,7 @@ export const studentHeader = [
     isAddable: false,
     isEditable: false,
     formatter: (data) => (
-      <Link to={'/student-info/' + data}className='btn btn-info btn-sm' data-attach-on-delete>Info</Link>
+      <Link to={'/student-info/' + data}className='btn btn-info btn-sm'>Info</Link>
     )
   },
   {

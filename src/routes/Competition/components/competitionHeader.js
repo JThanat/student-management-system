@@ -44,9 +44,7 @@ const competitionHeader = [
             'Content-Type': 'application/json'
           },
           body: JSON.stringify({
-            where: {
-              student_id: data.student_id
-            }
+            data: data
           })
         },
         resolve,

@@ -34,8 +34,8 @@ const updateCompetition = (dataSet) => {
     ${setCondition.join(', ')} WHERE team_id=${dataSet.team_id} AND competition_name='${dataSet.competition_name}';`
 }
 
-const deleteCompetition = (conditionSet) => {
-  return query.transformToSQL.delete(TABLE_NAME, conditionSet)
+const deleteCompetition = (data) => {
+  return `DELETE FROM ${TABLE_NAME} WHERE team_id="${data.team_id}"`
 }
 
 module.exports = {

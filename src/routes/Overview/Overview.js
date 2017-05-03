@@ -369,7 +369,7 @@ class OverviewView extends Component {
     const competitionByYear = stdCompByYear.map((x, i) => {
       return (<li key={`${i}-cptyear`}>
         <i className='icon-fire' />
-        <span className='title'>{x.student_year}</span>
+        <span className='title'>Year {x.student_year}</span>
         <span className='value'>{x.student_count}</span>
         <div className='bars'>
           <Progress className='progress-xs' color='danger'

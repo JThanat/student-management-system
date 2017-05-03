@@ -12,6 +12,14 @@ router.get('/all', (req, res) => {
   })
 })
 
+router.get('/criteria', (req, res) => {
+  queryHelper.queryAndResponse({
+    sql: `select punishment_id, punishment_name from punishment_criteria`,
+    req: req,
+    res: res
+  })
+})
+
 router.get('/filter', (req, res) => {
   const filterList = req.query
   queryHelper.queryAndResponse({

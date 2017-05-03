@@ -23,8 +23,8 @@ const filterStudentSQL = (filterList) => {
 
 const insertPunishment = (dataSet) => {
   return `insert into punishment_records ( sid, punishment_id, timestamp) select
-  (select sid from students where student_id = ${dataSet.student_id}) As sid,
-  (select punishment_id from punishment_criteria where punishment_id = ${dataSet.punishment_id}) As punishment_id,
+  (select ${dataSet.sid}) As sid,
+  (select ${dataSet.punishment_id}) As punishment_id,
   (select NOW()) As timestamp`
 }
 

@@ -63,3 +63,19 @@ export const competitionTeamOptionList = (resolve) => {
     }
   )
 }
+
+export const punishmentCriteriaOptionList = (resolve) => {
+  fetch('/api/punishment/criteria').then(data => data.json()).then(
+    (response) => {
+      const { data } = response
+      let option = []
+      for (const d of data) {
+        option.push({
+          title: d.punishment_name,
+          val: d.punishment_id
+        })
+      }
+      resolve(option)
+    }
+  )
+}

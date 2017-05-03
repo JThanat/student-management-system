@@ -70,7 +70,6 @@ const activityHeader = [
     isEditableVisible: false,
     isEditable: false,
     isVisible: false,
-    isNullable: false,
     type: studentOptionList
   },
   {

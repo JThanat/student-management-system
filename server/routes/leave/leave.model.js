@@ -21,14 +21,14 @@ const filterLeaves = (filterList) => {
 
 const insertLeave = (dataSet) => {
   return `insert into ${TABLE_NAME} ( sid, semester, year, leave_type ,leave_description) 
-  values ("${dataSet.sid}", ${dataSet.semester}, ${dataSet.year}, "${dataSet.leave_type}", "${dataSet.leave_description}")`
+  values ("${dataSet.sid}", "${dataSet.semester}", "${dataSet.year}", "${dataSet.leave_type}", "${dataSet.leave_description}")`
 }
 
 const updateLeave = (dataSet, oldDataSet) => {
   return `update leaves 
   set leaves.sid = (select sid from students where student_id = "${dataSet.student_id}"),
-  semester = ${dataSet.semester},
-  year = ${dataSet.year},
+  semester = "${dataSet.semester}",
+  year = "${dataSet.year}",
   leave_type = "${dataSet.leave_type}",
   leave_description = "${dataSet.leave_description}"
   where semester = "${oldDataSet.semester}" and year = "${oldDataSet.year}" and sid = (select sid from students where student_id = "${dataSet.student_id}")`

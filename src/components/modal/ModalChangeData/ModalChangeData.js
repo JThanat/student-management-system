@@ -139,17 +139,26 @@ class ModalChangeData extends Component {
     for (let i = 0; i < header.length; i++) {
       const prop = header[i].prop
       if (prop === '_rid' || header[i].isDelete || header[i].isEdit) continue
-      if (header[i].isAddable === false) continue
+      if (type === 'Add' && header[i].isAddable === false) continue
       if (type === 'Edit' && header[i].isEditableVisible === false) continue
       content.push(
         <div className='col-6 input-box' key={i}>
           <label key={i}><strong>{header[i].title}</strong> ({ header[i].prop })</label>
           <div>
-            <InputForm
+          {
+            (type === 'Edit' && header[i].isEditable === false)
+            ? <input
+              className='form-control'
+              name={prop}
+              value={this.props.fillData ? (this.props.fillData[prop] || '') : ''}
+              disabled
+              />
+            : <InputForm
               header={header[i]}
               fillData={this.props.fillData ? (this.props.fillData[prop] || '') : ''}
               onChange={(e) => this.handleChangeForm(e, prop)}
               disabled={this.shouldInputDisable(header)} />
+          }
           </div>
           {
             this.props.error[prop] &&

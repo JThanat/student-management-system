@@ -71,7 +71,6 @@ const leaveHeader = [
     isEditableVisible: false,
     isEditable: false,
     isVisible: false,
-    isNullable: false,
     type: studentOptionList
   },
   {

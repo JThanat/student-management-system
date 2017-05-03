@@ -93,7 +93,6 @@ const projectHeader = [
     isEditableVisible: false,
     isEditable: false,
     isVisible: false,
-    isNullable: false,
     type: studentOptionList
   },
   {

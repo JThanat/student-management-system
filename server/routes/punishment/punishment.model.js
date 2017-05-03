@@ -10,12 +10,12 @@ const PunishmentRecordColumns = [
 const TABLE_NAME = 'punishment_records'
 
 
-const getAllPunishment = () => `select  student_id, firstname, lastname, punishment_records.punishment_id, punishment_name, score_deduction, timestamp 
-from punishment_records 
-left join students 
-on punishment_records.sid = students.sid 
-left join punishment_criteria
-on punishment_records.punishment_id = punishment_criteria.punishment_id`
+const getAllPunishment = () => `select  student_id, firstname, lastname, t1.punishment_id, punishment_name, score_deduction, timestamp 
+from punishment_records as t1
+left join students as t2 
+on t1.sid = t2.sid 
+left join punishment_criteria as t3
+on t1.punishment_id = t3.punishment_id`
 
 const filterStudentSQL = (filterList) => {
   return query.transformToSQL.filter(TABLE_NAME, filterList)

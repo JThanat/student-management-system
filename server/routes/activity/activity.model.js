@@ -23,7 +23,7 @@ const filterActivities = (filterList) => {
 
 const insertActivity = (dataSet) => {
   return `insert into students_activities (sid, activity_id, received_score) select 
-  (select sid from students where student_id = "${dataSet.student_id}") as sid, 
+  (select "${dataSet.sid}") as sid, 
   (select activity_id from activities where activity_id = "${dataSet.activity_id}") as activity_id, 
   (select ${dataSet.received_score}) as received_score`
 }

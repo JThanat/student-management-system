@@ -5,27 +5,49 @@ class InputForm extends Component {
   constructor (props) {
     super(props)
 
-    console.log(props)
-
     this.state = {
       isFinish: false,
-      option: []
+      option: [],
+      error: ''
     }
+
+    this.fetchOptionList = this.fetchOptionList.bind(this)
   }
 
   optionList (header) {
+    const prop = this.props.header.prop
     let optionList = []
+    let i = 1
 
-    if (!this.props.fillData) optionList.push(<option />)
+    if (!this.props.fillData) optionList.push(<option key={prop + 0}>Select...</option>)
     for (const eachType of header.type) {
       if (typeof eachType === 'object') {
-        optionList.push(<option value={eachType.val}>{eachType.title} ({eachType.val})</option>)
+        optionList.push(<option key={prop + i} value={eachType.val}>{eachType.title} ({eachType.val})</option>)
       } else {
-        optionList.push(<option value={eachType}>{eachType}</option>)
+        optionList.push(<option key={prop + i} value={eachType}>{eachType}</option>)
       }
+      i++
     }
 
     return optionList
+  }
+
+  fetchOptionList (func) {
+    new Promise(func).then((data) => {
+      this.setState({
+        ...this.state,
+        option: this.optionList({
+          type: data
+        }),
+        isFinish: true
+      })
+    })
+  }
+
+  componentWillMount () {
+    if (typeof this.props.header.type === 'function') {
+      this.fetchOptionList(this.props.header.type)
+    }
   }
 
   render () {
@@ -36,7 +58,7 @@ class InputForm extends Component {
       return <select
         className='form-control'
         defaultValue={this.props.fillData}
-        onChange={(e) => this.handleChangeForm(e, prop)}>
+        onChange={this.props.onChange}>
         {this.optionList(header)}
       </select>
     } else if (typeof header.type === 'function') {
@@ -44,11 +66,11 @@ class InputForm extends Component {
         return <select
           className='form-control'
           defaultValue={this.props.fillData}
-          onChange={(e) => this.handleChangeForm(e, prop)}>
+          onChange={this.props.onChange}>
           {this.state.option}
         </select>
       } else {
-        return 'Loading...'
+        return <div className='form-control' style={{ background: '#DDD' }}>Load Option...</div>
       }
     } else {
       return <input

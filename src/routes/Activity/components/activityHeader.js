@@ -1,13 +1,16 @@
 import React from 'react'
 import { Link } from 'react-router'
 
+import { sidOptionList } from '../../../utils/tableSelectList'
+
 import {
   requestAndResponse,
   removeNull,
   convertObjectToQueryParams
 } from '../../../utils/query'
 
-const activityHeader = [{
+const activityHeader = [
+  {
     title: 'Edit',
     prop: 'edit',
     isEdit: true,
@@ -32,7 +35,7 @@ const activityHeader = [{
     title: 'Delete',
     prop: 'delete',
     isDelete: true,
-    formatter: () => <div className = 'btn btn-danger btn-sm' data-attach-on-delete> Delete </div>,
+    formatter: () => <div className='btn btn-danger btn-sm' data-attach-on-delete>Delete</div>,
     onDelete: (resolve, reject, data) => {
       requestAndResponse(
         '../api/activity/delete', {
@@ -62,11 +65,19 @@ const activityHeader = [{
     )
   },
   {
+    title: 'sid',
+    prop: 'sid',
+    isEditableVisible: false,
+    isEditable: false,
+    isVisible: false,
+    isNullable: false,
+    type: sidOptionList
+  },
+  {
     title: 'รหัสนิสิต',
     prop: 'student_id',
     isEditable: false,
-    isNullable: false,
-    isAddable: true
+    isAddable: false
   },
   {
     title: 'ชื่อจริง',

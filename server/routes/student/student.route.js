@@ -12,6 +12,14 @@ router.get('/all', (req, res) => {
   })
 })
 
+router.get('/all-sid', (req, res) => {
+  queryHelper.queryAndResponse({
+    sql: `SELECT sid,student_id FROM students`,
+    req: req,
+    res: res
+  })
+})
+
 router.get('/id/:id', (req, res) => {
   const id = req.params.id
   queryHelper.queryAndResponse({

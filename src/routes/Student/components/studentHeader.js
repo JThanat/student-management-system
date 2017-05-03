@@ -121,11 +121,14 @@ export const studentHeader = [
     title: 'เพศ',
     prop: 'gender',
     isNullable: false,
-    type: [
-      { title: 'ชาย', val: 'M' },
-      { title: 'หญิง', val: 'F' }
-    ]
-    // TODO: option F M
+    type: (resolve) => {
+      setTimeout(() => {
+        resolve([
+          { title: 'ชาย', val: 'M' },
+          { title: 'หญิง', val: 'F' }
+        ])
+      }, 0)
+    }
   },
   {
     title: 'รหัสประชาชน',

@@ -1,7 +1,7 @@
 import React from 'react'
 import { Link } from 'react-router'
 
-import { sidOptionList } from '../../../utils/tableSelectList'
+import { studentOptionList } from '../../../utils/tableSelectList'
 
 import {
   requestAndResponse,
@@ -71,7 +71,7 @@ const activityHeader = [
     isEditable: false,
     isVisible: false,
     isNullable: false,
-    type: sidOptionList
+    type: studentOptionList
   },
   {
     title: 'รหัสนิสิต',

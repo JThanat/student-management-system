@@ -19,10 +19,7 @@ const filterProjects = (filterList) => {
 }
 
 const insertProject = (dataSet) => {
-  console.log(dataSet)
-  return `insert into students_projects (project_id, sid) select 
-  (select project_id from projects where project_id = ${dataSet.project_id}) as project_id,
-  (select sid from students where student_id = "${dataSet.student_id}") as sid`
+  return `insert into students_projects (project_id, sid) values ("${dataSet.project_id}", "${dataSet.sid}")`
 }
 
 const deleteProject = (dataSet) => {

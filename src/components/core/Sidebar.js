@@ -85,7 +85,7 @@ class Sidebar extends Component {
               </li>
             </div>}
 
-            { (role.substr(7) === 'advisor' || role === 'debug') &&
+            { (role.substr(0, 7) === 'advisor' || role === 'debug') &&
             <li className='nav-item'>
               <Link to={'/advisor'} className='nav-link' activeClassName='active'>
                 <i className='icon-user' /> Advisor

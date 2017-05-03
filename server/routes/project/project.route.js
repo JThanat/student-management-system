@@ -14,6 +14,14 @@ router.get('/all', (req, res) => {
   })
 })
 
+router.get('/all-pid', (req, res) => {
+  queryHelper.queryAndResponse({
+    sql: 'select project_id, project_name from projects',
+    req: req,
+    res: res
+  })
+})
+
 router.get('/filter', (req, res) => {
   const filterList = req.query
   queryHelper.queryAndResponse({

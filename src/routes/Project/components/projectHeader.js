@@ -7,6 +7,8 @@ import {
   convertObjectToQueryParams
 } from '../../../utils/query'
 
+import { projectOptionList, studentOptionList } from '../../../utils/tableSelectList'
+
 const projectHeader = [
   {
     title: 'Edit',
@@ -58,7 +60,9 @@ const projectHeader = [
     prop: 'project_id',
     isEditable: true,
     isNullable: false,
-    isAddable: true
+    isVisible: false,
+    isAddable: true,
+    type: projectOptionList
   },
   {
     title: 'ชื่อโครงการ',
@@ -84,11 +88,20 @@ const projectHeader = [
     )
   },
   {
+    title: 'sid',
+    prop: 'sid',
+    isEditableVisible: false,
+    isEditable: false,
+    isVisible: false,
+    isNullable: false,
+    type: studentOptionList
+  },
+  {
     title: 'รหัสนิสิต',
     prop: 'student_id',
     isEditable: false,
     isNullable: true,
-    isAddable: true
+    isAddable: false
   },
   {
     title: 'ชื่อจริง',
@@ -108,6 +121,7 @@ const projectHeader = [
 
 export default {
   table: {
+    name: 'Project Student List',
     onAdd: (resolve, reject, newData) => {
       requestAndResponse(
         '../api/project/insert', {

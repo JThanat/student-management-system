@@ -31,3 +31,35 @@ export const projectOptionList = (resolve) => {
     }
   )
 }
+
+export const activityOptionList = (resolve) => {
+  fetch('/api/activity/all-aid').then(data => data.json()).then(
+    (response) => {
+      const { data } = response
+      let option = []
+      for (const d of data) {
+        option.push({
+          title: d.activity_name,
+          val: d.activity_id
+        })
+      }
+      resolve(option)
+    }
+  )
+}
+
+export const competitionTeamOptionList = (resolve) => {
+  fetch('/api/competition/team').then(data => data.json()).then(
+    (response) => {
+      const { data } = response
+      let option = []
+      for (const d of data) {
+        option.push({
+          title: d.team_name,
+          val: d.team_id
+        })
+      }
+      resolve(option)
+    }
+  )
+}

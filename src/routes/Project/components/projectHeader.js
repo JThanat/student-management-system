@@ -88,7 +88,7 @@ const projectHeader = [
     )
   },
   {
-    title: 'sid',
+    title: 'Student ID',
     prop: 'sid',
     isEditableVisible: false,
     isEditable: false,

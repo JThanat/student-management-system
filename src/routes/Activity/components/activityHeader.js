@@ -1,7 +1,7 @@
 import React from 'react'
 import { Link } from 'react-router'
 
-import { studentOptionList } from '../../../utils/tableSelectList'
+import { studentOptionList, activityOptionList } from '../../../utils/tableSelectList'
 
 import {
   requestAndResponse,
@@ -65,7 +65,7 @@ const activityHeader = [
     )
   },
   {
-    title: 'sid',
+    title: 'Student ID',
     prop: 'sid',
     isEditableVisible: false,
     isEditable: false,
@@ -98,7 +98,8 @@ const activityHeader = [
     prop: 'activity_id',
     isEditable: true,
     isNullable: false,
-    isAddable: true
+    isAddable: true,
+    type: activityOptionList
   },
   {
     title: 'ชื่อกิจกรรม',

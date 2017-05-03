@@ -1,6 +1,7 @@
 import React from 'react'
 
 import { requestAndResponse, convertObjectToQueryParams } from '../../../utils/query'
+import { competitionTeamOptionList } from '../../../utils/tableSelectList'
 
 const competitionHeader = [
   {
@@ -58,7 +59,8 @@ const competitionHeader = [
     prop: 'team_id',
     isVisible: false,
     isEditable: false,
-    isNullable: false
+    isNullable: false,
+    type: competitionTeamOptionList
   },
   {
     title: 'ชื่อทีม',

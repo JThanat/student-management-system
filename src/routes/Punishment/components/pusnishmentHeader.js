@@ -1,6 +1,7 @@
 import React from 'react'
 
 import { requestAndResponse, removeNull, convertObjectToQueryParams } from '../../../utils/query'
+import { studentOptionList } from '../../../utils/tableSelectList'
 
 const punishmentHeader = [
   {
@@ -52,9 +53,19 @@ const punishmentHeader = [
     }
   },
   {
+    title: 'Student ID',
+    prop: 'sid',
+    isEditableVisible: false,
+    isEditable: false,
+    isVisible: false,
+    isNullable: false,
+    type: studentOptionList
+  },
+  {
     title: 'รหัสนิสิต',
     prop: 'student_id',
     isEditable: false,
+    isAddable: false,
     isNullable: true
   },
   {

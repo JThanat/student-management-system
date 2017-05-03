@@ -7,6 +7,8 @@ import {
   convertObjectToQueryParams
 } from '../../../utils/query'
 
+import { studentOptionList } from '../../../utils/tableSelectList'
+
 const leaveHeader = [
   {
     title: 'Edit',
@@ -64,10 +66,20 @@ const leaveHeader = [
     )
   },
   {
+    title: 'Student ID',
+    prop: 'sid',
+    isEditableVisible: false,
+    isEditable: false,
+    isVisible: false,
+    isNullable: false,
+    type: studentOptionList
+  },
+  {
     title: 'รหัสนิสิต',
     prop: 'student_id',
     isEditable: false,
-    isNullable: true
+    isNullable: true,
+    isAddable: false
   },
   {
     title: 'ชื่อจริง',

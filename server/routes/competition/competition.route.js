@@ -12,6 +12,14 @@ router.get('/all', (req, res) => {
   })
 })
 
+router.get('/team', (req, res) => {
+  queryHelper.queryAndResponse({
+    sql: `SELECT team_id, team_name from competition_teams`,
+    req: req,
+    res: res
+  })
+})
+
 router.get('/filter', (req, res) => {
   const filterList = req.query
   queryHelper.queryAndResponse({

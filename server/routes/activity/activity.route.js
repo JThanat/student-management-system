@@ -12,6 +12,17 @@ router.get('/all', (req, res) => {
   })
 })
 
+router.get('/all-aid', (req, res) => {
+  queryHelper.queryAndResponse({
+    sql: `
+      select t1.activity_id, activity_name, activity_description from students_activities as t1 
+      inner join activities as t2 on t1.activity_id = t2.activity_id group by t1.activity_id
+    `,
+    req: req,
+    res: res
+  })
+})
+
 router.get('/filter', (req, res) => {
   const filterList = req.query
   queryHelper.queryAndResponse({

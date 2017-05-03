@@ -10,3 +10,6 @@ coverage
 
 server/config/config.js
 last.sql
+
+# private folder
+private/

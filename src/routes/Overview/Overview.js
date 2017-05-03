@@ -1,12 +1,12 @@
 import 'whatwg-fetch'
 import React, { Component } from 'react'
 import { Bar, Line } from 'react-chartjs-2'
-import { Dropdown, DropdownMenu, DropdownItem, Progress } from 'reactstrap'
+import { Progress } from 'reactstrap'
 
 import './Overview.scss'
 
-const brandPrimary = '#20a8d8'
-const brandSuccess = '#4dbd74'
+// const brandPrimary = '#20a8d8'
+// const brandSuccess = '#4dbd74'
 const brandInfo = '#63c2de'
 const brandDanger = '#f86c6b'
 
@@ -123,74 +123,6 @@ const chartGpaxLineFull = {
     }
   }
 }
-
-const barChartStudent1 = {
-  labels: ['1', '2', '3', '4'],
-  datasets: [
-    {
-      label: 'Number of Students',
-      backgroundColor: [
-        'rgba(255, 99, 132, 0.2)',
-        'rgba(54, 162, 235, 0.2)',
-        'rgba(255, 206, 86, 0.2)',
-        'rgba(75, 192, 192, 0.2)'
-      ],
-      borderColor: [
-        'rgba(255,99,132,1)',
-        'rgba(54, 162, 235, 1)',
-        'rgba(255, 206, 86, 1)',
-        'rgba(75, 192, 192, 1)'
-      ],
-      borderWidth: 1,
-      hoverBackgroundColor: 'rgba(255,99,132,0.4)',
-      hoverBorderColor: 'rgba(255,99,132,1)',
-      data: [1024, 986, 999, 870]
-    }
-  ]
-}
-
-const barChartStudentOpt1 = {
-  maintainAspectRatio: false,
-  scales: {
-    yAxes: [{
-      ticks: {
-        beginAtZero: true
-      }
-    }]
-  }
-}
-
-const barChartStudent2 = {
-  labels: ['Year 1', 'Year 2', 'Year 3', 'Year 4'],
-  datasets: [
-    {
-      label: 'Grade',
-      backgroundColor: 'rgba(255, 99, 132, 0.2)',
-      borderColor: 'rgba(255,99,132,1)',
-      borderWidth: 1,
-      hoverBackgroundColor: 'rgba(255,99,132,0.4)',
-      hoverBorderColor: 'rgba(255,99,132,1)',
-      data: [2.82, 3.11, 3.23, 2.99]
-    }
-  ]
-}
-
-const barChartStudentOpt2 = {
-  maintainAspectRatio: false,
-  scales: {
-    xAxes: [{
-      categorySpacing: 100,
-      barPercentage: 0.5
-    }],
-    yAxes: [{
-      ticks: {
-        beginAtZero: true
-      }
-    }]
-  }
-}
-
-// Main Chart
 
 // convert Hex to RGBA
 function convertHex (hex, opacity) {

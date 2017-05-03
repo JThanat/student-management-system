@@ -205,7 +205,7 @@ class StudentInfo extends Component {
                 </div>
                 <hr />
                 <div className='chart-wrapper' style={{ margin: '1em 0' }}>
-                  <h3 className='mb-3'>Student GPA &amp; GPAX</h3>
+                  <h4 className='mb-3'>Student GPA &amp; GPAX</h4>
                   <div>
                     <Line data={this.getChartData()} options={gpaGraphOption} height={300} />
                   </div>

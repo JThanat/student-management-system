@@ -157,7 +157,7 @@ TableFrame.propTypes = {
   className: PropTypes.string.isRequired,
   data: PropTypes.array.isRequired,
   header: PropTypes.array.isRequired,
-  isLoading: PropTypes.bool.isRequired,
+  isLoading: PropTypes.bool,
 
   editRowModalID: PropTypes.string,
   deleteRowModalID: PropTypes.string

@@ -11,11 +11,16 @@ class Login extends Component {
     super(props)
 
     this.state = {
-      user: ''
+      user: '',
+      error: ''
     }
 
     this.updateUser = this.updateUser.bind(this)
     this.submit = this.submit.bind(this)
+  }
+
+  componentWillMount () {
+    this.props.login('')
   }
 
   updateUser (e) {
@@ -25,24 +30,46 @@ class Login extends Component {
   }
 
   submit () {
-    console.log(this.state)
-    this.props.login(this.state.user)
-    switch (this.state.user) {
-      case 'advisor':
-        browserHistory.push('/advisor')
-        break
-      case 'staff':
-        browserHistory.push('/student')
-        break
-      case 'executive':
-        browserHistory.push('/overview')
-        break
+    const user = this.state.user
+    if (user.substr(0, 7) === 'advisor') {
+      const id = user.substr(7)
+      if (id === '') {
+        this.setState({
+          ...this.state,
+          error: 'Advisor username must follows by ID.'
+        })
+      } else {
+        this.props.login(user)
+        browserHistory.push(`/advisor`)
+      }
+    } else if (user === 'staff' || user === 'executive') {
+      this.props.login(user)
+      if (user === 'staff') browserHistory.push(`/student`)
+      else browserHistory.push(`/overview`)
+    } else {
+      this.setState({
+        ...this.state,
+        error: 'User is incorrect.'
+      })
     }
   }
 
   render () {
     return <div className='row'>
-      <div className='col-md-6 offset-md-3 mt-5'>
+      <div className='col-md-6 offset-md-3 mt-3'>
+        <div className='alert alert-info'>
+          <div>
+            You can login by entering these 3 types of users.
+          </div>
+          <ol className='pt-2'>
+            <li>User: "executive" Password: "executive"</li>
+            <li>User: "staff" Password: "staff"</li>
+            <li>
+              User: "advisor&lt;AVISOR_ID&gt;", Password: "advisor"<br />
+              (replace &lt;ADVISOR_ID&gt; with advisor id)
+            </li>
+          </ol>
+        </div>
         <div className='card'>
           <div className='card-block'>
             <h4 className='card-title mb-0'>Login</h4>
@@ -54,7 +81,10 @@ class Login extends Component {
               <label className='form-control-label'>Password</label>
               <input type='password' className='form-control form-control-success' />
             </div>
-            <div className='btn btn-primary' onClick={this.submit}>Login</div>
+            { this.state.error &&
+              <div className='alert alert-danger'>{this.state.error}</div>
+            }
+            <button type='button' className='btn btn-primary' onClick={this.submit}>Login</button>
           </div>
         </div>
       </div>

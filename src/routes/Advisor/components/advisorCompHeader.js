@@ -2,12 +2,11 @@ import React from 'react'
 import { Link } from 'react-router'
 
 import {
-  requestAndResponse,
-  removeNull,
   convertObjectToQueryParams
 } from '../../../utils/query'
 
-const advisorHeader = [{
+const advisorHeader = [
+  {
     title: 'Info',
     prop: 'student_id',
     isAddable: false,
@@ -16,48 +15,48 @@ const advisorHeader = [{
       <Link to={'/student-info/' + data}className='btn btn-info btn-sm' data-attach-on-delete>Info</Link>
     )
   },
-{
-  title: 'รหัสนิสิต',
-  prop: 'student_id',
-  isEditable: false,
-  isNullable: false,
-  isAddable: true
-},
-{
-  title: 'ชื่อจริง',
-  prop: 'firstname',
-  isEditable: false,
-  isNullable: true,
-  isAddable: false
-},
-{
-  title: 'นามสกุล',
-  prop: 'lastname',
-  isEditable: false,
-  isNullable: true,
-  isAddable: false
-},
-{
-  title: 'ชื่อทีม',
-  prop: 'team_name',
-  isEditable: false,
-  isNullable: true,
-  isAddable: false
-},
-{
-  title: 'รายการแข่งขัน',
-  prop: 'competition_name',
-  isEditable: false,
-  isNullable: true,
-  isAddable: false
-},
-{
-  title: 'รางวัลที่ได้รับ',
-  prop: 'prize',
-  isEditable: false,
-  isNullable: true,
-  isAddable: false
-}
+  {
+    title: 'รหัสนิสิต',
+    prop: 'student_id',
+    isEditable: false,
+    isNullable: false,
+    isAddable: true
+  },
+  {
+    title: 'ชื่อจริง',
+    prop: 'firstname',
+    isEditable: false,
+    isNullable: true,
+    isAddable: false
+  },
+  {
+    title: 'นามสกุล',
+    prop: 'lastname',
+    isEditable: false,
+    isNullable: true,
+    isAddable: false
+  },
+  {
+    title: 'ชื่อทีม',
+    prop: 'team_name',
+    isEditable: false,
+    isNullable: true,
+    isAddable: false
+  },
+  {
+    title: 'รายการแข่งขัน',
+    prop: 'competition_name',
+    isEditable: false,
+    isNullable: true,
+    isAddable: false
+  },
+  {
+    title: 'รางวัลที่ได้รับ',
+    prop: 'prize',
+    isEditable: false,
+    isNullable: true,
+    isAddable: false
+  }
 ]
 
 export default {

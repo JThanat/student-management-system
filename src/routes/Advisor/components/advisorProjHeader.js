@@ -2,12 +2,11 @@ import React from 'react'
 import { Link } from 'react-router'
 
 import {
-  requestAndResponse,
-  removeNull,
   convertObjectToQueryParams
 } from '../../../utils/query'
 
-const advisorHeader = [{
+const advisorHeader = [
+  {
     title: 'Info',
     prop: 'student_id',
     isAddable: false,
@@ -17,40 +16,40 @@ const advisorHeader = [{
     )
   },
   {
-  title: 'รหัสนิสิต',
-  prop: 'student_id',
-  isEditable: false,
-  isNullable: false,
-  isAddable: true
-},
-{
-  title: 'ชื่อจริง',
-  prop: 'firstname',
-  isEditable: false,
-  isNullable: true,
-  isAddable: false
-},
-{
-  title: 'นามสกุล',
-  prop: 'lastname',
-  isEditable: false,
-  isNullable: true,
-  isAddable: false
-},
-{
-  title: 'ชื่อโครงการ',
-  prop: 'project_name',
-  isEditable: false,
-  isNullable: true,
-  isAddable: false
-},
-{
-  title: 'คำอธิบายโครงการ',
-  prop: 'project_description',
-  isEditable: false,
-  isNullable: true,
-  isAddable: false
-}
+    title: 'รหัสนิสิต',
+    prop: 'student_id',
+    isEditable: false,
+    isNullable: false,
+    isAddable: true
+  },
+  {
+    title: 'ชื่อจริง',
+    prop: 'firstname',
+    isEditable: false,
+    isNullable: true,
+    isAddable: false
+  },
+  {
+    title: 'นามสกุล',
+    prop: 'lastname',
+    isEditable: false,
+    isNullable: true,
+    isAddable: false
+  },
+  {
+    title: 'ชื่อโครงการ',
+    prop: 'project_name',
+    isEditable: false,
+    isNullable: true,
+    isAddable: false
+  },
+  {
+    title: 'คำอธิบายโครงการ',
+    prop: 'project_description',
+    isEditable: false,
+    isNullable: true,
+    isAddable: false
+  }
 ]
 
 export default {

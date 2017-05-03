@@ -2,12 +2,14 @@ import React, { Component, PropTypes } from 'react'
 import { connect } from 'react-redux'
 import { Link } from 'react-router'
 
+import { logout } from '../../routes/Login/LoginContainer'
+
 class Sidebar extends Component {
 
   constructor (props) {
     super(props)
-
     this.handleClick = this.handleClick.bind(this)
+    this.logout = this.logout.bind(this)
   }
 
   handleClick (e) {
@@ -17,6 +19,10 @@ class Sidebar extends Component {
 
   activeRoute (routeName) {
     return this.props.location.pathname.indexOf(routeName) > -1 ? 'nav-item nav-dropdown open' : 'nav-item nav-dropdown'
+  }
+
+  logout (e) {
+    this.props.logout()
   }
 
   // secondLevelActive(routeName) {
@@ -79,7 +85,7 @@ class Sidebar extends Component {
               </li>
             </div>}
 
-            { (role === 'advisor' || role === 'debug') &&
+            { (role.substr(7) === 'advisor' || role === 'debug') &&
             <li className='nav-item'>
               <Link to={'/advisor'} className='nav-link' activeClassName='active'>
                 <i className='icon-user' /> Advisor
@@ -99,6 +105,12 @@ class Sidebar extends Component {
                 </Link>
               </li>
             </div>}
+            { (role !== '') &&
+            <li className='nav-item'>
+              <Link to={'/'} onClick={this.logout} className='nav-link'>
+                <i className='icon-logout' /> Logout
+              </Link>
+            </li>}
           </ul>
         </nav>
       </div>
@@ -108,7 +120,11 @@ class Sidebar extends Component {
 
 Sidebar.propTypes = {
   location: PropTypes.object,
-  role: PropTypes.string.isRequired
+  role: PropTypes.string.isRequired,
+  logout: PropTypes.func.isRequired
 }
 
-export default connect(state => ({ role : state.login.role || '' }))(Sidebar)
+export default connect(
+  state => ({ role : state.login.role || '' }),
+  dispatch => ({ logout: () => dispatch(logout()) })
+)(Sidebar)

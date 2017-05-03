@@ -298,8 +298,8 @@ class OverviewView extends Component {
         {
           label: 'Number of Student',
           data: barData,
-          borderColor: brandInfo,
-          backgroundColor: convertHex(brandInfo, 0.1),
+          borderColor: '#8522bf',
+          backgroundColor: convertHex('#8522bf', 0.1),
           pointBackgroundColor: '#fff',
           borderWidth: 1
         }
@@ -313,8 +313,8 @@ class OverviewView extends Component {
       return a.student_count < b.student_count
     })
     const maxActByName = stdByName.reduce((acc, val) => Math.max(acc, val.student_count), 0)
-    const actByName = stdByName.map((x) => {
-      return (<li>
+    const actByName = stdByName.map((x, i) => {
+      return (<li key={`${i}-actname`}>
         <i className='icon-fire' />
         <span className='title'>{x.activity_name}</span>
         <span className='value'>{x.student_count}</span>
@@ -330,10 +330,10 @@ class OverviewView extends Component {
       return a.student_count < b.student_count
     })
     const sumActByYear = stdByYear.reduce((acc, val) => acc + val.student_count, 0)
-    const actByYear = stdByYear.map((x) => {
+    const actByYear = stdByYear.map((x, i) => {
       const percent = this.roundNumber(x.student_count / sumActByYear * 100)
-      return (<li>
-        <span className='title'>{x.academic_year}</span>
+      return (<li key={`${i}-actyear`}>
+        <span className='title'>Year {x.academic_year}</span>
         <span className='value'>{x.student_count} <span className='text-muted small'>({percent}%)</span></span>
         <div className='bars'>
           <Progress className='progress-xs' color='success' value={percent} />
@@ -366,8 +366,8 @@ class OverviewView extends Component {
       return a.student_count < b.student_count
     })
     const maxActByName = stdCompByYear.reduce((acc, val) => Math.max(acc, val.student_count), 0)
-    const competitionByYear = stdCompByYear.map((x) => {
-      return (<li>
+    const competitionByYear = stdCompByYear.map((x, i) => {
+      return (<li key={`${i}-cptyear`}>
         <i className='icon-fire' />
         <span className='title'>{x.student_year}</span>
         <span className='value'>{x.student_count}</span>
@@ -383,10 +383,10 @@ class OverviewView extends Component {
       return a.student_count < b.student_count
     })
     const sumProjectByYear = stdByProject.reduce((acc, val) => acc + val.student_count, 0)
-    const projectByYear = stdByProject.map((x) => {
+    const projectByYear = stdByProject.map((x, i) => {
       const percent = this.roundNumber(x.student_count / sumProjectByYear * 100)
-      return (<li>
-        <span className='title'>{x.academic_year}</span>
+      return (<li key={`${i}-pjyear`}>
+        <span className='title'>Year {x.student_year}</span>
         <span className='value'>{x.student_count} <span className='text-muted small'>({percent}%)</span></span>
         <div className='bars'>
           <Progress className='progress-xs' color='info' value={percent} />
@@ -401,14 +401,7 @@ class OverviewView extends Component {
         <li className='divider' />
         <div className='mb-2'>Student Project by Year</div>
         {projectByYear}
-        <li className='divider text-center'>
-          <button
-            type='button' className='btn btn-sm btn-link text-muted'
-            data-toggle='tooltip' data-placement='top' title=''
-            data-original-title='show more'>
-            <i className='icon-options' />
-          </button>
-        </li>
+        <li className='divider text-center' />
       </ul>
     </div>)
   }

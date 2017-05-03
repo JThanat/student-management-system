@@ -21,13 +21,27 @@ class Advisor extends Component {
   }
 
   render () {
+    let tableConfig = { ...TableConfig }
+    tableConfig.src = {
+      ...tableConfig.src,
+      url: `${TableConfig.src.url}?memberID=${this.props.advisor_id}`
+    }
+    let tableConfigProj = { ...TableConfigProj }
+    tableConfigProj.src = {
+      ...tableConfigProj.src,
+      url: `${TableConfigProj.src.url}?memberID=${this.props.advisor_id}`
+    }
+    let tableConfigComp = { ...TableConfigComp }
+    tableConfigComp.src = {
+      ...tableConfigComp.src,
+      url: `${TableConfigComp.src.url}?memberID=${this.props.advisor_id}`
+    }
     return (<div>
-      <div>{this.props.advisor_id}</div>
-      <Table id={this.tableID} config={TableConfig} />
+      <Table id={this.tableID} config={tableConfig} />
       <hr />
-      <Table id={this.tableIDProj} config={TableConfigProj} />
+      <Table id={this.tableIDProj} config={tableConfigProj} />
       <hr />
-      <Table id={this.tableIDComp} config={TableConfigComp} />
+      <Table id={this.tableIDComp} config={tableConfigComp} />
     </div>
     )
   }

@@ -63,7 +63,6 @@ export default {
   table: {
     name: 'Competition Advisees',
     showAddButton: false,
-    showRefreshButton: false,
     showFilterButton: true,
     filterOptions: (filterStr) => {
       const url = '../api/advisor/advisees?' + convertObjectToQueryParams({

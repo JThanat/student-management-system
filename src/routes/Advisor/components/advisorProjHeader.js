@@ -56,7 +56,6 @@ export default {
   table: {
     name: 'Project Advisees',
     showAddButton: false,
-    showRefreshButton: false,
     showFilterButton: true,
     filterOptions: (filterStr) => {
       const url = '../api/advisor/advisees?' + convertObjectToQueryParams({

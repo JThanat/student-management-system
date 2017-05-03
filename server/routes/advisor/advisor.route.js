@@ -4,8 +4,8 @@ const router = express.Router()
 
 router.get('/advisees', (req, res) => {
   let where = req.query.where ? req.query.where.replace('WHERE', 'AND') : ''
-  // const member_id = req.user.member_id
-  const memberId = 1
+  const memberId = req.query.memberID || '1'
+  // const memberId = 1
   queryHelper.queryAndResponse({
     sql: `select student_id, s.firstname, s.lastname, s.member_id, f.member_name, s.gpax, s.status from students as s 
           inner join advisors as a 
@@ -20,8 +20,8 @@ router.get('/advisees', (req, res) => {
 
 router.get('/project/advisees', (req, res) => {
   let where = req.query.where ? req.query.where.replace('WHERE', 'AND') : ''
-  // const member_id = req.user.member_id
-  const memberId = 1
+  const memberId = req.query.memberID || '1'
+  // const memberId = 1
   queryHelper.queryAndResponse({
     sql: `select s.student_id, s.firstname, s.lastname, p.project_name, p.project_description  from advisors as a
           inner join projects_advisors as pa
@@ -39,8 +39,8 @@ router.get('/project/advisees', (req, res) => {
 
 router.get('/competition/advisees', (req, res) => {
   let where = req.query.where ? req.query.where.replace('WHERE', 'AND') : ''
-  // const member_id = req.user.member_id
-  const memberId = 1
+  const memberId = req.query.memberID || '1'
+  // const memberId = 1
   queryHelper.queryAndResponse({
     sql: `select t5.student_id, team_name, t5.firstname, t5.lastname , c.competition_name, c.prize from advisors as t1
           inner join teams_advisors as t2

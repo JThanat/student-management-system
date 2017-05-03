@@ -6,7 +6,7 @@ const router = express.Router()
 
 router.get('/all', (req, res) => {
   queryHelper.queryAndResponse({
-    sql: Competition.getAllCompetitions(),
+    sql: Competition.getAllCompetitions(req.query.where || ''),
     req: req,
     res: res
   })

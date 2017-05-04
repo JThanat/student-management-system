@@ -24,6 +24,7 @@ Lastly, we would like to give special thank to [React Redux Starter Kit](https:/
   1. [Developer Tools](#developer-tools)
   1. [Routing](#routing)
 1. [Testing](#testing)
+1. [Team Member](#team-member)
 
 ## Prerequisites
 * node `^4.5.0`
@@ -44,7 +45,7 @@ $ yarn install    # Install project dependencies
 $ yarn start      # Compile and launch (same as `npm start`)
 ```
 
-If you want to watch file change in api development. You should run 
+If you want to watch file change in api development. You should run
 
 ```bash
 $ yarn dev      # Compile, run and watch
@@ -76,3 +77,13 @@ We use `react-router` [route definitions](https://github.com/ReactTraining/react
 
 ## Testing
 To add a unit test, simply create a `.spec.js` file anywhere in `~/tests`. Karma will pick up on these files automatically, and Mocha and Chai will be available within your test without the need to import them. Coverage reports will be compiled to `~/coverage` by default. If you wish to change what reporters are used and where reports are compiled, you can do so by modifying `coverage_reporters` in `~/config/project.config.js`.
+
+## Team Member
+
+| Name                     | ID         |
+|--------------------------|------------|
+| Korrawe Karunratanakul   | 5731002421 |
+| Kosate Limpongsa         | 5731012721 |
+| Parinthorn Saithong      | 5730329521 |
+| Sirinthra Chantharaj     | 5730635521 |
+| Thanat Jatuphattharachat | 5730243121 |
